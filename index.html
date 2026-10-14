@@ -261,6 +261,11 @@
     <!-- GROWN-UPS -->
     <section id="screen-grown" aria-label="For grown-ups" hidden>
       <div class="panel">
+        <h2>Sound it out: level</h2>
+        <p class="small">Pick which words show up. Each level includes the ones before it.</p>
+        <div id="levelBtns" class="row" role="group" aria-label="Level" style="flex-wrap:wrap;gap:10px"></div>
+      </div>
+      <div class="panel">
         <h2>What this app stores</h2>
         <p>Nothing is uploaded, ever. There are no accounts, no analytics, no ads and no outside files. It works offline once loaded.</p>
         <button id="swRemember" class="switch" type="button" role="switch" aria-checked="false">
@@ -331,18 +336,125 @@
      ===================================================================== */
   const CONTENT = {
     words: [
-      { word: 'sun',  units: ['s','u','n'],   emoji: '☀️', sight: false, anim: 'rise' },
-      { word: 'map',  units: ['m','a','p'],   emoji: '🗺️', sight: false, anim: 'unfold' },
-      { word: 'ship', units: ['sh','i','p'],  emoji: '🚢', sight: false, anim: 'sail',   ground: 'water' },
-      { word: 'cat',  units: ['c','a','t'],   emoji: '🐱', sight: false, anim: 'hop' },
-      { word: 'dog',  units: ['d','o','g'],   emoji: '🐶', sight: false, anim: 'wag' },
-      { word: 'hat',  units: ['h','a','t'],   emoji: '🎩', sight: false, anim: 'toss' },
-      { word: 'run',  units: ['r','u','n'],   emoji: '🏃', sight: false, anim: 'run' },
-      { word: 'bus',  units: ['b','u','s'],   emoji: '🚌', sight: false, anim: 'drive' },
-      { word: 'fish', units: ['f','i','sh'],  emoji: '🐟', sight: false, anim: 'swim',   ground: 'water' },
-      { word: 'duck', units: ['d','u','ck'],  emoji: '🦆', sight: false, anim: 'waddle' },
-      { word: 'chip', units: ['ch','i','p'],  emoji: '🍟', sight: false, anim: 'pop' },
-      { word: 'pig',  units: ['p','i','g'],   emoji: '🐷', sight: false, anim: 'wiggle' },
+      { word: 'sun',  units: ['s','u','n'],   emoji: '☀️', sight: false, level: 1, anim: 'rise' },
+      { word: 'map',  units: ['m','a','p'],   emoji: '🗺️', sight: false, level: 1, anim: 'unfold' },
+      { word: 'ship', units: ['sh','i','p'],  emoji: '🚢', sight: false, level: 2, anim: 'sail',   ground: 'water' },
+      { word: 'cat',  units: ['c','a','t'],   emoji: '🐱', sight: false, level: 1, anim: 'hop' },
+      { word: 'dog',  units: ['d','o','g'],   emoji: '🐶', sight: false, level: 1, anim: 'wag' },
+      { word: 'hat',  units: ['h','a','t'],   emoji: '🎩', sight: false, level: 1, anim: 'toss' },
+      { word: 'run',  units: ['r','u','n'],   emoji: '🏃', sight: false, level: 1, anim: 'run' },
+      { word: 'bus',  units: ['b','u','s'],   emoji: '🚌', sight: false, level: 1, anim: 'drive' },
+      { word: 'fish', units: ['f','i','sh'],  emoji: '🐟', sight: false, level: 2, anim: 'swim',   ground: 'water' },
+      { word: 'duck', units: ['d','u','ck'],  emoji: '🦆', sight: false, level: 2, anim: 'waddle' },
+      { word: 'chip', units: ['ch','i','p'],  emoji: '🍟', sight: false, level: 2, anim: 'pop' },
+      { word: 'pig',  units: ['p','i','g'],   emoji: '🐷', sight: false, level: 1, anim: 'wiggle' },
+
+      { word: 'bat', units: ['b','a','t'], emoji: '🦇', sight: false, level: 1, anim: 'pop' },
+      { word: 'bed', units: ['b','e','d'], emoji: '🛏️', sight: false, level: 1, anim: 'pop' },
+      { word: 'big', units: ['b','i','g'], emoji: '🐘', sight: false, level: 1, anim: 'pop' },
+      { word: 'bin', units: ['b','i','n'], emoji: '🗑️', sight: false, level: 1, anim: 'pop' },
+      { word: 'bug', units: ['b','u','g'], emoji: '🐛', sight: false, level: 1, anim: 'pop' },
+      { word: 'can', units: ['c','a','n'], emoji: '🥫', sight: false, level: 1, anim: 'pop' },
+      { word: 'cap', units: ['c','a','p'], emoji: '🧢', sight: false, level: 1, anim: 'pop' },
+      { word: 'cup', units: ['c','u','p'], emoji: '🥤', sight: false, level: 1, anim: 'pop' },
+      { word: 'cot', units: ['c','o','t'], emoji: '🏕️', sight: false, level: 1, anim: 'pop' },
+      { word: 'dig', units: ['d','i','g'], emoji: '⛏️', sight: false, level: 1, anim: 'pop' },
+      { word: 'dot', units: ['d','o','t'], emoji: '⚫', sight: false, level: 1, anim: 'pop' },
+      { word: 'fin', units: ['f','i','n'], emoji: '🦈', sight: false, level: 1, anim: 'swim', ground: 'water' },
+      { word: 'fox', units: ['f','o','x'], emoji: '🦊', sight: false, level: 1, anim: 'pop' },
+      { word: 'gum', units: ['g','u','m'], emoji: '🍬', sight: false, level: 1, anim: 'pop' },
+      { word: 'hen', units: ['h','e','n'], emoji: '🐔', sight: false, level: 1, anim: 'hop' },
+      { word: 'hop', units: ['h','o','p'], emoji: '🐇', sight: false, level: 1, anim: 'hop' },
+      { word: 'hug', units: ['h','u','g'], emoji: '🤗', sight: false, level: 1, anim: 'pop' },
+      { word: 'jam', units: ['j','a','m'], emoji: '🍓', sight: false, level: 1, anim: 'pop' },
+      { word: 'jet', units: ['j','e','t'], emoji: '✈️', sight: false, level: 1, anim: 'pop' },
+      { word: 'jug', units: ['j','u','g'], emoji: '🫗', sight: false, level: 1, anim: 'pop' },
+      { word: 'kid', units: ['k','i','d'], emoji: '🧒', sight: false, level: 1, anim: 'pop' },
+      { word: 'leg', units: ['l','e','g'], emoji: '🦵', sight: false, level: 1, anim: 'pop' },
+      { word: 'lid', units: ['l','i','d'], emoji: '🥘', sight: false, level: 1, anim: 'pop' },
+      { word: 'lip', units: ['l','i','p'], emoji: '👄', sight: false, level: 1, anim: 'pop' },
+      { word: 'log', units: ['l','o','g'], emoji: '🪵', sight: false, level: 1, anim: 'pop' },
+      { word: 'mop', units: ['m','o','p'], emoji: '🧹', sight: false, level: 1, anim: 'pop' },
+      { word: 'mud', units: ['m','u','d'], emoji: '🟤', sight: false, level: 1, anim: 'pop' },
+      { word: 'net', units: ['n','e','t'], emoji: '🥅', sight: false, level: 1, anim: 'pop' },
+      { word: 'nut', units: ['n','u','t'], emoji: '🥜', sight: false, level: 1, anim: 'pop' },
+      { word: 'pan', units: ['p','a','n'], emoji: '🍳', sight: false, level: 1, anim: 'pop' },
+      { word: 'pen', units: ['p','e','n'], emoji: '🖊️', sight: false, level: 1, anim: 'pop' },
+      { word: 'pin', units: ['p','i','n'], emoji: '📌', sight: false, level: 1, anim: 'pop' },
+      { word: 'pot', units: ['p','o','t'], emoji: '🍲', sight: false, level: 1, anim: 'pop' },
+      { word: 'rat', units: ['r','a','t'], emoji: '🐀', sight: false, level: 1, anim: 'run' },
+      { word: 'red', units: ['r','e','d'], emoji: '🟥', sight: false, level: 1, anim: 'pop' },
+      { word: 'rug', units: ['r','u','g'], emoji: '🧶', sight: false, level: 1, anim: 'pop' },
+      { word: 'sit', units: ['s','i','t'], emoji: '🪑', sight: false, level: 1, anim: 'pop' },
+      { word: 'six', units: ['s','i','x'], emoji: '6️⃣', sight: false, level: 1, anim: 'pop' },
+      { word: 'tub', units: ['t','u','b'], emoji: '🛁', sight: false, level: 1, anim: 'pop' },
+      { word: 'ten', units: ['t','e','n'], emoji: '🔟', sight: false, level: 1, anim: 'pop' },
+      { word: 'top', units: ['t','o','p'], emoji: '🔝', sight: false, level: 1, anim: 'pop' },
+      { word: 'van', units: ['v','a','n'], emoji: '🚐', sight: false, level: 1, anim: 'drive' },
+      { word: 'web', units: ['w','e','b'], emoji: '🕸️', sight: false, level: 1, anim: 'pop' },
+      { word: 'wet', units: ['w','e','t'], emoji: '💧', sight: false, level: 1, anim: 'pop' },
+      { word: 'win', units: ['w','i','n'], emoji: '🏆', sight: false, level: 1, anim: 'pop' },
+      { word: 'zip', units: ['z','i','p'], emoji: '🤐', sight: false, level: 1, anim: 'pop' },
+      { word: 'box', units: ['b','o','x'], emoji: '📦', sight: false, level: 1, anim: 'pop' },
+      { word: 'jump', units: ['j','u','m','p'], emoji: '🤸', sight: false, level: 2, anim: 'hop' },
+      { word: 'tent', units: ['t','e','n','t'], emoji: '⛺', sight: false, level: 2, anim: 'pop' },
+      { word: 'nest', units: ['n','e','s','t'], emoji: '🪺', sight: false, level: 2, anim: 'pop' },
+      { word: 'hand', units: ['h','a','n','d'], emoji: '✋', sight: false, level: 2, anim: 'pop' },
+      { word: 'milk', units: ['m','i','l','k'], emoji: '🥛', sight: false, level: 2, anim: 'pop' },
+      { word: 'plan', units: ['p','l','a','n'], emoji: '📝', sight: false, level: 2, anim: 'pop' },
+      { word: 'clap', units: ['c','l','a','p'], emoji: '👏', sight: false, level: 2, anim: 'pop' },
+      { word: 'flag', units: ['f','l','a','g'], emoji: '🚩', sight: false, level: 2, anim: 'pop' },
+      { word: 'frog', units: ['f','r','o','g'], emoji: '🐸', sight: false, level: 2, anim: 'hop' },
+      { word: 'crab', units: ['c','r','a','b'], emoji: '🦀', sight: false, level: 2, anim: 'wiggle' },
+      { word: 'drum', units: ['d','r','u','m'], emoji: '🥁', sight: false, level: 2, anim: 'pop' },
+      { word: 'stop', units: ['s','t','o','p'], emoji: '🛑', sight: false, level: 2, anim: 'pop' },
+      { word: 'swim', units: ['s','w','i','m'], emoji: '🏊', sight: false, level: 2, anim: 'swim', ground: 'water' },
+      { word: 'skip', units: ['s','k','i','p'], emoji: '🪢', sight: false, level: 2, anim: 'pop' },
+      { word: 'back', units: ['b','a','ck'], emoji: '🎒', sight: false, level: 2, anim: 'pop' },
+      { word: 'bath', units: ['b','a','th'], emoji: '🛀', sight: false, level: 2, anim: 'pop' },
+      { word: 'check', units: ['ch','e','ck'], emoji: '✅', sight: false, level: 2, anim: 'pop' },
+      { word: 'chick', units: ['ch','i','ck'], emoji: '🐥', sight: false, level: 2, anim: 'pop' },
+      { word: 'chin', units: ['ch','i','n'], emoji: '🙂', sight: false, level: 2, anim: 'pop' },
+      { word: 'chop', units: ['ch','o','p'], emoji: '🪓', sight: false, level: 2, anim: 'pop' },
+      { word: 'kick', units: ['k','i','ck'], emoji: '⚽', sight: false, level: 2, anim: 'hop' },
+      { word: 'neck', units: ['n','e','ck'], emoji: '🦒', sight: false, level: 2, anim: 'pop' },
+      { word: 'much', units: ['m','u','ch'], emoji: '🍕', sight: false, level: 2, anim: 'pop' },
+      { word: 'rich', units: ['r','i','ch'], emoji: '💰', sight: false, level: 2, anim: 'pop' },
+      { word: 'shell', units: ['sh','e','ll:l'], emoji: '🐚', sight: false, level: 2, anim: 'pop', ground: 'water' },
+      { word: 'shop', units: ['sh','o','p'], emoji: '🏪', sight: false, level: 2, anim: 'pop' },
+      { word: 'sock', units: ['s','o','ck'], emoji: '🧦', sight: false, level: 2, anim: 'pop' },
+      { word: 'thin', units: ['th','i','n'], emoji: '📏', sight: false, level: 2, anim: 'pop' },
+      { word: 'this', units: ['th:th_voiced','i','s'], emoji: '👉', sight: false, level: 2, anim: 'pop' },
+      { word: 'thumb', units: ['th','u','mb:m'], emoji: '👍', sight: false, level: 2, anim: 'pop' },
+      { word: 'wish', units: ['w','i','sh'], emoji: '🌠', sight: false, level: 2, anim: 'pop' },
+      { word: 'truck', units: ['t','r','u','ck'], emoji: '🚚', sight: false, level: 2, anim: 'drive' },
+      { word: 'cake', units: ['c','a:a_long','k','e:_'], emoji: '🎂', sight: false, level: 3, anim: 'pop' },
+      { word: 'bike', units: ['b','i:i_long','k','e:_'], emoji: '🚲', sight: false, level: 3, anim: 'pop' },
+      { word: 'bone', units: ['b','o:o_long','n','e:_'], emoji: '🦴', sight: false, level: 3, anim: 'pop' },
+      { word: 'cube', units: ['c','u:u_long','b','e:_'], emoji: '🧊', sight: false, level: 3, anim: 'pop' },
+      { word: 'kite', units: ['k','i:i_long','t','e:_'], emoji: '🪁', sight: false, level: 3, anim: 'pop' },
+      { word: 'name', units: ['n','a:a_long','m','e:_'], emoji: '📛', sight: false, level: 3, anim: 'pop' },
+      { word: 'nose', units: ['n','o:o_long','s','e:_'], emoji: '👃', sight: false, level: 3, anim: 'pop' },
+      { word: 'bee', units: ['b','ee:e_long'], emoji: '🐝', sight: false, level: 3, anim: 'wiggle' },
+      { word: 'seed', units: ['s','ee:e_long','d'], emoji: '🌱', sight: false, level: 3, anim: 'pop' },
+      { word: 'tree', units: ['t','r','ee:e_long'], emoji: '🌳', sight: false, level: 3, anim: 'pop' },
+      { word: 'boat', units: ['b','oa:o_long','t'], emoji: '⛵', sight: false, level: 3, anim: 'sail', ground: 'water' },
+      { word: 'goat', units: ['g','oa:o_long','t'], emoji: '🐐', sight: false, level: 3, anim: 'hop' },
+      { word: 'rain', units: ['r','ai:a_long','n'], emoji: '🌧️', sight: false, level: 3, anim: 'pop' },
+      { word: 'tail', units: ['t','ai:a_long','l'], emoji: '🐕', sight: false, level: 3, anim: 'wag' },
+      { word: 'moon', units: ['m','oo:oo_long','n'], emoji: '🌙', sight: false, level: 3, anim: 'pop' },
+      { word: 'book', units: ['b','oo:oo_short','k'], emoji: '📖', sight: false, level: 3, anim: 'pop' },
+      { word: 'snow', units: ['s','n','ow:o_long'], emoji: '❄️', sight: false, level: 3, anim: 'pop' },
+      { word: 'car', units: ['c','ar'], emoji: '🚗', sight: false, level: 4, anim: 'drive' },
+      { word: 'star', units: ['s','t','ar'], emoji: '⭐', sight: false, level: 4, anim: 'pop' },
+      { word: 'bird', units: ['b','ir:er','d'], emoji: '🐦', sight: false, level: 4, anim: 'pop' },
+      { word: 'fur', units: ['f','ur:er'], emoji: '🧸', sight: false, level: 4, anim: 'pop' },
+      { word: 'fork', units: ['f','or','k'], emoji: '🍴', sight: false, level: 4, anim: 'pop' },
+      { word: 'corn', units: ['c','or','n'], emoji: '🌽', sight: false, level: 4, anim: 'pop' },
+      { word: 'out', units: ['ou','t'], emoji: '🚪', sight: false, level: 4, anim: 'pop' },
+      { word: 'cow', units: ['c','ow:ou'], emoji: '🐄', sight: false, level: 4, anim: 'wiggle' },
+      { word: 'coin', units: ['c','oi','n'], emoji: '🪙', sight: false, level: 4, anim: 'pop' },
+      { word: 'boy', units: ['b','oy:oi'], emoji: '👦', sight: false, level: 4, anim: 'pop' },
 
       { word: 'the',  units: ['t','h','e'],   emoji: null, sight: true },
       { word: 'a',    units: ['a'],           emoji: null, sight: true },
@@ -421,7 +533,7 @@
     p = (p && typeof p === 'object') ? p : {};
     return { soundedOut: strList(p.soundedOut), sightGot: strList(p.sightGot), sightPractice: strList(p.sightPractice) };
   }
-  let settings = Object.assign({ remember: false }, store.read(SETTINGS_KEY, {}));
+  let settings = Object.assign({ remember: false, level: 'all' }, store.read(SETTINGS_KEY, {}));
   settings.remember = settings.remember === true;
   settings.speech = settings.speech === true;          // speech is OFF until a grown-up turns it on
   settings.sound = settings.sound !== false;           // playing your recordings is ON (silent anyway if no files)
@@ -484,9 +596,21 @@
   let order = [], oi = -1, cur = null, run = 0, finished = false;
   const lit = new Set();
 
+  // A unit is 'text' or 'text:key'. text is what the tile shows; key picks the sound file
+  // (for example 'a:a_long' shows a but plays a_long.mp3; key '_' is a silent letter).
+  function unitText(u) { return String(u).split(':')[0]; }
+  function unitKey(u) { const p = String(u).split(':'); return (p.length > 1 ? p[1] : p[0]).toLowerCase(); }
+  window.WordPlayUnit = { text: unitText, key: unitKey };
+  const LEVELS = [['all', 'All'], ['1', '1 · short vowels'], ['2', '2 · blends, sh ch th ck'], ['3', '3 · long vowels'], ['4', '4 · ar er or ou oi']];
+  function levelWords() {
+    const L = settings.level;
+    const list = L === 'all' ? soundWords : soundWords.filter(w => (w.level || 1) <= Number(L));
+    return list.length ? list : soundWords;
+  }
+
   function nextWord() {
     if (!order.length || oi >= order.length - 1) {
-      order = shuffle(soundWords);
+      order = shuffle(levelWords());
       if (cur && order.length > 1 && order[0] === cur) { const t = order[0]; order[0] = order[1]; order[1] = t; }
       oi = -1;
     }
@@ -501,8 +625,9 @@
     tilesEl.innerHTML = '';
     w.units.forEach((u, i) => {
       const b = document.createElement('button');
-      b.type = 'button'; b.className = 'tile'; b.textContent = u; b.dataset.i = i;
-      b.setAttribute('aria-label', 'sound ' + u);
+      const ut = unitText(u);
+      b.type = 'button'; b.className = 'tile'; b.textContent = ut; b.dataset.i = i;
+      b.setAttribute('aria-label', unitKey(u) === '_' ? 'silent ' + ut : 'sound ' + ut);
       b.setAttribute('aria-pressed', 'false');
       tilesEl.appendChild(b);
     });
@@ -632,7 +757,7 @@
     sightWordEl.appendChild(sr);
     card.units.forEach((u, i) => {
       const s = document.createElement('span');
-      s.className = 'ch'; s.textContent = u; s.style.setProperty('--i', i);
+      s.className = 'ch'; s.textContent = unitText(u); s.style.setProperty('--i', i);
       s.setAttribute('aria-hidden', 'true');
       sightWordEl.appendChild(s);
     });
@@ -680,7 +805,22 @@
     add('Marked “Got it”', progress.sightGot);
     add('Marked “Practice more”', progress.sightPractice);
   }
+  function renderLevels() {
+    const box = $('levelBtns');
+    box.innerHTML = '';
+    LEVELS.forEach(([val, label]) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'btn' + (settings.level === val ? '' : ' ghost');
+      b.textContent = label;
+      b.setAttribute('aria-pressed', settings.level === val ? 'true' : 'false');
+      b.addEventListener('click', () => {
+        settings.level = val; saveSettings(); order = []; renderLevels();
+      });
+      box.appendChild(b);
+    });
+  }
   function renderGrown() {
+    renderLevels();
     setSwitch($('swRemember'), settings.remember);
     renderProgress();
     disarmReset();
@@ -702,7 +842,7 @@
       return;
     }
     store.clear(PROGRESS_KEY); store.clear(SETTINGS_KEY);
-    progress = normProgress(null); settings = { remember: false, speech: false, sound: true };
+    progress = normProgress(null); settings = { remember: false, speech: false, sound: true, level: 'all' };
     if (window.WordPlay.onReset) window.WordPlay.onReset();
     renderGrown();
     msg.textContent = 'Erased. Nothing is saved on this device now.';
@@ -917,11 +1057,11 @@
   const FOLDER = cfg.folder || 'sounds/';
   const EXTS = (cfg.extensions && cfg.extensions.length) ? cfg.extensions : ['m4a', 'mp3', 'wav'];
   const soundOn = () => W.settings.sound !== false;
-  const tileKey = u => String(u).toLowerCase();
+  const tileKey = u => window.WordPlayUnit.key(u);
   const wordKey = w => 'word-' + String(w.word).toLowerCase();
 
   const soundWords = CONTENT.words.filter(w => !w.sight);
-  const tileKeys = Array.from(new Set(soundWords.reduce((a, w) => a.concat(w.units.map(tileKey)), [])));
+  const tileKeys = Array.from(new Set(soundWords.reduce((a, w) => a.concat(w.units.map(tileKey)), []))).filter(k => k !== '_');
   const wordKeys = soundWords.map(wordKey);
 
   /* ---- which files exist? (same-folder HEAD requests; nothing leaves the site) ---- */
@@ -982,6 +1122,7 @@
     try { audio.pause(); } catch (e) {}
   }
   function enqueue(key) {
+    if (key === '_') return;
     const url = found[key];
     if (!url || !soundOn()) return;
     if (queue.length >= 8) return;
@@ -1031,7 +1172,7 @@
     shown = w;
     note.textContent = QUIET;
     const tiles = w.units.map(tileKey);
-    Promise.all(tiles.concat(wordKey(w)).map(k => resolve(k))).then(() => {
+    Promise.all(tiles.filter(k => k !== '_').concat(wordKey(w)).map(k => resolve(k))).then(() => {
       if (shown !== w || couldNotCheck) return;
       if (tiles.some(k => found[k])) note.textContent = 'Each sound plays your recording. Say it out loud together!';
     });
