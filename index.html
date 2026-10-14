@@ -1,0 +1,1093 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f3f7fb">
+<title>Word play</title>
+<style>
+  :root{
+    --bg:#f3f7fb; --ink:#1d2b46; --ink-soft:#44546f; --card:#ffffff;
+    --accent:#2a62c0; --lit:#ffd447; --lit-edge:#7a5a00; --good:#2e7d4f;
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none !important}
+  html{font-size:100%; -webkit-text-size-adjust:100%; text-size-adjust:100%;
+       font-family: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif}
+  /* On iPhone this makes text follow the "Text Size" accessibility setting. */
+  @supports (font: -apple-system-body){
+    html{font: -apple-system-body;
+         font-family: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, sans-serif}
+  }
+  body{margin:0; background:var(--bg); color:var(--ink); min-height:100vh; min-height:100dvh;
+       -webkit-tap-highlight-color:transparent}
+  #app{max-width:34rem; margin:0 auto;
+       padding:max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+               max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left))}
+
+  /* ---------- header ---------- */
+  .top{display:flex; align-items:center; gap:12px; min-height:3.5rem}
+  .top h1{flex:1; margin:0; font-size:1.4rem; line-height:1.2; outline:none}
+
+  /* ---------- buttons ---------- */
+  .btn{min-height:max(56px,3.5rem); min-width:56px; padding:0 1.25rem; border-radius:1rem;
+       border:3px solid var(--accent); background:var(--accent); color:#fff;
+       font:inherit; font-weight:700; font-size:1.1rem; cursor:pointer; touch-action:manipulation}
+  .btn.ghost{background:#fff; color:var(--accent)}
+  .btn:focus-visible, .menu-card:focus-visible, .switch:focus-visible, .tile:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
+  .btn:active{transform:scale(.98)}
+  .row{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:1rem 0}
+  .row .btn{flex:1 1 9rem}
+
+  /* ---------- home ---------- */
+  .menu{display:grid; gap:14px; margin-top:1rem}
+  .menu-card{display:flex; align-items:center; gap:1rem; width:100%; min-height:7rem; padding:1rem 1.25rem;
+       background:var(--card); color:var(--ink); border:4px solid var(--ink); border-radius:1.5rem;
+       font:inherit; text-align:left; cursor:pointer; touch-action:manipulation}
+  .menu-card:active{transform:scale(.99)}
+  .menu-card .big{font-size:2.6rem; line-height:1; flex:none}
+  .menu-card strong{font-size:1.35rem}
+  .menu-card .sub{display:block; margin-top:.2rem; font-size:1rem; color:var(--ink-soft)}
+  .foot{margin-top:1.5rem; text-align:center}
+
+  /* ---------- shared text ---------- */
+  .hint{font-size:1.15rem; text-align:center; margin:.5rem 0}
+  .note{font-size:1rem; color:var(--ink-soft); text-align:center; margin:.5rem 0}
+  .praise{font-size:1.35rem; font-weight:800; text-align:center; min-height:2rem; margin:.75rem 0 0}
+  .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+
+  /* ---------- Sound it out: tiles ---------- */
+  .tiles{display:flex; flex-wrap:wrap; justify-content:center; align-content:center;
+         min-height:9rem; padding:.5rem 0;
+         touch-action:none; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none}
+  .tile{margin:5px; min-width:5rem; min-height:6.5rem; padding:0 1rem;
+        display:flex; align-items:center; justify-content:center;
+        border:4px solid var(--ink); border-radius:1.25rem; background:#fff; color:var(--ink);
+        font:inherit; font-size:clamp(3rem,17vw,4.5rem); font-weight:800; line-height:1;
+        cursor:pointer; touch-action:none; -webkit-user-select:none; user-select:none;
+        transition:margin .7s ease, background-color .25s ease, box-shadow .25s ease, border-radius .5s ease}
+  .tile.lit{background:var(--lit); border-color:var(--lit-edge);
+            box-shadow:0 0 0 6px rgba(255,212,71,.45), 0 0 28px 8px rgba(255,212,71,.8)}
+  .tile.wiggle{animation:wiggle .5s ease}
+  @keyframes wiggle{0%{transform:scale(1)}30%{transform:scale(1.15) rotate(-4deg)}60%{transform:scale(1.1) rotate(3deg)}100%{transform:scale(1)}}
+  /* blend: tiles slide together, then read as one word */
+  .tiles.blend .tile{margin:5px 0; border-radius:0}
+  .tiles.blend .tile + .tile{margin-left:-4px}
+  .tiles.blend .tile:first-child{border-top-left-radius:1.25rem; border-bottom-left-radius:1.25rem}
+  .tiles.blend .tile:last-child{border-top-right-radius:1.25rem; border-bottom-right-radius:1.25rem}
+  .tiles.blend .tile:only-child{border-radius:1.25rem}
+
+  /* ---------- Sound it out: picture stage ---------- */
+  .stage{position:relative; height:9.5rem; margin-top:.5rem; overflow:hidden; border-radius:1.25rem;
+         border:3px solid #cfe0f3; background:linear-gradient(#dff1ff,#f3faff)}
+  .ground{position:absolute; left:0; right:0; bottom:0; height:2.2rem; background:#bfe3b0; z-index:2}
+  .stage[data-ground="water"] .ground{background:#8cc7f0}
+  .pic{position:absolute; left:0; right:0; bottom:1.7rem; text-align:center; font-size:5.5rem; line-height:1; z-index:1}
+  .emo{display:inline-block; opacity:0}
+  .stage.show .emo{opacity:1}
+  @keyframes k-rise{from{transform:translateY(160%)}to{transform:none}}
+  @keyframes k-hop{0%{transform:translate(-200%,0)}12%{transform:translate(-165%,-55%)}24%{transform:translate(-130%,0)}36%{transform:translate(-95%,-55%)}48%{transform:translate(-60%,0)}60%{transform:translate(-30%,-45%)}72%{transform:translate(-8%,0)}86%{transform:translate(0,-20%)}100%{transform:none}}
+  @keyframes k-sail{0%{transform:translateX(250%) rotate(-5deg)}25%{transform:translateX(185%) rotate(5deg)}50%{transform:translateX(115%) rotate(-5deg)}75%{transform:translateX(45%) rotate(4deg)}100%{transform:none}}
+  @keyframes k-run{0%{transform:translateX(-250%)}15%{transform:translate(-205%,-14%)}30%{transform:translate(-160%,0)}45%{transform:translate(-110%,-14%)}60%{transform:translate(-65%,0)}75%{transform:translate(-25%,-10%)}100%{transform:none}}
+  @keyframes k-drive{0%{transform:translateX(260%)}65%{transform:translateX(8%)}78%{transform:translate(0,-4%)}100%{transform:none}}
+  @keyframes k-swim{0%{transform:translate(250%,10%) rotate(6deg)}25%{transform:translate(185%,-10%) rotate(-6deg)}50%{transform:translate(115%,10%) rotate(6deg)}75%{transform:translate(45%,-8%) rotate(-5deg)}100%{transform:none}}
+  @keyframes k-waddle{0%{transform:translateX(120%)}15%{transform:translateX(98%) rotate(-10deg)}30%{transform:translateX(74%) rotate(10deg)}45%{transform:translateX(50%) rotate(-10deg)}60%{transform:translateX(28%) rotate(10deg)}75%{transform:translateX(8%) rotate(-8deg)}100%{transform:none}}
+  @keyframes k-wiggle{0%{transform:scale(.3)}30%{transform:scale(1.1) rotate(-12deg)}50%{transform:rotate(12deg)}70%{transform:rotate(-8deg)}85%{transform:rotate(5deg)}100%{transform:none}}
+  @keyframes k-wag{0%{transform:translateY(60%) scale(.6)}25%{transform:translateY(-20%) rotate(-10deg)}40%{transform:rotate(10deg)}55%{transform:translateY(-10%) rotate(-8deg)}70%{transform:rotate(8deg)}100%{transform:none}}
+  @keyframes k-toss{0%{transform:translateY(0) rotate(0)}40%{transform:translateY(-70%) rotate(300deg)}70%{transform:translateY(-70%) rotate(360deg)}100%{transform:translateY(0) rotate(360deg)}}
+  @keyframes k-unfold{0%{transform:scaleX(.05) rotate(-6deg)}60%{transform:scaleX(1.1)}80%{transform:scaleX(.95)}100%{transform:none}}
+  @keyframes k-pop{0%{transform:scale(0) rotate(-30deg)}60%{transform:scale(1.25) rotate(8deg)}80%{transform:scale(.95)}100%{transform:none}}
+  .anim-rise{animation:k-rise 2s ease-out both}
+  .anim-hop{animation:k-hop 2.4s ease-in-out both}
+  .anim-sail{animation:k-sail 3s ease-in-out both}
+  .anim-run{animation:k-run 2.2s ease-out both}
+  .anim-drive{animation:k-drive 2s ease-out both}
+  .anim-swim{animation:k-swim 2.8s ease-in-out both}
+  .anim-waddle{animation:k-waddle 2.6s ease-in-out both}
+  .anim-wiggle{animation:k-wiggle 1.6s ease-in-out both}
+  .anim-wag{animation:k-wag 1.8s ease-in-out both}
+  .anim-toss{animation:k-toss 1.8s ease-in-out both}
+  .anim-unfold{animation:k-unfold 1.4s ease-out both}
+  .anim-pop{animation:k-pop 1.2s ease-out both}
+
+  /* ---------- Sight words ---------- */
+  .flash{min-height:12rem; display:grid; place-items:center; margin:1rem 0; padding:1rem;
+         background:#fff; border:4px solid var(--ink); border-radius:1.5rem}
+  .sightword{font-size:clamp(4rem,24vw,7rem); font-weight:800; line-height:1; letter-spacing:.02em}
+  .ch{display:inline-block; opacity:0; animation:letterIn .6s ease forwards; animation-delay:calc(var(--i) * .45s)}
+  @keyframes letterIn{from{opacity:0; transform:translateY(.4em) scale(.8)}to{opacity:1; transform:none}}
+  .grownbar{margin-top:1.25rem; padding:.75rem 1rem 0; border-top:3px dashed #9db4d3}
+  .grownbar p{margin:0; text-align:center; font-size:1rem; color:var(--ink-soft)}
+  .done{text-align:center; margin:1rem 0}
+  .done p{font-size:1.5rem; font-weight:800}
+
+  /* ---------- Grown-ups ---------- */
+  .panel{background:#fff; border:3px solid #cfe0f3; border-radius:1.25rem; padding:1rem 1.25rem; margin:1rem 0}
+  .panel h2{margin:.1rem 0 .5rem; font-size:1.2rem}
+  .panel p{margin:.4rem 0; line-height:1.45}
+  .panel ul{margin:.4rem 0; padding-left:1.2rem; line-height:1.5}
+  .switch{display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:3.5rem;
+          padding:.5rem 1rem; background:#fff; color:var(--ink); border:3px solid var(--ink); border-radius:1rem;
+          font:inherit; font-size:1.05rem; font-weight:700; text-align:left; cursor:pointer; touch-action:manipulation; margin:.5rem 0}
+  .switch .state{margin-left:auto; font-size:.95rem}
+  .switch .track{flex:none; width:3.5rem; height:2rem; border-radius:1rem; background:#8a97ad; position:relative; transition:background .2s}
+  .switch .track::after{content:""; position:absolute; top:.2rem; left:.2rem; width:1.6rem; height:1.6rem; border-radius:50%; background:#fff; transition:transform .2s}
+  .switch.on .track{background:var(--good)}
+  .switch.on .track::after{transform:translateX(1.5rem)}
+  .small{font-size:1rem; color:var(--ink-soft)}
+
+  /* ---------- Say the word (speech, optional) ---------- */
+  .chips{display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:1rem 0; min-height:5rem}
+  .chip{display:flex; align-items:center; justify-content:center; min-width:4rem; min-height:4.25rem; padding:0 1rem;
+        background:#fff; border:4px solid var(--ink); border-radius:1.1rem;
+        font-size:clamp(1.9rem,9vw,2.6rem); font-weight:800; line-height:1;
+        transition:background-color .25s ease, box-shadow .25s ease}
+  .chip.lit{background:var(--lit); border-color:var(--lit-edge);
+            box-shadow:0 0 0 5px rgba(255,212,71,.45), 0 0 22px 6px rgba(255,212,71,.8)}
+  .chip.wiggle{animation:wiggle .5s ease}
+  .heard{min-height:1.6rem; margin:.25rem 0; text-align:center; font-size:1.05rem; color:var(--ink-soft); overflow-wrap:anywhere}
+  .status{min-height:3.2rem; margin:.5rem 0; text-align:center; font-size:1.15rem; font-weight:700; line-height:1.35}
+  .btn.on{background:var(--good); border-color:var(--good); color:#fff}
+  .dot{display:inline-block; width:.8rem; height:.8rem; margin-right:.5rem; border-radius:50%; background:#fff; animation:pulse 1.2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{transform:scale(.7); opacity:.6}50%{transform:scale(1.2); opacity:1}}
+
+  .soundlist{display:flex; flex-wrap:wrap; gap:8px; margin:.5rem 0}
+  .soundlist .btn{flex:0 0 auto; padding:0 1rem}
+  code{background:#eef2f8; padding:.05rem .35rem; border-radius:.35rem; font-size:.95em}
+
+  /* ---------- small / landscape screens ---------- */
+  @media (max-height:520px){
+    .stage{height:6.5rem} .pic{font-size:3.5rem; bottom:1.2rem} .ground{height:1.4rem}
+    .tiles{min-height:5.5rem} .tile{min-height:4.5rem; font-size:2.6rem}
+    .flash{min-height:7rem} .sightword{font-size:4rem} .menu-card{min-height:5.5rem}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{animation:none !important; transition:none !important}
+    .ch{opacity:1}
+    .emo{opacity:1}
+    .btn:active, .menu-card:active{transform:none}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <button id="backBtn" class="btn ghost" type="button" aria-label="Back to home" hidden>&larr; Back</button>
+    <h1 id="title" tabindex="-1">Word play</h1>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section id="screen-home" aria-label="Choose something to play">
+      <div class="menu">
+        <button class="menu-card" type="button" data-go="sound" aria-label="Sound it out. Touch each sound and watch the word come together.">
+          <span class="big" aria-hidden="true">👆</span>
+          <span><strong>Sound it out</strong><span class="sub">Touch each sound. Watch the word come together.</span></span>
+        </button>
+        <button class="menu-card" type="button" data-go="sight" aria-label="Sight words. Words we know by sight; watch the letters appear.">
+          <span class="big" aria-hidden="true">👀</span>
+          <span><strong>Sight words</strong><span class="sub">Words we know by sight. Watch the letters appear.</span></span>
+        </button>
+        <!-- Shown only when a grown-up turned speech on AND this browser supports it -->
+        <button id="sayCard" class="menu-card" type="button" data-go="say" hidden aria-label="Say the word. Read words out loud and watch them light up.">
+          <span class="big" aria-hidden="true">🎤</span>
+          <span><strong>Say the word</strong><span class="sub">Read the words out loud. They light up as they are heard.</span></span>
+        </button>
+      </div>
+      <div class="foot">
+        <button id="grownBtn" class="btn ghost" type="button" data-go="grown" aria-label="For grown-ups: settings and privacy">For grown-ups</button>
+      </div>
+    </section>
+
+    <!-- SOUND IT OUT -->
+    <section id="screen-sound" aria-label="Sound it out" hidden>
+      <p class="hint">Touch each sound, or slide your finger across them.</p>
+      <div id="tiles" class="tiles" role="group" aria-label="Sounds in the word"></div>
+      <div id="stage" class="stage" aria-hidden="true">
+        <div class="ground"></div>
+        <div class="pic"><span id="emo" class="emo"></span></div>
+      </div>
+      <p id="praise" class="praise" role="status" aria-live="polite"></p>
+      <div id="srWord" class="sr" role="status" aria-live="polite"></div>
+      <div class="row">
+        <button id="againBtn" class="btn ghost" type="button" aria-label="Again: try this word again">&#8635; Again</button>
+        <button id="nextBtn" class="btn" type="button" aria-label="Next word">Next word &rarr;</button>
+      </div>
+      <p id="soundNote" class="note">The sounds are quiet for now. Say each sound out loud together!</p>
+    </section>
+
+    <!-- SIGHT WORDS -->
+    <section id="screen-sight" aria-label="Sight words" hidden>
+      <div id="sightPlay">
+        <div class="flash"><div id="sightWord" class="sightword"></div></div>
+        <div class="row">
+          <button id="replayBtn" class="btn ghost" type="button" aria-label="Show the letters again">&#8635; Show again</button>
+        </div>
+        <div class="grownbar" role="group" aria-label="Grown-up buttons">
+          <p>Grown-up: how did that go?</p>
+          <div class="row">
+            <button id="gotBtn" class="btn" type="button" aria-label="Got it. Go to the next word.">&#10003; Got it</button>
+            <button id="practiceBtn" class="btn ghost" type="button" aria-label="Practice more. This word will come back soon.">Practice more</button>
+          </div>
+        </div>
+      </div>
+      <div id="sightDone" class="done" hidden>
+        <p>All done! You kept going!</p>
+        <div class="row"><button id="sightAgainBtn" class="btn" type="button">&#8635; Go again</button></div>
+      </div>
+    </section>
+
+    <!-- SAY THE WORD (optional speech) -->
+    <section id="screen-say" aria-label="Say the word" hidden>
+      <p class="hint">Press Listen, then read the words out loud.</p>
+      <div id="chips" class="chips" role="list" aria-label="Words to read"></div>
+      <p id="heard" class="heard" aria-live="polite"></p>
+      <p id="sayStatus" class="status" role="status" aria-live="polite"></p>
+      <div class="row">
+        <button id="listenBtn" class="btn" type="button" aria-pressed="false">🎤 Listen</button>
+        <button id="restartBtn" class="btn ghost" type="button" aria-label="Start over with these words">&#8635; Start over</button>
+      </div>
+      <div class="row">
+        <button id="nextPhraseBtn" class="btn ghost" type="button" aria-label="Next words">Next words &rarr;</button>
+      </div>
+      <div class="grownbar" role="group" aria-label="Grown-up button">
+        <p>Grown-up: if you read it together, tap here.</p>
+        <div class="row"><button id="weReadBtn" class="btn" type="button" aria-label="We read it. Light up all the words.">We read it</button></div>
+      </div>
+      <p class="note">Safari sends what you say to Apple to turn it into words. This app keeps no audio and no text. Matching is simple and can miss words. It does not check how well anyone reads.</p>
+    </section>
+
+    <!-- GROWN-UPS -->
+    <section id="screen-grown" aria-label="For grown-ups" hidden>
+      <div class="panel">
+        <h2>What this app stores</h2>
+        <p>Nothing is uploaded, ever. There are no accounts, no analytics, no ads and no outside files. It works offline once loaded.</p>
+        <button id="swRemember" class="switch" type="button" role="switch" aria-checked="false">
+          <span>Remember practiced words on this device</span>
+          <span class="state" aria-hidden="true">Off</span>
+          <span class="track" aria-hidden="true"></span>
+        </button>
+        <p class="small">When this is on, a simple list of words is kept in this browser only. Turning it off erases that list.</p>
+        <div id="progressList" aria-live="polite"></div>
+        <div class="row"><button id="resetBtn" class="btn ghost" type="button">Reset</button></div>
+        <p id="resetMsg" class="small" role="status" aria-live="polite"></p>
+        <p class="small">Reset erases everything this app saved in this browser, including the switches on this page.</p>
+      </div>
+      <div class="panel">
+        <h2>About the sounds</h2>
+        <p>The sound tiles are silent unless you add your own recordings (see “Sounds” below). The app does not use text-to-speech for letter sounds because it can't make true phonics sounds (it would say letter names or garble them). Until you add recordings, say each sound out loud together.</p>
+        <p>The app never grades pronunciation and never measures reading level. There are no scores, streaks or timers.</p>
+      </div>
+      <div class="panel" id="soundPanel">
+        <h2>Sounds (your own recordings)</h2>
+        <p>The tiles play <strong>only recordings you add</strong>. Nothing is generated, and nothing leaves this device. A lit tile plays its clip; after the blend, a whole-word clip plays if you added one.</p>
+        <ol class="small">
+          <li>Record each sound in your own voice (Voice Memos works). Keep each clip about one second. Say the pure sound, like “sss” for s, not “suh”.</li>
+          <li>Name each file by its tile, like <code>s.m4a</code> or <code>sh.m4a</code>. Whole words are named like <code>word-sun.m4a</code>. Use lowercase.</li>
+          <li>Put the files in a folder named <code>sounds</code> next to <code>index.html</code> (on GitHub, upload the folder).</li>
+          <li>Come back here and tap “Check sound files”.</li>
+        </ol>
+        <button id="swSound" class="switch" type="button" role="switch" aria-checked="true">
+          <span>Play my recorded sounds</span>
+          <span class="state" aria-hidden="true">On</span>
+          <span class="track" aria-hidden="true"></span>
+        </button>
+        <div class="row"><button id="checkSoundsBtn" class="btn ghost" type="button">Check sound files</button></div>
+        <p id="soundCheck" class="small" role="status" aria-live="polite"></p>
+        <div id="soundList" class="soundlist"></div>
+        <p class="small"><strong>Sounds to record:</strong> <span id="needTiles"></span></p>
+        <p class="small"><strong>Whole words (optional):</strong> <span id="needWords"></span></p>
+        <p class="small">If you hear nothing on an iPhone, check the volume and that the page was tapped at least once. Sounds that fail to play are skipped quietly.</p>
+      </div>
+      <div class="panel" id="speechPanel">
+        <h2>Say the word (speech, optional)</h2>
+        <p>This activity uses the microphone through Safari's speech recognition. <strong>Safari sends the audio to Apple to turn it into text.</strong> This app itself stores no audio and no text, and nothing is uploaded by this app.</p>
+        <button id="swSpeech" class="switch" type="button" role="switch" aria-checked="false">
+          <span>Allow “Say the word”</span>
+          <span class="state" aria-hidden="true">Off</span>
+          <span class="track" aria-hidden="true"></span>
+        </button>
+        <p id="speechSupport" class="small"></p>
+        <p class="small">It starts Off. Turning it Off removes the activity and the app never touches the microphone. Every other activity works fully without speech.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* =====================================================================
+     EDIT ME: all content lives in this one object.
+     word   : the word as shown
+     units  : one entry per SOUND (so "sh", "ch", "th", "ck" are one tile)
+     emoji  : the picture (null is fine for sight words)
+     sight  : true = Sight words activity, false = Sound it out activity
+     anim   : how the picture comes alive. One of:
+              rise hop sail run drive swim waddle wiggle wag toss unfold pop
+     ground : optional, "water" paints the ground blue
+     ===================================================================== */
+  const CONTENT = {
+    words: [
+      { word: 'sun',  units: ['s','u','n'],   emoji: '☀️', sight: false, anim: 'rise' },
+      { word: 'map',  units: ['m','a','p'],   emoji: '🗺️', sight: false, anim: 'unfold' },
+      { word: 'ship', units: ['sh','i','p'],  emoji: '🚢', sight: false, anim: 'sail',   ground: 'water' },
+      { word: 'cat',  units: ['c','a','t'],   emoji: '🐱', sight: false, anim: 'hop' },
+      { word: 'dog',  units: ['d','o','g'],   emoji: '🐶', sight: false, anim: 'wag' },
+      { word: 'hat',  units: ['h','a','t'],   emoji: '🎩', sight: false, anim: 'toss' },
+      { word: 'run',  units: ['r','u','n'],   emoji: '🏃', sight: false, anim: 'run' },
+      { word: 'bus',  units: ['b','u','s'],   emoji: '🚌', sight: false, anim: 'drive' },
+      { word: 'fish', units: ['f','i','sh'],  emoji: '🐟', sight: false, anim: 'swim',   ground: 'water' },
+      { word: 'duck', units: ['d','u','ck'],  emoji: '🦆', sight: false, anim: 'waddle' },
+      { word: 'chip', units: ['ch','i','p'],  emoji: '🍟', sight: false, anim: 'pop' },
+      { word: 'pig',  units: ['p','i','g'],   emoji: '🐷', sight: false, anim: 'wiggle' },
+
+      { word: 'the',  units: ['t','h','e'],   emoji: null, sight: true },
+      { word: 'a',    units: ['a'],           emoji: null, sight: true },
+      { word: 'I',    units: ['I'],           emoji: null, sight: true },
+      { word: 'is',   units: ['i','s'],       emoji: null, sight: true },
+      { word: 'can',  units: ['c','a','n'],   emoji: null, sight: true },
+      { word: 'see',  units: ['s','e','e'],   emoji: null, sight: true },
+      { word: 'we',   units: ['w','e'],       emoji: null, sight: true },
+      { word: 'you',  units: ['y','o','u'],   emoji: null, sight: true },
+      { word: 'go',   units: ['g','o'],       emoji: null, sight: true },
+      { word: 'my',   units: ['m','y'],       emoji: null, sight: true },
+      { word: 'like', units: ['l','i','k','e'], emoji: null, sight: true },
+      { word: 'and',  units: ['a','n','d'],   emoji: null, sight: true }
+    ],
+    // Recorded sounds (optional). Put YOUR OWN recordings in this folder next to index.html.
+    // Tile clips are named by the tile text: s.m4a, sh.m4a, ck.m4a ...
+    // Whole-word clips (played after the blend) are named word-sun.m4a, word-ship.m4a ...
+    // Missing files are simply silent. The grown-ups page lists exactly which files are needed.
+    sounds: { folder: 'sounds/', extensions: ['m4a', 'mp3', 'wav'] },
+    // Short lines for the optional "Say the word" activity. Use words from this list.
+    phrases: [
+      'I see a cat',
+      'the dog can run',
+      'we like the sun',
+      'you can go',
+      'a pig and a duck',
+      'I can see the bus'
+    ],
+    // Effort-only praise. Never about being right or fast.
+    praise: [
+      'You kept going!',
+      'You gave it a try!',
+      'Look at you, sounding it out!',
+      'You stuck with it!',
+      'Nice trying!'
+    ]
+  };
+  /* ===================== end of editable content ===================== */
+
+  const $ = id => document.getElementById(id);
+  const reduced = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+  // No countdowns anywhere for the child; this is only animation pacing. Shortened when motion is reduced.
+  const sleep = ms => new Promise(r => setTimeout(r, reduced.matches ? Math.min(ms, 120) : ms));
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  function shuffle(a) {
+    const b = a.slice();
+    for (let i = b.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = b[i]; b[i] = b[j]; b[j] = t;
+    }
+    return b;
+  }
+
+  /* ---------------- on-device storage (safe if blocked) ---------------- */
+  const SETTINGS_KEY = 'wordplay.settings.v1';
+  const PROGRESS_KEY = 'wordplay.progress.v1';
+  const mem = {};
+  const store = {
+    read(k, fallback) {
+      let raw = null;
+      try { raw = window.localStorage.getItem(k); } catch (e) {}
+      if (raw != null) { try { return JSON.parse(raw); } catch (e) {} }
+      return (k in mem) ? mem[k] : fallback;
+    },
+    write(k, v) {
+      mem[k] = v;
+      try { window.localStorage.setItem(k, JSON.stringify(v)); } catch (e) {}
+    },
+    clear(k) {
+      delete mem[k];
+      try { window.localStorage.removeItem(k); } catch (e) {}
+    }
+  };
+  const strList = v => Array.isArray(v) ? v.filter(x => typeof x === 'string') : [];
+  function normProgress(p) {
+    p = (p && typeof p === 'object') ? p : {};
+    return { soundedOut: strList(p.soundedOut), sightGot: strList(p.sightGot), sightPractice: strList(p.sightPractice) };
+  }
+  let settings = Object.assign({ remember: false }, store.read(SETTINGS_KEY, {}));
+  settings.remember = settings.remember === true;
+  settings.speech = settings.speech === true;          // speech is OFF until a grown-up turns it on
+  settings.sound = settings.sound !== false;           // playing your recordings is ON (silent anyway if no files)
+  let progress = normProgress(store.read(PROGRESS_KEY, null));
+
+  function saveSettings() { store.write(SETTINGS_KEY, settings); }
+  function mark(list, word) {
+    if (!settings.remember) return;       // nothing is kept unless a grown-up turns this on
+    if (list === 'sightGot') progress.sightPractice = progress.sightPractice.filter(w => w !== word);
+    if (list === 'sightPractice') progress.sightGot = progress.sightGot.filter(w => w !== word);
+    if (progress[list].indexOf(word) < 0) progress[list].push(word);
+    store.write(PROGRESS_KEY, progress);
+  }
+
+  /* ---------------- navigation ---------------- */
+  const TITLES = { home: 'Word play', sound: 'Sound it out', sight: 'Sight words', say: 'Say the word', grown: 'For grown-ups' };
+  const hooks = { enter: {}, leave: {} };
+  let current = 'home';
+
+  function render(name) {
+    const old = current;
+    if (hooks.leave[old]) hooks.leave[old]();
+    current = name;
+    Object.keys(TITLES).forEach(k => { const el = $('screen-' + k); if (el) el.hidden = (k !== name); });
+    $('backBtn').hidden = (name === 'home');
+    $('title').textContent = TITLES[name] || 'Word play';
+    window.scrollTo(0, 0);
+    if (hooks.enter[name]) hooks.enter[name]();
+    try { $('title').focus({ preventScroll: true }); } catch (e) {}
+  }
+  function go(name) {
+    if (name === current) return;
+    try { history.pushState({ s: name }, '', '#' + name); } catch (e) {}
+    render(name);
+  }
+  window.addEventListener('popstate', e => render((e.state && e.state.s) || 'home'));
+  try { history.replaceState({ s: 'home' }, '', location.pathname + location.search); } catch (e) {}
+  $('backBtn').addEventListener('click', () => {
+    if (history.state && history.state.s && history.state.s !== 'home') { try { history.back(); return; } catch (e) {} }
+    render('home');
+  });
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('[data-go]');
+    if (b) go(b.getAttribute('data-go'));
+  });
+  // tiny event bus so the optional sound / speech blocks never touch the activity code
+  const listeners = {};
+  function on(name, fn) { (listeners[name] = listeners[name] || []).push(fn); }
+  function emit(name) {
+    const args = Array.prototype.slice.call(arguments, 1);
+    (listeners[name] || []).forEach(fn => { try { fn.apply(null, args); } catch (e) {} });
+  }
+  window.WordPlay = { go, render, hooks, on, emit, CONTENT, store, get settings() { return settings; }, saveSettings, sleep, reduced, pick, shuffle, mark, $ };
+
+  /* =====================================================================
+     ACTIVITY 1: Sound it out
+     ===================================================================== */
+  const tilesEl = $('tiles'), stageEl = $('stage'), emoEl = $('emo'), praiseEl = $('praise'), srWordEl = $('srWord');
+  const soundWords = CONTENT.words.filter(w => !w.sight);
+  let order = [], oi = -1, cur = null, run = 0, finished = false;
+  const lit = new Set();
+
+  function nextWord() {
+    if (!order.length || oi >= order.length - 1) {
+      order = shuffle(soundWords);
+      if (cur && order.length > 1 && order[0] === cur) { const t = order[0]; order[0] = order[1]; order[1] = t; }
+      oi = -1;
+    }
+    oi++;
+    loadWord(order[oi]);
+  }
+
+  function loadWord(w) {
+    run++;                       // cancels any blend still in progress
+    cur = w; finished = false; lit.clear();
+    tilesEl.className = 'tiles';
+    tilesEl.innerHTML = '';
+    w.units.forEach((u, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'tile'; b.textContent = u; b.dataset.i = i;
+      b.setAttribute('aria-label', 'sound ' + u);
+      b.setAttribute('aria-pressed', 'false');
+      tilesEl.appendChild(b);
+    });
+    stageEl.classList.remove('show');
+    stageEl.removeAttribute('data-ground');
+    emoEl.className = 'emo'; emoEl.textContent = '';
+    praiseEl.textContent = ''; srWordEl.textContent = '';
+    emit('wordLoaded', w);
+  }
+
+  function light(i) {
+    if (finished || lit.has(i)) return;
+    const el = tilesEl.children[i];
+    if (!el) return;
+    lit.add(i);
+    emit('tileLit', cur.units[i], cur);              // runs inside the touch handler, which iOS needs for audio
+    el.classList.add('lit', 'wiggle');
+    el.setAttribute('aria-pressed', 'true');
+    el.addEventListener('animationend', () => el.classList.remove('wiggle'), { once: true });
+    if (lit.size === cur.units.length) blend();
+  }
+
+  async function blend() {
+    finished = true;
+    const my = run, w = cur;
+    await sleep(500);                      if (my !== run) return;
+    tilesEl.classList.add('blend');        // tiles slide together
+    await sleep(800);                      if (my !== run) return;
+    srWordEl.textContent = 'The word is ' + w.word + '.';
+    showPicture(w);
+    emit('wordBlended', w);
+    mark('soundedOut', w.word);
+  }
+
+  function showPicture(w) {
+    if (w.ground) stageEl.setAttribute('data-ground', w.ground);
+    emoEl.textContent = w.emoji || '';
+    emoEl.className = 'emo anim-' + (w.anim || 'pop');
+    void emoEl.offsetWidth;                // restart animation
+    stageEl.classList.add('show');
+    praiseEl.textContent = pick(CONTENT.praise);
+  }
+
+  /* --- touch / mouse: taps AND slides, sampled along the path so fast or tiny moves never skip a tile --- */
+  let dragging = false, last = null, rects = [];
+  function cacheRects() { rects = Array.prototype.map.call(tilesEl.children, el => el.getBoundingClientRect()); }
+  function hit(x, y) {
+    for (let i = 0; i < rects.length; i++) {
+      const r = rects[i];
+      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return i;
+    }
+    // forgiving margin so a slightly wobbly finger still counts
+    for (let i = 0; i < rects.length; i++) {
+      const r = rects[i];
+      if (x >= r.left - 6 && x <= r.right + 6 && y >= r.top - 16 && y <= r.bottom + 16) return i;
+    }
+    return -1;
+  }
+  function sweep(x0, y0, x1, y1) {
+    const dx = x1 - x0, dy = y1 - y0;
+    const steps = Math.max(1, Math.ceil(Math.hypot(dx, dy) / 6));
+    for (let s = 0; s <= steps; s++) {
+      const i = hit(x0 + dx * s / steps, y0 + dy * s / steps);
+      if (i >= 0) light(i);
+    }
+  }
+  tilesEl.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    dragging = true;
+    cacheRects();
+    last = { x: e.clientX, y: e.clientY };
+    sweep(last.x, last.y, last.x, last.y);
+    try { tilesEl.setPointerCapture(e.pointerId); } catch (err) {}
+  });
+  tilesEl.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const evs = (typeof e.getCoalescedEvents === 'function' && e.getCoalescedEvents().length) ? e.getCoalescedEvents() : [e];
+    for (const ev of evs) {
+      sweep(last.x, last.y, ev.clientX, ev.clientY);
+      last = { x: ev.clientX, y: ev.clientY };
+    }
+  });
+  const endDrag = () => { dragging = false; last = null; };   // lit tiles stay lit
+  tilesEl.addEventListener('pointerup', endDrag);
+  tilesEl.addEventListener('pointercancel', endDrag);
+  tilesEl.addEventListener('lostpointercapture', endDrag);
+  // keyboard / VoiceOver activation
+  tilesEl.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('.tile');
+    if (b) light(Number(b.dataset.i));
+  });
+  tilesEl.addEventListener('contextmenu', e => e.preventDefault());
+
+  $('againBtn').addEventListener('click', () => { if (cur) loadWord(cur); });
+  $('nextBtn').addEventListener('click', nextWord);
+  hooks.enter.sound = nextWord;
+  hooks.leave.sound = () => { run++; endDrag(); emit('leaveSound'); };
+
+  /* =====================================================================
+     ACTIVITY 2: Sight words
+     ===================================================================== */
+  const sightWordEl = $('sightWord');
+  const sightAll = CONTENT.words.filter(w => w.sight);
+  let deck = [], card = null;
+
+  function buildDeck() {
+    let d = shuffle(sightAll);
+    if (settings.remember) {
+      const p = new Set(progress.sightPractice), g = new Set(progress.sightGot);
+      const rank = w => p.has(w.word) ? 0 : g.has(w.word) ? 2 : 1;
+      d = d.map((w, i) => ({ w, i })).sort((a, b) => rank(a.w) - rank(b.w) || a.i - b.i).map(x => x.w);
+    }
+    return d;
+  }
+  function showCard() {
+    card = deck[0] || null;
+    const done = !card;
+    $('sightPlay').hidden = done;
+    $('sightDone').hidden = !done;
+    if (!card) return;
+    revealCard();
+  }
+  function revealCard() {
+    sightWordEl.innerHTML = '';
+    const sr = document.createElement('span');
+    sr.className = 'sr'; sr.textContent = card.word;
+    sightWordEl.appendChild(sr);
+    card.units.forEach((u, i) => {
+      const s = document.createElement('span');
+      s.className = 'ch'; s.textContent = u; s.style.setProperty('--i', i);
+      s.setAttribute('aria-hidden', 'true');
+      sightWordEl.appendChild(s);
+    });
+  }
+  function startDeck() { deck = buildDeck(); showCard(); }
+  $('replayBtn').addEventListener('click', () => { if (card) revealCard(); });
+  $('gotBtn').addEventListener('click', () => {
+    if (!card) return;
+    mark('sightGot', card.word);
+    deck.shift(); showCard();
+  });
+  $('practiceBtn').addEventListener('click', () => {
+    if (!card) return;
+    mark('sightPractice', card.word);
+    const w = deck.shift();
+    deck.splice(Math.min(3, deck.length), 0, w);   // comes back a few cards later
+    showCard();
+  });
+  $('sightAgainBtn').addEventListener('click', startDeck);
+  hooks.enter.sight = startDeck;
+
+  /* =====================================================================
+     Grown-ups
+     ===================================================================== */
+  function setSwitch(btn, on) {
+    btn.setAttribute('aria-checked', on ? 'true' : 'false');
+    btn.classList.toggle('on', on);
+    const st = btn.querySelector('.state'); if (st) st.textContent = on ? 'On' : 'Off';
+  }
+  function renderProgress() {
+    const box = $('progressList');
+    box.innerHTML = '';
+    const add = (label, list) => {
+      const p = document.createElement('p');
+      p.textContent = label + ': ' + (list.length ? list.join(', ') : 'none yet');
+      box.appendChild(p);
+    };
+    if (!settings.remember) {
+      const p = document.createElement('p'); p.className = 'small';
+      p.textContent = 'Not saving anything right now.';
+      box.appendChild(p);
+      return;
+    }
+    add('Words sounded out', progress.soundedOut);
+    add('Marked “Got it”', progress.sightGot);
+    add('Marked “Practice more”', progress.sightPractice);
+  }
+  function renderGrown() {
+    setSwitch($('swRemember'), settings.remember);
+    renderProgress();
+    disarmReset();
+  }
+  $('swRemember').addEventListener('click', () => {
+    settings.remember = !settings.remember;
+    if (!settings.remember) { progress = normProgress(null); store.clear(PROGRESS_KEY); }
+    saveSettings();
+    renderGrown();
+  });
+  let armed = false, armTimer = null;
+  function disarmReset() { armed = false; clearTimeout(armTimer); $('resetBtn').textContent = 'Reset'; }
+  $('resetBtn').addEventListener('click', () => {
+    const msg = $('resetMsg');
+    if (!armed) {
+      armed = true; msg.textContent = '';
+      $('resetBtn').textContent = 'Tap again to erase everything';
+      armTimer = setTimeout(disarmReset, 6000);
+      return;
+    }
+    store.clear(PROGRESS_KEY); store.clear(SETTINGS_KEY);
+    progress = normProgress(null); settings = { remember: false, speech: false, sound: true };
+    if (window.WordPlay.onReset) window.WordPlay.onReset();
+    renderGrown();
+    msg.textContent = 'Erased. Nothing is saved on this device now.';
+  });
+  hooks.enter.grown = () => { $('resetMsg').textContent = ''; renderGrown(); };
+
+  render('home');
+})();
+</script>
+
+<!-- =====================================================================
+     STEP 2: optional speech ("Say the word"). Everything speech-related is in
+     this block. Delete this block, the #sayCard / #screen-say / #speechPanel
+     HTML and the .chip CSS to remove speech completely.
+     Nothing here runs the microphone unless a grown-up turned speech On AND a
+     person presses Listen.
+     ===================================================================== -->
+<script>
+(function () {
+  'use strict';
+  const W = window.WordPlay;
+  if (!W) return;
+  const { $, hooks, CONTENT, pick, shuffle } = W;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const supported = typeof SR === 'function';
+
+  // Speech recognition hears "eye" for "I", etc. Add more here if you see misses. Matching is forgiving, not a grade.
+  const ALIASES = { a: ['a', 'uh', 'ah', 'eh'], i: ['i', 'eye', 'aye'], see: ['see', 'sea', 'c'], we: ['we', 'wee'],
+                    you: ['you', 'u'], the: ['the', 'thee'], and: ['and', 'n'] };
+
+  const speechOn = () => supported && W.settings.speech === true;
+
+  const chipsEl = $('chips'), heardEl = $('heard'), statusEl = $('sayStatus'), listenBtn = $('listenBtn');
+  let phrases = [], pi = -1, target = [], litN = 0, rec = null, listening = false;
+
+  /* ---- text matching: lights words in order; skips anything that isn't the next word ---- */
+  const tokens = s => String(s).toLowerCase().replace(/[^a-z0-9' ]+/g, ' ').trim().split(/\s+/).filter(Boolean);
+  const same = (heard, want) => { const t = want.toLowerCase(); return heard === t || (ALIASES[t] || []).indexOf(heard) >= 0; };
+  function matchCount(heard, words) {
+    let idx = 0;
+    for (const h of heard) if (idx < words.length && same(h, words[idx])) idx++;
+    return idx;
+  }
+
+  function say(msg) { statusEl.textContent = msg; }
+  function setListening(on) {
+    listening = on;
+    listenBtn.classList.toggle('on', on);
+    listenBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (on) {
+      listenBtn.innerHTML = '<span class="dot" aria-hidden="true"></span>Listening… tap to stop';
+      listenBtn.setAttribute('aria-label', 'Listening. Tap to stop.');
+    } else {
+      listenBtn.textContent = '🎤 Listen';
+      listenBtn.setAttribute('aria-label', 'Listen. Then read the words out loud.');
+    }
+  }
+  function stopRec() {
+    const r = rec;
+    rec = null;
+    if (r) {
+      r.__quiet = true;                       // we stopped it on purpose, so no "try again" message
+      try { r.abort(); } catch (e) { try { r.stop(); } catch (e2) {} }
+    }
+    setListening(false);
+  }
+
+  /* ---- words on screen ---- */
+  function renderChips() {
+    chipsEl.innerHTML = '';
+    target.forEach((w, i) => {
+      const c = document.createElement('span');
+      c.className = 'chip'; c.setAttribute('role', 'listitem'); c.textContent = w;
+      chipsEl.appendChild(c);
+    });
+  }
+  function lightChip(i) {
+    const c = chipsEl.children[i];
+    if (!c || c.classList.contains('lit')) return;
+    c.classList.add('lit', 'wiggle');
+    c.addEventListener('animationend', () => c.classList.remove('wiggle'), { once: true });
+    const s = document.createElement('span'); s.className = 'sr'; s.textContent = ' (heard)';
+    c.appendChild(s);
+  }
+  function updateLit(n) {
+    n = Math.min(n, target.length);
+    for (let i = litN; i < n; i++) lightChip(i);
+    if (n > litN) litN = n;
+    if (litN >= target.length) { stopRec(); say(pick(CONTENT.praise)); }
+  }
+  function setPhrase(next) {
+    stopRec();
+    if (next || !phrases.length) {
+      if (!phrases.length || pi >= phrases.length - 1) { phrases = shuffle(CONTENT.phrases || []); pi = -1; }
+      pi++;
+    }
+    target = (phrases[pi] || '').split(' ').filter(Boolean);
+    litN = 0;
+    renderChips();
+    heardEl.textContent = '';
+    say('');
+  }
+
+  /* ---- listening ---- */
+  const MESSAGES = {
+    'not-allowed': 'The microphone is blocked. A grown-up can allow it in Safari (the “aA” menu, then Website Settings, then Microphone). Or tap “We read it”.',
+    'service-not-allowed': 'Speech needs Dictation turned on. A grown-up can check Settings, then General, then Keyboard, then Enable Dictation. Or tap “We read it”.',
+    'no-speech': "I didn't catch that, try again.",
+    'audio-capture': "I can't find a microphone. Tap “We read it” to keep going.",
+    'network': 'Speech needs the internet right now. Try again, or tap “We read it”.',
+    'language-not-supported': "Speech isn't working here. Tap “We read it” to keep going."
+  };
+  function start() {
+    if (!speechOn()) return;
+    if (listening) { stopRec(); say('Stopped. Press Listen to keep going.'); return; }
+    if (litN >= target.length) setPhrase(false);       // finished one already: start it fresh
+    stopRec();
+    let r;
+    try { r = new SR(); } catch (e) { say("Speech isn't available. Tap “We read it” to keep going."); return; }
+    rec = r;
+    const base = litN;                                  // keep words that are already lit
+    let heardAny = false, errored = false;
+    r.lang = 'en-US';
+    r.continuous = true;
+    r.interimResults = true;
+    r.maxAlternatives = 1;
+    r.onstart = () => { if (rec === r) { setListening(true); say('Listening… read the words out loud.'); } };
+    r.onresult = e => {
+      if (rec !== r) return;
+      heardAny = true;
+      let text = '';
+      for (let i = 0; i < e.results.length; i++) text += ' ' + e.results[i][0].transcript;
+      heardEl.textContent = 'I heard: ' + text.trim();              // shown on screen only, never saved
+      updateLit(base + matchCount(tokens(text), target.slice(base)));
+    };
+    r.onerror = e => {
+      if (r.__quiet) return;
+      errored = true;
+      const code = e && e.error;
+      if (code === 'aborted') return;                               // we or Safari stopped it, nothing to say
+      say(MESSAGES[code] || "Speech isn't working right now. Tap “We read it” to keep going.");
+    };
+    r.onend = () => {
+      if (rec === r) { rec = null; setListening(false); }
+      if (r.__quiet || errored || litN >= target.length) return;
+      say(heardAny ? 'That stopped on its own. Press Listen to keep going.' : "I didn't catch that, try again.");
+    };
+    setListening(true);
+    say('Getting ready…');
+    try { r.start(); }
+    catch (e) { rec = null; setListening(false); say("I couldn't start listening. Try again, or tap “We read it”."); }
+  }
+
+  listenBtn.addEventListener('click', start);
+  $('restartBtn').addEventListener('click', () => setPhrase(false));
+  $('nextPhraseBtn').addEventListener('click', () => setPhrase(true));
+  $('weReadBtn').addEventListener('click', () => {            // grown-up override: always available
+    stopRec();
+    for (let i = 0; i < target.length; i++) lightChip(i);
+    litN = target.length;
+    heardEl.textContent = '';
+    say(pick(CONTENT.praise));
+  });
+
+  hooks.enter.say = () => {
+    if (!speechOn()) { W.render('home'); return; }      // speech off means this screen is closed
+    setPhrase(true);
+  };
+  hooks.leave.say = () => { stopRec(); heardEl.textContent = ''; };
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stopRec(); });
+  window.addEventListener('pagehide', stopRec);
+
+  /* ---- grown-up switch + home card ---- */
+  const sw = $('swSpeech');
+  function refresh() {
+    const on = W.settings.speech === true;
+    sw.setAttribute('aria-checked', on ? 'true' : 'false');
+    sw.classList.toggle('on', on);
+    sw.querySelector('.state').textContent = on ? 'On' : 'Off';
+    sw.disabled = !supported;
+    $('speechSupport').textContent = supported
+      ? 'This browser offers speech recognition.'
+      : 'This browser does not offer speech recognition, so this activity stays hidden.';
+    $('sayCard').hidden = !speechOn();
+  }
+  sw.addEventListener('click', () => {
+    if (!supported) return;
+    W.settings.speech = !W.settings.speech;
+    if (!W.settings.speech) stopRec();
+    W.saveSettings();
+    refresh();
+  });
+  const prevGrown = hooks.enter.grown;
+  hooks.enter.grown = () => { if (prevGrown) prevGrown(); refresh(); };
+  W.onReset = () => { stopRec(); refresh(); };
+  refresh();
+})();
+</script>
+
+<!-- =====================================================================
+     STEP 3: recorded sounds. Plays ONLY audio files you put in the sounds/
+     folder (your own recordings). No text-to-speech, nothing generated,
+     nothing downloaded from anywhere else. Missing files are just silent.
+     ===================================================================== -->
+<script>
+(function () {
+  'use strict';
+  const W = window.WordPlay;
+  if (!W) return;
+  const { $, CONTENT } = W;
+  const cfg = CONTENT.sounds || {};
+  const FOLDER = cfg.folder || 'sounds/';
+  const EXTS = (cfg.extensions && cfg.extensions.length) ? cfg.extensions : ['m4a', 'mp3', 'wav'];
+  const soundOn = () => W.settings.sound !== false;
+  const tileKey = u => String(u).toLowerCase();
+  const wordKey = w => 'word-' + String(w.word).toLowerCase();
+
+  const soundWords = CONTENT.words.filter(w => !w.sight);
+  const tileKeys = Array.from(new Set(soundWords.reduce((a, w) => a.concat(w.units.map(tileKey)), [])));
+  const wordKeys = soundWords.map(wordKey);
+
+  /* ---- which files exist? (same-folder HEAD requests; nothing leaves the site) ---- */
+  const found = {};        // key -> url, or null once checked and missing
+  const pending = {};
+  let couldNotCheck = false;
+  function resolve(key, force) {
+    if (!force && key in found) return Promise.resolve(found[key]);
+    if (pending[key]) return pending[key];
+    pending[key] = (async () => {
+      try {
+        for (const ext of EXTS) {
+          const url = FOLDER + key + '.' + ext;
+          const r = await fetch(url, { method: 'HEAD' });
+          if (r.ok) { found[key] = url; return url; }
+        }
+        found[key] = null;
+        return null;
+      } catch (e) {
+        // Opened as a local file, or can't reach the folder: try the first format when played.
+        couldNotCheck = true;
+        found[key] = FOLDER + key + '.' + EXTS[0];
+        return found[key];
+      } finally {
+        delete pending[key];
+      }
+    })();
+    return pending[key];
+  }
+
+  /* ---- playback: one audio element, clips play one after another (so a slide sounds like s... u... n...) ---- */
+  const audio = new Audio();
+  audio.preload = 'auto';
+  let playing = false, unlocked = false, queue = [], clipId = 0;
+  function pump() {
+    if (playing) return;
+    const url = queue.shift();
+    if (!url) return;
+    playing = true;
+    const my = ++clipId;                      // so a late rejection from an older clip can never disturb this one
+    audio.src = url;
+    try {
+      const p = audio.play();
+      if (p && p.catch) p.catch(e => {
+        if (my !== clipId) return;
+        playing = false;
+        if (e && e.name === 'AbortError') { pump(); return; }    // interrupted by us: carry on
+        queue.length = 0;                                         // blocked or unsupported: stay quiet
+      });
+    } catch (e) { playing = false; queue.length = 0; }
+  }
+  audio.addEventListener('ended', () => { playing = false; pump(); });
+  audio.addEventListener('error', () => { playing = false; pump(); });
+  function stop() {
+    clipId++;
+    queue.length = 0;
+    playing = false;
+    try { audio.pause(); } catch (e) {}
+  }
+  function enqueue(key) {
+    const url = found[key];
+    if (!url || !soundOn()) return;
+    if (queue.length >= 8) return;
+    queue.push(url);
+    pump();
+  }
+
+  // iOS only lets a page play audio after a tap. The first tap anywhere (for example on the Home card)
+  // plays a tiny silent clip through the same audio element, which unlocks it for later sounds.
+  function silentWav() {
+    const n = 400, buf = new Uint8Array(44 + n), dv = new DataView(buf.buffer);
+    const tag = (o, s) => { for (let i = 0; i < s.length; i++) buf[o + i] = s.charCodeAt(i); };
+    tag(0, 'RIFF'); dv.setUint32(4, 36 + n, true); tag(8, 'WAVE'); tag(12, 'fmt ');
+    dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true);
+    dv.setUint32(24, 8000, true); dv.setUint32(28, 8000, true); dv.setUint16(32, 1, true); dv.setUint16(34, 8, true);
+    tag(36, 'data'); dv.setUint32(40, n, true); buf.fill(128, 44);
+    let s = ''; for (let i = 0; i < buf.length; i++) s += String.fromCharCode(buf[i]);
+    return 'data:audio/wav;base64,' + btoa(s);
+  }
+  const SILENT = silentWav();
+  function unlock() {
+    if (unlocked) return;
+    unlocked = true;
+    if (playing || queue.length) return;
+    try {
+      playing = true;
+      const my = ++clipId;
+      audio.src = SILENT;
+      const p = audio.play();
+      if (p && p.catch) p.catch(e => {
+        if (my !== clipId) return;
+        playing = false;
+        if (!e || e.name !== 'AbortError') unlocked = false;      // really blocked: try again on the next tap
+      });
+    } catch (e) { playing = false; unlocked = false; }
+  }
+  ['pointerup', 'touchend', 'click', 'keydown'].forEach(t => document.addEventListener(t, unlock, true));
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
+  window.addEventListener('pagehide', stop);
+
+  /* ---- hook into Sound it out ---- */
+  const note = $('soundNote');
+  const QUIET = note.textContent;
+  let shown = null;
+  W.on('wordLoaded', w => {
+    stop();
+    shown = w;
+    note.textContent = QUIET;
+    const tiles = w.units.map(tileKey);
+    Promise.all(tiles.concat(wordKey(w)).map(k => resolve(k))).then(() => {
+      if (shown !== w || couldNotCheck) return;
+      if (tiles.some(k => found[k])) note.textContent = 'Each sound plays your recording. Say it out loud together!';
+    });
+  });
+  W.on('tileLit', unit => enqueue(tileKey(unit)));
+  W.on('wordBlended', w => enqueue(wordKey(w)));
+  W.on('leaveSound', stop);
+
+  /* ---- grown-ups panel ---- */
+  $('needTiles').textContent = tileKeys.join(', ') + '  (each saved like ' + tileKeys[0] + '.' + EXTS[0] + ')';
+  $('needWords').textContent = soundWords.map(w => w.word).join(', ') + '  (each saved like word-' + soundWords[0].word + '.' + EXTS[0] + ')';
+
+  async function check() {
+    const msg = $('soundCheck'), list = $('soundList');
+    list.innerHTML = '';
+    msg.textContent = 'Checking…';
+    couldNotCheck = false;
+    const keys = tileKeys.concat(wordKeys);
+    await Promise.all(keys.map(k => resolve(k, true)));
+    if (couldNotCheck) {
+      msg.textContent = "Can't check from a local file. Once the site is online, this will show which recordings were found.";
+      return;
+    }
+    const have = keys.filter(k => found[k]), miss = keys.filter(k => !found[k]);
+    msg.textContent = 'Found ' + have.length + ' of ' + keys.length + '.' +
+      (miss.length ? ' Missing: ' + miss.join(', ') + '.' : ' Everything is in place.');
+    have.forEach(k => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'btn ghost';
+      b.textContent = '▶ ' + (k.indexOf('word-') === 0 ? 'word: ' + k.slice(5) : k);
+      b.setAttribute('aria-label', 'Play ' + b.textContent.slice(2));
+      b.addEventListener('click', () => { stop(); queue.push(found[k]); pump(); });   // plays even when the switch is Off, for checking
+      list.appendChild(b);
+    });
+  }
+  $('checkSoundsBtn').addEventListener('click', check);
+
+  const sw = $('swSound');
+  function refresh() {
+    const on = soundOn();
+    sw.setAttribute('aria-checked', on ? 'true' : 'false');
+    sw.classList.toggle('on', on);
+    sw.querySelector('.state').textContent = on ? 'On' : 'Off';
+  }
+  sw.addEventListener('click', () => {
+    W.settings.sound = !soundOn();
+    if (!W.settings.sound) stop();
+    W.saveSettings();
+    refresh();
+  });
+  const prevGrown = W.hooks.enter.grown;
+  W.hooks.enter.grown = () => { if (prevGrown) prevGrown(); refresh(); };
+  const prevReset = W.onReset;
+  W.onReset = () => { if (prevReset) prevReset(); stop(); refresh(); };
+  refresh();
+})();
+</script>
+</body>
+</html>
