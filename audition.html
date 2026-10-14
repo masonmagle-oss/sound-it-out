@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sound picker</title>
+<style>
+:root{color-scheme:light dark;--bg:#fff;--fg:#111;--card:#f1f3f7;--acc:#0b5fff}
+@media (prefers-color-scheme:dark){:root{--bg:#111;--fg:#fff;--card:#222a38;--acc:#7aa7ff}}
+body{margin:0;padding:16px;background:var(--bg);color:var(--fg);font:18px/1.4 -apple-system,system-ui,sans-serif}
+h1{font-size:24px}h2{font-size:20px;margin:24px 0 8px}
+.row{display:flex;gap:10px;align-items:center;background:var(--card);border-radius:14px;padding:8px 12px;margin:8px 0}
+button{min-height:56px;min-width:56px;font:inherit;border-radius:12px;border:2px solid var(--acc);background:transparent;color:var(--fg);padding:0 16px}
+button.pick[aria-pressed=true]{background:var(--acc);color:#fff}
+.lbl{flex:1}
+#out{white-space:pre-wrap;background:var(--card);padding:12px;border-radius:12px}
+</style></head><body>
+<h1>Pick the best sound</h1>
+<p>Tap ▶ to listen. The first one in each group is what the app plays now. Tap “Best” on the one that sounds right (a short vowel is the sound in the middle of cat, bed, sit, hot, cup). Then tap “Show my picks”.</p>
+<div id="groups"></div>
+<p><button id="show">Show my picks</button></p>
+<div id="out" role="status"></div>
+<script>
+const G={
+ 'short a (cat)':['a','a_ack_1','a_ack_2','a_ack_3','a_ack_4','a_add_1','a_add_2','a_add_3','a_add_4'],
+ 'short e (bed)':['e','e_eck_1','e_eck_2','e_eck_3','e_eck_4'],
+ 'short i (sit)':['i','i_ick_1','i_ick_2','i_ick_3','i_ick_4'],
+ 'short o (hot)':['o','o_ock_1','o_ock_2','o_ock_3','o_ock_4'],
+ 'short u (cup)':['u','u_uck_1','u_uck_2','u_uck_3','u_uck_4'],
+ 'x (box)':['x','x_ksss_1','x_ksss_2','x_ksss_3','x_ksss_4'],
+ 'ng (ring)':['ng','ng_nnng_1','ng_nnng_2','ng_nnng_3','ng_nnng_4']};
+const au=new Audio(),picks={};
+const box=document.getElementById('groups');
+for(const g in G){const h=document.createElement('h2');h.textContent=g;box.appendChild(h);
+ G[g].forEach((n,i)=>{const d=document.createElement('div');d.className='row';
+  const p=document.createElement('button');p.textContent='▶';p.setAttribute('aria-label','play '+n);
+  p.onclick=()=>{au.src=(i?'candidates/':'sounds/')+n+'.mp3';au.play().catch(()=>{})};
+  const l=document.createElement('span');l.className='lbl';l.textContent=i?('Take '+i+' ('+n+')'):'Current';
+  const b=document.createElement('button');b.className='pick';b.textContent='Best';b.setAttribute('aria-pressed','false');
+  b.onclick=()=>{picks[g]=n;d.parentNode.querySelectorAll('.pick').forEach(x=>{});
+   document.querySelectorAll('[data-g="'+g+'"] .pick').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true')};
+  d.dataset.g=g;d.append(p,l,b);box.appendChild(d)})}
+document.getElementById('show').onclick=()=>{document.getElementById('out').textContent=Object.keys(G).map(g=>g+': '+(picks[g]||'(not picked)')).join('\n')};
+</script></body></html>
