@@ -145,6 +145,7 @@
   .chip.lit{background:var(--lit); border-color:var(--lit-edge);
             box-shadow:0 0 0 5px rgba(255,212,71,.45), 0 0 22px 6px rgba(255,212,71,.8)}
   .chip.wiggle{animation:wiggle .5s ease}
+  button.chip{font-family:inherit; color:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent}
   .heard{min-height:1.6rem; margin:.25rem 0; text-align:center; font-size:1.05rem; color:var(--ink-soft); overflow-wrap:anywhere}
   .status{min-height:3.2rem; margin:.5rem 0; text-align:center; font-size:1.15rem; font-weight:700; line-height:1.35}
   .btn.on{background:var(--good); border-color:var(--good); color:#fff}
@@ -188,6 +189,10 @@
         <button class="menu-card" type="button" data-go="sight" aria-label="Sight words. Words we know by sight; watch the letters appear.">
           <span class="big" aria-hidden="true">👀</span>
           <span><strong>Sight words</strong><span class="sub">Words we know by sight. Watch the letters appear.</span></span>
+        </button>
+        <button class="menu-card" type="button" data-go="read" aria-label="Read a sentence. Touch each word, then hear the whole sentence.">
+          <span class="big" aria-hidden="true">📖</span>
+          <span><strong>Read a sentence</strong><span class="sub">Touch each word. Then hear the whole sentence.</span></span>
         </button>
         <!-- Shown only when a grown-up turned speech on AND this browser supports it -->
         <button id="sayCard" class="menu-card" type="button" data-go="say" hidden aria-label="Say the word. Read words out loud and watch them light up.">
@@ -235,6 +240,19 @@
       <div id="sightDone" class="done" hidden>
         <p>All done! You kept going!</p>
         <div class="row"><button id="sightAgainBtn" class="btn" type="button">&#8635; Go again</button></div>
+      </div>
+    </section>
+
+    <!-- READ A SENTENCE -->
+    <section id="screen-read" aria-label="Read a sentence" hidden>
+      <p class="hint">Touch each word. Then hear the whole sentence.</p>
+      <div id="rwords" class="chips" role="group" aria-label="Words in the sentence"></div>
+      <div id="rstage" class="stage" aria-hidden="true"><div class="pic"><span id="remo" class="emo"></span></div></div>
+      <p id="rpraise" class="praise" role="status" aria-live="polite"></p>
+      <div id="rsr" class="sr" role="status" aria-live="polite"></div>
+      <div class="row">
+        <button id="rAgain" class="btn ghost" type="button" aria-label="Again: try this sentence again">&#8635; Again</button>
+        <button id="rNext" class="btn" type="button" aria-label="Next sentence">Next sentence &rarr;</button>
       </div>
     </section>
 
@@ -474,6 +492,24 @@
     // Whole-word clips (played after the blend) are named word-sun.m4a, word-ship.m4a ...
     // Missing files are simply silent. The grown-ups page lists exactly which files are needed.
     sounds: { folder: 'sounds/', extensions: ['m4a', 'mp3', 'wav'] },
+    // Sentences for "Read a sentence". Use only words that exist above (sound words or sight words).
+    // Clips: sentence-<words-joined-by-dashes>.mp3, e.g. sentence-i-see-a-red-bug.mp3
+    sentences: [
+      { text: 'I see a red bug', emoji: '🐛' },
+      { text: 'the pig is big', emoji: '🐷' },
+      { text: 'my dog can run', emoji: '🐶' },
+      { text: 'I like the sun', emoji: '☀️' },
+      { text: 'the fish can swim', emoji: '🐟' },
+      { text: 'a cat and a dog', emoji: '🐱' },
+      { text: 'you can see the moon', emoji: '🌙' },
+      { text: 'my cat can hop', emoji: '🐱' },
+      { text: 'the frog can hop', emoji: '🐸' },
+      { text: 'I see the star', emoji: '⭐' },
+      { text: 'we like the rain', emoji: '🌧️' },
+      { text: 'I see a fox', emoji: '🦊' },
+      { text: 'the hen is red', emoji: '🐔' },
+      { text: 'we can go', emoji: '🏃' }
+    ],
     // Short lines for the optional "Say the word" activity. Use words from this list.
     phrases: [
       'I see a cat',
@@ -549,7 +585,7 @@
   }
 
   /* ---------------- navigation ---------------- */
-  const TITLES = { home: 'Word play', sound: 'Sound it out', sight: 'Sight words', say: 'Say the word', grown: 'For grown-ups' };
+  const TITLES = { home: 'Word play', sound: 'Sound it out', sight: 'Sight words', read: 'Read a sentence', say: 'Say the word', grown: 'For grown-ups' };
   const hooks = { enter: {}, leave: {} };
   let current = 'home';
 
@@ -1052,6 +1088,67 @@
   'use strict';
   const W = window.WordPlay;
   if (!W) return;
+  const { $, CONTENT, hooks } = W;
+  const sentences = CONTENT.sentences || [];
+  const box = $('rwords'), stage = $('rstage'), emo = $('remo'), praise = $('rpraise'), sr = $('rsr');
+  let order = [], oi = -1, cur = null, lit = new Set(), token = 0;
+
+  function load(sn) {
+    token++;
+    cur = sn; lit = new Set();
+    box.innerHTML = '';
+    sn.text.split(' ').forEach((w, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'chip'; b.textContent = w; b.dataset.i = i;
+      b.setAttribute('aria-label', 'word ' + w);
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', () => tap(i, b, w));
+      box.appendChild(b);
+    });
+    stage.classList.remove('show');
+    emo.className = 'emo'; emo.textContent = '';
+    praise.textContent = ''; sr.textContent = '';
+  }
+  async function tap(i, b, w) {
+    if (!cur) return;
+    b.classList.add('lit'); b.setAttribute('aria-pressed', 'true');
+    b.classList.remove('wiggle'); void b.offsetWidth; b.classList.add('wiggle');
+    W.emit('readWord', w);
+    if (W.playKey) W.playKey(W.wordKeyOf(w));
+    lit.add(i);
+    if (lit.size === cur.text.split(' ').length) {
+      const my = token, sn = cur;
+      await W.sleep(900);
+      if (my !== token) return;
+      sr.textContent = 'The sentence is: ' + sn.text + '.';
+      emo.textContent = sn.emoji || '';
+      emo.className = 'emo anim-pop'; void emo.offsetWidth;
+      stage.classList.add('show');
+      praise.textContent = W.pick(CONTENT.praise);
+      if (W.playKey) W.playKey(W.sentenceKeyOf(sn.text));
+    }
+  }
+  function next() {
+    if (!sentences.length) return;
+    if (!order.length || oi >= order.length - 1) {
+      order = W.shuffle(sentences);
+      if (cur && order.length > 1 && order[0] === cur) { const t = order[0]; order[0] = order[1]; order[1] = t; }
+      oi = -1;
+    }
+    oi++;
+    load(order[oi]);
+  }
+  $('rAgain').addEventListener('click', () => { if (W.stopSound) W.stopSound(); if (cur) load(cur); });
+  $('rNext').addEventListener('click', () => { if (W.stopSound) W.stopSound(); next(); });
+  hooks.enter.read = next;
+  hooks.leave.read = () => { token++; if (W.stopSound) W.stopSound(); };
+})();
+</script>
+<script>
+(function () {
+  'use strict';
+  const W = window.WordPlay;
+  if (!W) return;
   const { $, CONTENT } = W;
   const cfg = CONTENT.sounds || {};
   const FOLDER = cfg.folder || 'sounds/';
@@ -1062,7 +1159,9 @@
 
   const soundWords = CONTENT.words.filter(w => !w.sight);
   const tileKeys = Array.from(new Set(soundWords.reduce((a, w) => a.concat(w.units.map(tileKey)), []))).filter(k => k !== '_');
-  const wordKeys = soundWords.map(wordKey);
+  const sightKeys = CONTENT.words.filter(w => w.sight).map(wordKey);
+  const sentenceKeys = (CONTENT.sentences || []).map(x => 'sentence-' + x.text.toLowerCase().replace(/[^a-z ]/g, '').trim().replace(/ +/g, '-'));
+  const wordKeys = soundWords.map(wordKey).concat(sightKeys.filter(k => k !== 'word-can'), sentenceKeys);
 
   /* ---- which files exist? (same-folder HEAD requests; nothing leaves the site) ---- */
   const found = {};        // key -> url, or null once checked and missing
@@ -1180,6 +1279,11 @@
   W.on('tileLit', unit => enqueue(tileKey(unit)));
   W.on('wordBlended', w => enqueue(wordKey(w)));
   W.on('leaveSound', stop);
+  // for the Read a sentence screen
+  W.playKey = key => { resolve(key).then(() => enqueue(key)); };
+  W.stopSound = stop;
+  W.wordKeyOf = x => 'word-' + String(x).toLowerCase().replace(/[^a-z]/g, '');
+  W.sentenceKeyOf = t => 'sentence-' + String(t).toLowerCase().replace(/[^a-z ]/g, '').trim().replace(/ +/g, '-');
 
   /* ---- grown-ups panel ---- */
   $('needTiles').textContent = tileKeys.join(', ') + '  (each saved like ' + tileKeys[0] + '.' + EXTS[0] + ')';
