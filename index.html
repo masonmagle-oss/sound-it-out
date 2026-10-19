@@ -136,6 +136,25 @@
   .switch.on .track::after{transform:translateX(1.5rem)}
   .small{font-size:1rem; color:var(--ink-soft)}
 
+
+  /* ---------- Sound detective / Trace / Stories ---------- */
+  .dchoices{display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin:1rem 0}
+  .dchoice{min-width:5.5rem; min-height:5.5rem; padding:0 1.1rem; background:#fff; color:var(--ink); border:4px solid var(--ink); border-radius:1.25rem;
+           font:inherit; font-size:clamp(2.4rem,13vw,3.4rem); font-weight:800; cursor:pointer; touch-action:manipulation}
+  .dchoice.right{background:#d8f1e2; border-color:var(--good)}
+  .dchoice.heard-it{background:#fff3c4}
+  .dchoice:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
+  .twrap{position:relative; margin:.5rem auto; width:100%; max-width:360px; aspect-ratio:1/1; background:#fff; border:4px solid var(--ink); border-radius:1.25rem; overflow:hidden}
+  .twrap canvas{position:absolute; inset:0; width:100%; height:100%}
+  #tInk{touch-action:none; -webkit-user-select:none; user-select:none}
+  .stitle{text-align:center; font-size:1.5rem; margin:.5rem 0}
+  .sline{display:flex; align-items:center; flex-wrap:wrap; gap:6px; padding:8px; margin:8px 0; border:3px solid transparent; border-radius:1rem}
+  .sline.lit{background:var(--lit); border-color:var(--lit-edge)}
+  .snum{min-width:56px; min-height:56px; border-radius:50%; border:3px solid var(--accent); background:#fff; color:var(--accent); font:inherit; font-weight:800; font-size:1.2rem; cursor:pointer; touch-action:manipulation}
+  .sword{min-height:56px; min-width:56px; padding:0 .6rem; border:0; background:transparent; color:var(--ink); font:inherit; font-size:clamp(1.7rem,8vw,2.3rem); font-weight:700; border-radius:.75rem; cursor:pointer; touch-action:manipulation}
+  .sword:active{background:rgba(255,212,71,.5)}
+  .sword:focus-visible,.snum:focus-visible{outline:4px solid var(--ink); outline-offset:2px}
+
   /* ---------- Say the word (speech, optional) ---------- */
   .chips{display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:1rem 0; min-height:5rem}
   .chip{display:flex; align-items:center; justify-content:center; min-width:4rem; min-height:4.25rem; padding:0 1rem;
@@ -145,6 +164,7 @@
   .chip.lit{background:var(--lit); border-color:var(--lit-edge);
             box-shadow:0 0 0 5px rgba(255,212,71,.45), 0 0 22px 6px rgba(255,212,71,.8)}
   .chip.wiggle{animation:wiggle .5s ease}
+  button.chip{font-family:inherit; color:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent}
   .heard{min-height:1.6rem; margin:.25rem 0; text-align:center; font-size:1.05rem; color:var(--ink-soft); overflow-wrap:anywhere}
   .status{min-height:3.2rem; margin:.5rem 0; text-align:center; font-size:1.15rem; font-weight:700; line-height:1.35}
   .btn.on{background:var(--good); border-color:var(--good); color:#fff}
@@ -156,6 +176,30 @@
   code{background:#eef2f8; padding:.05rem .35rem; border-radius:.35rem; font-size:.95em}
 
   /* ---------- small / landscape screens ---------- */
+
+  /* ---------- Letters and Rhyme time ---------- */
+  .lgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(3.6rem,1fr)); gap:8px; margin:.75rem 0}
+  .lgrid .chip{min-width:0; min-height:3.6rem; padding:0; font-size:1.7rem}
+  .lcard{display:flex; flex-direction:column; align-items:center; gap:.25rem; margin:.5rem 0; padding:.75rem 1rem;
+         background:#fff; border:4px solid var(--ink); border-radius:1.5rem}
+  .lbig{font-size:4.5rem; font-weight:800; line-height:1}
+  .lpic{font-size:4.5rem; line-height:1}
+  .lword{font-size:1.9rem; font-weight:800}
+  .rtarget{display:flex; align-items:center; justify-content:center; gap:1rem; width:100%; min-height:7rem; margin:.5rem 0;
+           background:#fff; border:4px solid var(--ink); border-radius:1.5rem; color:var(--ink); font-family:inherit; cursor:pointer;
+           -webkit-tap-highlight-color:transparent}
+  .rtemo{font-size:4rem; line-height:1}
+  .rtword{font-size:2.4rem; font-weight:800}
+  .rchoices{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:1rem 0}
+  .rchoice{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.25rem; min-height:7rem; padding:.5rem;
+           background:#fff; border:4px solid var(--ink); border-radius:1.25rem; color:var(--ink); font-family:inherit; cursor:pointer;
+           -webkit-tap-highlight-color:transparent; transition:background-color .25s ease, box-shadow .25s ease}
+  .rchoice .rce{font-size:3rem; line-height:1}
+  .rchoice .rcw{font-size:1.3rem; font-weight:800; min-height:1.5rem}
+  .rchoice.heard-it{background:#eef3fb}
+  .rchoice.right{background:var(--lit); border-color:var(--lit-edge); box-shadow:0 0 0 5px rgba(255,212,71,.45), 0 0 22px 6px rgba(255,212,71,.8)}
+  .rchoice:focus-visible, .rtarget:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
+
   @media (max-height:520px){
     .stage{height:6.5rem} .pic{font-size:3.5rem; bottom:1.2rem} .ground{height:1.4rem}
     .tiles{min-height:5.5rem} .tile{min-height:4.5rem; font-size:2.6rem}
@@ -188,6 +232,30 @@
         <button class="menu-card" type="button" data-go="sight" aria-label="Sight words. Words we know by sight; watch the letters appear.">
           <span class="big" aria-hidden="true">👀</span>
           <span><strong>Sight words</strong><span class="sub">Words we know by sight. Watch the letters appear.</span></span>
+        </button>
+        <button class="menu-card" type="button" data-go="read" aria-label="Read a sentence. Touch each word, then hear the whole sentence.">
+          <span class="big" aria-hidden="true">📖</span>
+          <span><strong>Read a sentence</strong><span class="sub">Touch each word. Then hear the whole sentence.</span></span>
+        </button>
+        <button class="menu-card" type="button" data-go="letters" aria-label="Letters. Touch a letter to hear its name, its sound and a word.">
+          <span class="big" aria-hidden="true">🔤</span>
+          <span><strong>Letters</strong><span class="sub">Touch a letter. Hear its name, its sound and a word.</span></span>
+        </button>
+        <button class="menu-card" type="button" data-go="rhyme" aria-label="Rhyme time. Find the picture that rhymes.">
+          <span class="big" aria-hidden="true">🎵</span>
+          <span><strong>Rhyme time</strong><span class="sub">Find the picture that sounds the same at the end.</span></span>
+        </button>
+        <button class="menu-card" type="button" data-go="detective" aria-label="Sound detective. Listen for the first sound, the last sound, or count the sounds.">
+          <span class="big" aria-hidden="true">🕵️</span>
+          <span><strong>Sound detective</strong><span class="sub">First sound, last sound, or count the sounds.</span></span>
+        </button>
+        <button class="menu-card" type="button" data-go="trace" aria-label="Trace letters. Draw over a letter with your finger.">
+          <span class="big" aria-hidden="true">✏️</span>
+          <span><strong>Trace letters</strong><span class="sub">Draw over a letter with your finger.</span></span>
+        </button>
+        <button class="menu-card" type="button" data-go="stories" aria-label="Little stories. Read short stories with sounds you know.">
+          <span class="big" aria-hidden="true">📚</span>
+          <span><strong>Little stories</strong><span class="sub">Short stories to read with the sounds you know.</span></span>
         </button>
         <!-- Shown only when a grown-up turned speech on AND this browser supports it -->
         <button id="sayCard" class="menu-card" type="button" data-go="say" hidden aria-label="Say the word. Read words out loud and watch them light up.">
@@ -235,6 +303,104 @@
       <div id="sightDone" class="done" hidden>
         <p>All done! You kept going!</p>
         <div class="row"><button id="sightAgainBtn" class="btn" type="button">&#8635; Go again</button></div>
+      </div>
+    </section>
+
+    <!-- READ A SENTENCE -->
+    <section id="screen-read" aria-label="Read a sentence" hidden>
+      <p class="hint">Touch each word. Then hear the whole sentence.</p>
+      <div id="rwords" class="chips" role="group" aria-label="Words in the sentence"></div>
+      <div id="rstage" class="stage" aria-hidden="true"><div class="pic"><span id="remo" class="emo"></span></div></div>
+      <p id="rpraise" class="praise" role="status" aria-live="polite"></p>
+      <div id="rsr" class="sr" role="status" aria-live="polite"></div>
+      <div class="row">
+        <button id="rAgain" class="btn ghost" type="button" aria-label="Again: try this sentence again">&#8635; Again</button>
+        <button id="rNext" class="btn" type="button" aria-label="Next sentence">Next sentence &rarr;</button>
+      </div>
+    </section>
+
+    <!-- LETTERS -->
+    <section id="screen-letters" aria-label="Letters" hidden>
+      <p class="hint">Touch a letter.</p>
+      <div id="lgrid" class="lgrid" role="group" aria-label="Letters of the alphabet"></div>
+      <div id="lcard" class="lcard" hidden>
+        <div id="lbig" class="lbig" aria-hidden="true"></div>
+        <div class="lpic"><span id="lemo" aria-hidden="true"></span></div>
+        <div id="lword" class="lword"></div>
+      </div>
+      <div id="lsr" class="sr" role="status" aria-live="polite"></div>
+      <div class="row">
+        <button id="lAgain" class="btn ghost" type="button" aria-label="Hear it again">&#8635; Hear it again</button>
+        <button id="lNext" class="btn" type="button" aria-label="Next letter">Next letter &rarr;</button>
+      </div>
+    </section>
+
+    <!-- RHYME TIME -->
+    <section id="screen-rhyme" aria-label="Rhyme time" hidden>
+      <p class="hint">Which one rhymes? They sound the same at the end.</p>
+      <button id="rtarget" class="rtarget" type="button" aria-label="Hear the word again">
+        <span id="rtEmo" class="rtemo" aria-hidden="true"></span>
+        <span id="rtWord" class="rtword"></span>
+      </button>
+      <div id="rchoices" class="rchoices" role="group" aria-label="Pictures to choose from"></div>
+      <p id="rhPraise" class="praise" role="status" aria-live="polite"></p>
+      <div class="row">
+        <button id="rhNext" class="btn" type="button" aria-label="Next rhyme">Next one &rarr;</button>
+      </div>
+    </section>
+
+
+    <!-- SOUND DETECTIVE -->
+    <section id="screen-detective" aria-label="Sound detective" hidden>
+      <div class="row" role="group" aria-label="Choose a game">
+        <button class="btn ghost" type="button" data-dmode="begin" aria-pressed="true">First sound</button>
+        <button class="btn ghost" type="button" data-dmode="end" aria-pressed="false">Last sound</button>
+        <button class="btn ghost" type="button" data-dmode="count" aria-pressed="false">Count sounds</button>
+      </div>
+      <p id="dPrompt" class="hint"></p>
+      <button id="dPic" class="rtarget" type="button" aria-label="Hear the word again">
+        <span id="dEmo" class="rtemo" aria-hidden="true"></span>
+      </button>
+      <div id="dChoices" class="dchoices" role="group" aria-label="Choices"></div>
+      <p id="dPraise" class="praise" role="status" aria-live="polite"></p>
+      <div class="row">
+        <button id="dNext" class="btn" type="button" aria-label="Next one">Next one &rarr;</button>
+      </div>
+    </section>
+
+    <!-- TRACE LETTERS -->
+    <section id="screen-trace" aria-label="Trace letters" hidden>
+      <p class="hint">Trace the letter with your finger.</p>
+      <div id="tWrap" class="twrap">
+        <canvas id="tGuide" aria-hidden="true"></canvas>
+        <canvas id="tInk" role="img" aria-label="Drawing space. Trace the letter with your finger."></canvas>
+      </div>
+      <p id="tPraise" class="praise" role="status" aria-live="polite"></p>
+      <div class="row">
+        <button id="tClear" class="btn ghost" type="button" aria-label="Clear and try again">&#8635; Again</button>
+        <button id="tCase" class="btn ghost" type="button" aria-label="Switch between big and little letter">Aa</button>
+        <button id="tHear" class="btn ghost" type="button" aria-label="Hear the letter">&#128266; Hear</button>
+      </div>
+      <div class="row">
+        <button id="tPrev" class="btn ghost" type="button" aria-label="Previous letter">&larr; Back letter</button>
+        <button id="tNext" class="btn" type="button" aria-label="Next letter">Next letter &rarr;</button>
+      </div>
+    </section>
+
+    <!-- LITTLE STORIES -->
+    <section id="screen-stories" aria-label="Little stories" hidden>
+      <div id="sList">
+        <p class="hint">Pick a story.</p>
+        <div id="sBooks" class="menu"></div>
+      </div>
+      <div id="sRead" hidden>
+        <h2 id="sTitle" class="stitle"></h2>
+        <p class="hint">Touch a word to hear it. Touch the line number to hear the line.</p>
+        <div id="sLines"></div>
+        <div class="row">
+          <button id="sPlay" class="btn" type="button" aria-label="Read the whole story to me">&#9654; Read it to me</button>
+          <button id="sAll" class="btn ghost" type="button" aria-label="Back to all stories">All stories</button>
+        </div>
       </div>
     </section>
 
@@ -356,26 +522,26 @@
       { word: 'bug', units: ['b','u','g'], emoji: '🐛', sight: false, level: 1, anim: 'pop' },
       { word: 'can', units: ['c','a','n'], emoji: '🥫', sight: false, level: 1, anim: 'pop' },
       { word: 'cap', units: ['c','a','p'], emoji: '🧢', sight: false, level: 1, anim: 'pop' },
-      { word: 'cup', units: ['c','u','p'], emoji: '🥤', sight: false, level: 1, anim: 'pop' },
-      { word: 'cot', units: ['c','o','t'], emoji: '🏕️', sight: false, level: 1, anim: 'pop' },
+      { word: 'cup', units: ['c','u','p'], emoji: '☕', sight: false, level: 1, anim: 'pop' },
+      { word: 'cot', units: ['c','o','t'], emoji: null, sight: false, level: 1, anim: 'pop' },
       { word: 'dig', units: ['d','i','g'], emoji: '⛏️', sight: false, level: 1, anim: 'pop' },
       { word: 'dot', units: ['d','o','t'], emoji: '⚫', sight: false, level: 1, anim: 'pop' },
-      { word: 'fin', units: ['f','i','n'], emoji: '🦈', sight: false, level: 1, anim: 'swim', ground: 'water' },
+      { word: 'fin', units: ['f','i','n'], emoji: null, sight: false, level: 1, anim: 'swim', ground: 'water' },
       { word: 'fox', units: ['f','o','x'], emoji: '🦊', sight: false, level: 1, anim: 'pop' },
-      { word: 'gum', units: ['g','u','m'], emoji: '🍬', sight: false, level: 1, anim: 'pop' },
+      { word: 'gum', units: ['g','u','m'], emoji: null, sight: false, level: 1, anim: 'pop' },
       { word: 'hen', units: ['h','e','n'], emoji: '🐔', sight: false, level: 1, anim: 'hop' },
       { word: 'hop', units: ['h','o','p'], emoji: '🐇', sight: false, level: 1, anim: 'hop' },
       { word: 'hug', units: ['h','u','g'], emoji: '🤗', sight: false, level: 1, anim: 'pop' },
-      { word: 'jam', units: ['j','a','m'], emoji: '🍓', sight: false, level: 1, anim: 'pop' },
+      { word: 'jam', units: ['j','a','m'], emoji: null, sight: false, level: 1, anim: 'pop' },
       { word: 'jet', units: ['j','e','t'], emoji: '✈️', sight: false, level: 1, anim: 'pop' },
-      { word: 'jug', units: ['j','u','g'], emoji: '🫗', sight: false, level: 1, anim: 'pop' },
+      { word: 'jug', units: ['j','u','g'], emoji: null, sight: false, level: 1, anim: 'pop' },
       { word: 'kid', units: ['k','i','d'], emoji: '🧒', sight: false, level: 1, anim: 'pop' },
       { word: 'leg', units: ['l','e','g'], emoji: '🦵', sight: false, level: 1, anim: 'pop' },
-      { word: 'lid', units: ['l','i','d'], emoji: '🥘', sight: false, level: 1, anim: 'pop' },
+      { word: 'lid', units: ['l','i','d'], emoji: null, sight: false, level: 1, anim: 'pop' },
       { word: 'lip', units: ['l','i','p'], emoji: '👄', sight: false, level: 1, anim: 'pop' },
       { word: 'log', units: ['l','o','g'], emoji: '🪵', sight: false, level: 1, anim: 'pop' },
-      { word: 'mop', units: ['m','o','p'], emoji: '🧹', sight: false, level: 1, anim: 'pop' },
-      { word: 'mud', units: ['m','u','d'], emoji: '🟤', sight: false, level: 1, anim: 'pop' },
+      { word: 'mop', units: ['m','o','p'], emoji: null, sight: false, level: 1, anim: 'pop' },
+      { word: 'mud', units: ['m','u','d'], emoji: null, sight: false, level: 1, anim: 'pop' },
       { word: 'net', units: ['n','e','t'], emoji: '🥅', sight: false, level: 1, anim: 'pop' },
       { word: 'nut', units: ['n','u','t'], emoji: '🥜', sight: false, level: 1, anim: 'pop' },
       { word: 'pan', units: ['p','a','n'], emoji: '🍳', sight: false, level: 1, anim: 'pop' },
@@ -384,7 +550,7 @@
       { word: 'pot', units: ['p','o','t'], emoji: '🍲', sight: false, level: 1, anim: 'pop' },
       { word: 'rat', units: ['r','a','t'], emoji: '🐀', sight: false, level: 1, anim: 'run' },
       { word: 'red', units: ['r','e','d'], emoji: '🟥', sight: false, level: 1, anim: 'pop' },
-      { word: 'rug', units: ['r','u','g'], emoji: '🧶', sight: false, level: 1, anim: 'pop' },
+      { word: 'rug', units: ['r','u','g'], emoji: null, sight: false, level: 1, anim: 'pop' },
       { word: 'sit', units: ['s','i','t'], emoji: '🪑', sight: false, level: 1, anim: 'pop' },
       { word: 'six', units: ['s','i','x'], emoji: '6️⃣', sight: false, level: 1, anim: 'pop' },
       { word: 'tub', units: ['t','u','b'], emoji: '🛁', sight: false, level: 1, anim: 'pop' },
@@ -410,20 +576,20 @@
       { word: 'stop', units: ['s','t','o','p'], emoji: '🛑', sight: false, level: 2, anim: 'pop' },
       { word: 'swim', units: ['s','w','i','m'], emoji: '🏊', sight: false, level: 2, anim: 'swim', ground: 'water' },
       { word: 'skip', units: ['s','k','i','p'], emoji: '🪢', sight: false, level: 2, anim: 'pop' },
-      { word: 'back', units: ['b','a','ck'], emoji: '🎒', sight: false, level: 2, anim: 'pop' },
+      { word: 'back', units: ['b','a','ck'], emoji: '🔙', sight: false, level: 2, anim: 'pop' },
       { word: 'bath', units: ['b','a','th'], emoji: '🛀', sight: false, level: 2, anim: 'pop' },
       { word: 'check', units: ['ch','e','ck'], emoji: '✅', sight: false, level: 2, anim: 'pop' },
       { word: 'chick', units: ['ch','i','ck'], emoji: '🐥', sight: false, level: 2, anim: 'pop' },
-      { word: 'chin', units: ['ch','i','n'], emoji: '🙂', sight: false, level: 2, anim: 'pop' },
+      { word: 'chin', units: ['ch','i','n'], emoji: null, sight: false, level: 2, anim: 'pop' },
       { word: 'chop', units: ['ch','o','p'], emoji: '🪓', sight: false, level: 2, anim: 'pop' },
       { word: 'kick', units: ['k','i','ck'], emoji: '⚽', sight: false, level: 2, anim: 'hop' },
       { word: 'neck', units: ['n','e','ck'], emoji: '🦒', sight: false, level: 2, anim: 'pop' },
-      { word: 'much', units: ['m','u','ch'], emoji: '🍕', sight: false, level: 2, anim: 'pop' },
+      { word: 'much', units: ['m','u','ch'], emoji: null, sight: false, level: 2, anim: 'pop' },
       { word: 'rich', units: ['r','i','ch'], emoji: '💰', sight: false, level: 2, anim: 'pop' },
       { word: 'shell', units: ['sh','e','ll:l'], emoji: '🐚', sight: false, level: 2, anim: 'pop', ground: 'water' },
       { word: 'shop', units: ['sh','o','p'], emoji: '🏪', sight: false, level: 2, anim: 'pop' },
       { word: 'sock', units: ['s','o','ck'], emoji: '🧦', sight: false, level: 2, anim: 'pop' },
-      { word: 'thin', units: ['th','i','n'], emoji: '📏', sight: false, level: 2, anim: 'pop' },
+      { word: 'thin', units: ['th','i','n'], emoji: null, sight: false, level: 2, anim: 'pop' },
       { word: 'this', units: ['th:th_voiced','i','s'], emoji: '👉', sight: false, level: 2, anim: 'pop' },
       { word: 'thumb', units: ['th','u','mb:m'], emoji: '👍', sight: false, level: 2, anim: 'pop' },
       { word: 'wish', units: ['w','i','sh'], emoji: '🌠', sight: false, level: 2, anim: 'pop' },
@@ -441,39 +607,646 @@
       { word: 'boat', units: ['b','oa:o_long','t'], emoji: '⛵', sight: false, level: 3, anim: 'sail', ground: 'water' },
       { word: 'goat', units: ['g','oa:o_long','t'], emoji: '🐐', sight: false, level: 3, anim: 'hop' },
       { word: 'rain', units: ['r','ai:a_long','n'], emoji: '🌧️', sight: false, level: 3, anim: 'pop' },
-      { word: 'tail', units: ['t','ai:a_long','l'], emoji: '🐕', sight: false, level: 3, anim: 'wag' },
+      { word: 'tail', units: ['t','ai:a_long','l'], emoji: null, sight: false, level: 3, anim: 'wag' },
       { word: 'moon', units: ['m','oo:oo_long','n'], emoji: '🌙', sight: false, level: 3, anim: 'pop' },
       { word: 'book', units: ['b','oo:oo_short','k'], emoji: '📖', sight: false, level: 3, anim: 'pop' },
       { word: 'snow', units: ['s','n','ow:o_long'], emoji: '❄️', sight: false, level: 3, anim: 'pop' },
       { word: 'car', units: ['c','ar'], emoji: '🚗', sight: false, level: 4, anim: 'drive' },
       { word: 'star', units: ['s','t','ar'], emoji: '⭐', sight: false, level: 4, anim: 'pop' },
       { word: 'bird', units: ['b','ir:er','d'], emoji: '🐦', sight: false, level: 4, anim: 'pop' },
-      { word: 'fur', units: ['f','ur:er'], emoji: '🧸', sight: false, level: 4, anim: 'pop' },
+      { word: 'fur', units: ['f','ur:er'], emoji: null, sight: false, level: 4, anim: 'pop' },
       { word: 'fork', units: ['f','or','k'], emoji: '🍴', sight: false, level: 4, anim: 'pop' },
       { word: 'corn', units: ['c','or','n'], emoji: '🌽', sight: false, level: 4, anim: 'pop' },
-      { word: 'out', units: ['ou','t'], emoji: '🚪', sight: false, level: 4, anim: 'pop' },
+      { word: 'out', units: ['ou','t'], emoji: null, sight: false, level: 4, anim: 'pop' },
       { word: 'cow', units: ['c','ow:ou'], emoji: '🐄', sight: false, level: 4, anim: 'wiggle' },
       { word: 'coin', units: ['c','oi','n'], emoji: '🪙', sight: false, level: 4, anim: 'pop' },
       { word: 'boy', units: ['b','oy:oi'], emoji: '👦', sight: false, level: 4, anim: 'pop' },
 
-      { word: 'the',  units: ['t','h','e'],   emoji: null, sight: true },
-      { word: 'a',    units: ['a'],           emoji: null, sight: true },
-      { word: 'I',    units: ['I'],           emoji: null, sight: true },
-      { word: 'is',   units: ['i','s'],       emoji: null, sight: true },
-      { word: 'can',  units: ['c','a','n'],   emoji: null, sight: true },
-      { word: 'see',  units: ['s','e','e'],   emoji: null, sight: true },
-      { word: 'we',   units: ['w','e'],       emoji: null, sight: true },
-      { word: 'you',  units: ['y','o','u'],   emoji: null, sight: true },
-      { word: 'go',   units: ['g','o'],       emoji: null, sight: true },
-      { word: 'my',   units: ['m','y'],       emoji: null, sight: true },
-      { word: 'like', units: ['l','i','k','e'], emoji: null, sight: true },
-      { word: 'and',  units: ['a','n','d'],   emoji: null, sight: true }
+      // ---- stage 5 and 6 sound words (built from the word lists) ----
+      { word: 'night', units: ['n','igh:i_long','t'], emoji: '🌃', sight: false, level: 5, anim: 'pop' },
+      { word: 'light', units: ['l','igh:i_long','t'], emoji: '💡', sight: false, level: 5, anim: 'pop' },
+      { word: 'right', units: ['r','igh:i_long','t'], emoji: '➡️', sight: false, level: 5, anim: 'pop' },
+      { word: 'bright', units: ['b','r','igh:i_long','t'], emoji: '🌟', sight: false, level: 5, anim: 'pop' },
+      { word: 'fight', units: ['f','igh:i_long','t'], emoji: '🥊', sight: false, level: 5, anim: 'pop' },
+      { word: 'tight', units: ['t','igh:i_long','t'], emoji: '🤏', sight: false, level: 5, anim: 'pop' },
+      { word: 'flight', units: ['f','l','igh:i_long','t'], emoji: '🛫', sight: false, level: 5, anim: 'pop' },
+      { word: 'day', units: ['d','ay:a_long'], emoji: '🌞', sight: false, level: 5, anim: 'pop' },
+      { word: 'stay', units: ['s','t','ay:a_long'], emoji: '🏠', sight: false, level: 5, anim: 'pop' },
+      { word: 'tray', units: ['t','r','ay:a_long'], emoji: '🍽️', sight: false, level: 5, anim: 'pop' },
+      { word: 'clay', units: ['c','l','ay:a_long'], emoji: '🏺', sight: false, level: 5, anim: 'pop' },
+      { word: 'gray', units: ['g','r','ay:a_long'], emoji: '🩶', sight: false, level: 5, anim: 'pop' },
+      { word: 'spray', units: ['s','p','r','ay:a_long'], emoji: '💦', sight: false, level: 5, anim: 'pop' },
+      { word: 'sea', units: ['s','ea:e_long'], emoji: '🌊', sight: false, level: 5, anim: 'pop' },
+      { word: 'seat', units: ['s','ea:e_long','t'], emoji: '💺', sight: false, level: 5, anim: 'pop' },
+      { word: 'meat', units: ['m','ea:e_long','t'], emoji: '🥩', sight: false, level: 5, anim: 'pop' },
+      { word: 'bean', units: ['b','ea:e_long','n'], emoji: '🫘', sight: false, level: 5, anim: 'pop' },
+      { word: 'team', units: ['t','ea:e_long','m'], emoji: '👥', sight: false, level: 5, anim: 'pop' },
+      { word: 'beach', units: ['b','ea:e_long','ch'], emoji: '🏖️', sight: false, level: 5, anim: 'pop' },
+      { word: 'peach', units: ['p','ea:e_long','ch'], emoji: '🍑', sight: false, level: 5, anim: 'pop' },
+      { word: 'leaf', units: ['l','ea:e_long','f'], emoji: '🍃', sight: false, level: 5, anim: 'pop' },
+      { word: 'feet', units: ['f','ee:e_long','t'], emoji: '🦶', sight: false, level: 5, anim: 'pop' },
+      { word: 'sheep', units: ['sh','ee:e_long','p'], emoji: '🐑', sight: false, level: 5, anim: 'pop' },
+      { word: 'green', units: ['g','r','ee:e_long','n'], emoji: '🟢', sight: false, level: 5, anim: 'pop' },
+      { word: 'sleep', units: ['s','l','ee:e_long','p'], emoji: '😴', sight: false, level: 5, anim: 'pop' },
+      { word: 'street', units: ['s','t','r','ee:e_long','t'], emoji: '🛣️', sight: false, level: 5, anim: 'pop' },
+      { word: 'three', units: ['th','r','ee:e_long'], emoji: '3️⃣', sight: false, level: 5, anim: 'pop' },
+      { word: 'wheel', units: ['wh','ee:e_long','l'], emoji: '🛞', sight: false, level: 5, anim: 'pop' },
+      { word: 'jeep', units: ['j','ee:e_long','p'], emoji: '🚙', sight: false, level: 5, anim: 'pop' },
+      { word: 'road', units: ['r','oa:o_long','d'], emoji: '🛣️', sight: false, level: 5, anim: 'pop' },
+      { word: 'soap', units: ['s','oa:o_long','p'], emoji: '🧼', sight: false, level: 5, anim: 'pop' },
+      { word: 'toast', units: ['t','oa:o_long','s','t'], emoji: '🍞', sight: false, level: 5, anim: 'pop' },
+      { word: 'coat', units: ['c','oa:o_long','t'], emoji: '🧥', sight: false, level: 5, anim: 'pop' },
+      { word: 'float', units: ['f','l','oa:o_long','t'], emoji: '🛟', sight: false, level: 5, anim: 'pop' },
+      { word: 'blow', units: ['b','l','ow:o_long'], emoji: '🌬️', sight: false, level: 5, anim: 'pop' },
+      { word: 'slow', units: ['s','l','ow:o_long'], emoji: '🐌', sight: false, level: 5, anim: 'pop' },
+      { word: 'crow', units: ['c','r','ow:o_long'], emoji: '🐦‍⬛', sight: false, level: 5, anim: 'pop' },
+      { word: 'grow', units: ['g','r','ow:o_long'], emoji: '🌻', sight: false, level: 5, anim: 'pop' },
+      { word: 'mail', units: ['m','ai:a_long','l'], emoji: '📬', sight: false, level: 5, anim: 'pop' },
+      { word: 'nail', units: ['n','ai:a_long','l'], emoji: '💅', sight: false, level: 5, anim: 'pop' },
+      { word: 'train', units: ['t','r','ai:a_long','n'], emoji: '🚂', sight: false, level: 5, anim: 'pop' },
+      { word: 'paint', units: ['p','ai:a_long','n','t'], emoji: '🎨', sight: false, level: 5, anim: 'pop' },
+      { word: 'snail', units: ['s','n','ai:a_long','l'], emoji: '🐌', sight: false, level: 5, anim: 'pop' },
+      { word: 'chain', units: ['ch','ai:a_long','n'], emoji: '⛓️', sight: false, level: 5, anim: 'pop' },
+      { word: 'brain', units: ['b','r','ai:a_long','n'], emoji: '🧠', sight: false, level: 5, anim: 'pop' },
+      { word: 'pail', units: ['p','ai:a_long','l'], emoji: '🪣', sight: false, level: 5, anim: 'pop' },
+      { word: 'sail', units: ['s','ai:a_long','l'], emoji: '⛵', sight: false, level: 5, anim: 'pop' },
+      { word: 'food', units: ['f','oo:oo_long','d'], emoji: '🍽️', sight: false, level: 5, anim: 'pop' },
+      { word: 'zoo', units: ['z','oo:oo_long'], emoji: '🦁', sight: false, level: 5, anim: 'pop' },
+      { word: 'spoon', units: ['s','p','oo:oo_long','n'], emoji: '🥄', sight: false, level: 5, anim: 'pop' },
+      { word: 'boot', units: ['b','oo:oo_long','t'], emoji: '🥾', sight: false, level: 5, anim: 'pop' },
+      { word: 'roof', units: ['r','oo:oo_long','f'], emoji: '🏠', sight: false, level: 5, anim: 'pop' },
+      { word: 'broom', units: ['b','r','oo:oo_long','m'], emoji: '🧹', sight: false, level: 5, anim: 'pop' },
+      { word: 'pool', units: ['p','oo:oo_long','l'], emoji: '🏊', sight: false, level: 5, anim: 'pop' },
+      { word: 'tooth', units: ['t','oo:oo_long','th'], emoji: '🦷', sight: false, level: 5, anim: 'pop' },
+      { word: 'room', units: ['r','oo:oo_long','m'], emoji: '🛋️', sight: false, level: 5, anim: 'pop' },
+      { word: 'goose', units: ['g','oo:oo_long','s','e:_'], emoji: '🪿', sight: false, level: 5, anim: 'pop' },
+      { word: 'foot', units: ['f','oo:oo_short','t'], emoji: '🦶', sight: false, level: 5, anim: 'pop' },
+      { word: 'wood', units: ['w','oo:oo_short','d'], emoji: '🪵', sight: false, level: 5, anim: 'pop' },
+      { word: 'cook', units: ['c','oo:oo_short','k'], emoji: '🧑‍🍳', sight: false, level: 5, anim: 'pop' },
+      { word: 'good', units: ['g','oo:oo_short','d'], emoji: '👍', sight: false, level: 5, anim: 'pop' },
+      { word: 'hook', units: ['h','oo:oo_short','k'], emoji: '🪝', sight: false, level: 5, anim: 'pop' },
+      { word: 'look', units: ['l','oo:oo_short','k'], emoji: '👀', sight: false, level: 5, anim: 'pop' },
+      { word: 'house', units: ['h','ou','s','e:_'], emoji: '🏠', sight: false, level: 5, anim: 'pop' },
+      { word: 'mouse', units: ['m','ou','s','e:_'], emoji: '🐭', sight: false, level: 5, anim: 'pop' },
+      { word: 'cloud', units: ['c','l','ou','d'], emoji: '☁️', sight: false, level: 5, anim: 'pop' },
+      { word: 'mouth', units: ['m','ou','th'], emoji: '👄', sight: false, level: 5, anim: 'pop' },
+      { word: 'round', units: ['r','ou','n','d'], emoji: '⚪', sight: false, level: 5, anim: 'pop' },
+      { word: 'sound', units: ['s','ou','n','d'], emoji: '🔊', sight: false, level: 5, anim: 'pop' },
+      { word: 'ground', units: ['g','r','ou','n','d'], emoji: null, sight: false, level: 5, anim: 'pop' },
+      { word: 'brown', units: ['b','r','ow:ou','n'], emoji: '🟤', sight: false, level: 5, anim: 'pop' },
+      { word: 'crown', units: ['c','r','ow:ou','n'], emoji: '👑', sight: false, level: 5, anim: 'pop' },
+      { word: 'clown', units: ['c','l','ow:ou','n'], emoji: '🤡', sight: false, level: 5, anim: 'pop' },
+      { word: 'down', units: ['d','ow:ou','n'], emoji: '⬇️', sight: false, level: 5, anim: 'pop' },
+      { word: 'town', units: ['t','ow:ou','n'], emoji: '🏘️', sight: false, level: 5, anim: 'pop' },
+      { word: 'owl', units: ['ow:ou','l'], emoji: '🦉', sight: false, level: 5, anim: 'pop' },
+      { word: 'oil', units: ['oi','l'], emoji: '🛢️', sight: false, level: 5, anim: 'pop' },
+      { word: 'soil', units: ['s','oi','l'], emoji: '🪴', sight: false, level: 5, anim: 'pop' },
+      { word: 'boil', units: ['b','oi','l'], emoji: '♨️', sight: false, level: 5, anim: 'pop' },
+      { word: 'toy', units: ['t','oy:oi'], emoji: '🧸', sight: false, level: 5, anim: 'pop' },
+      { word: 'joy', units: ['j','oy:oi'], emoji: '😄', sight: false, level: 5, anim: 'pop' },
+      { word: 'saw', units: ['s','aw'], emoji: '🪚', sight: false, level: 5, anim: 'pop' },
+      { word: 'paw', units: ['p','aw'], emoji: '🐾', sight: false, level: 5, anim: 'pop' },
+      { word: 'claw', units: ['c','l','aw'], emoji: '🦀', sight: false, level: 5, anim: 'pop' },
+      { word: 'draw', units: ['d','r','aw'], emoji: '✏️', sight: false, level: 5, anim: 'pop' },
+      { word: 'straw', units: ['s','t','r','aw'], emoji: '🥤', sight: false, level: 5, anim: 'pop' },
+      { word: 'yawn', units: ['y','aw','n'], emoji: '🥱', sight: false, level: 5, anim: 'pop' },
+      { word: 'lawn', units: ['l','aw','n'], emoji: '🌿', sight: false, level: 5, anim: 'pop' },
+      { word: 'hawk', units: ['h','aw','k'], emoji: '🦅', sight: false, level: 5, anim: 'pop' },
+      { word: 'farm', units: ['f','ar','m'], emoji: '🚜', sight: false, level: 5, anim: 'pop' },
+      { word: 'barn', units: ['b','ar','n'], emoji: null, sight: false, level: 5, anim: 'pop' },
+      { word: 'park', units: ['p','ar','k'], emoji: '🏞️', sight: false, level: 5, anim: 'pop' },
+      { word: 'shark', units: ['sh','ar','k'], emoji: '🦈', sight: false, level: 5, anim: 'pop' },
+      { word: 'card', units: ['c','ar','d'], emoji: '🃏', sight: false, level: 5, anim: 'pop' },
+      { word: 'yard', units: ['y','ar','d'], emoji: '🏡', sight: false, level: 5, anim: 'pop' },
+      { word: 'arm', units: ['ar','m'], emoji: '💪', sight: false, level: 5, anim: 'pop' },
+      { word: 'jar', units: ['j','ar'], emoji: '🫙', sight: false, level: 5, anim: 'pop' },
+      { word: 'horn', units: ['h','or','n'], emoji: '📯', sight: false, level: 5, anim: 'pop' },
+      { word: 'storm', units: ['s','t','or','m'], emoji: '⛈️', sight: false, level: 5, anim: 'pop' },
+      { word: 'horse', units: ['h','or','s','e:_'], emoji: '🐴', sight: false, level: 5, anim: 'pop' },
+      { word: 'sport', units: ['s','p','or','t'], emoji: '⚽', sight: false, level: 5, anim: 'pop' },
+      { word: 'short', units: ['sh','or','t'], emoji: '📏', sight: false, level: 5, anim: 'pop' },
+      { word: 'north', units: ['n','or','th'], emoji: '🧭', sight: false, level: 5, anim: 'pop' },
+      { word: 'fern', units: ['f','er','n'], emoji: '🌿', sight: false, level: 5, anim: 'pop' },
+      { word: 'girl', units: ['g','ir:er','l'], emoji: '👧', sight: false, level: 5, anim: 'pop' },
+      { word: 'shirt', units: ['sh','ir:er','t'], emoji: '👕', sight: false, level: 5, anim: 'pop' },
+      { word: 'first', units: ['f','ir:er','s','t'], emoji: '🥇', sight: false, level: 5, anim: 'pop' },
+      { word: 'third', units: ['th','ir:er','d'], emoji: '🥉', sight: false, level: 5, anim: 'pop' },
+      { word: 'turn', units: ['t','ur:er','n'], emoji: '↪️', sight: false, level: 5, anim: 'pop' },
+      { word: 'burn', units: ['b','ur:er','n'], emoji: '🔥', sight: false, level: 5, anim: 'pop' },
+      { word: 'nurse', units: ['n','ur:er','s','e:_'], emoji: '🧑‍⚕️', sight: false, level: 5, anim: 'pop' },
+      { word: 'purse', units: ['p','ur:er','s','e:_'], emoji: '👛', sight: false, level: 5, anim: 'pop' },
+      { word: 'gate', units: ['g','a:a_long','t','e:_'], emoji: '🚪', sight: false, level: 5, anim: 'pop' },
+      { word: 'game', units: ['g','a:a_long','m','e:_'], emoji: '🎲', sight: false, level: 5, anim: 'pop' },
+      { word: 'cave', units: ['c','a:a_long','v','e:_'], emoji: '⛰️', sight: false, level: 5, anim: 'pop' },
+      { word: 'wave', units: ['w','a:a_long','v','e:_'], emoji: '👋', sight: false, level: 5, anim: 'pop' },
+      { word: 'snake', units: ['s','n','a:a_long','k','e:_'], emoji: '🐍', sight: false, level: 5, anim: 'pop' },
+      { word: 'plane', units: ['p','l','a:a_long','n','e:_'], emoji: '✈️', sight: false, level: 5, anim: 'pop' },
+      { word: 'five', units: ['f','i:i_long','v','e:_'], emoji: '5️⃣', sight: false, level: 5, anim: 'pop' },
+      { word: 'nine', units: ['n','i:i_long','n','e:_'], emoji: '9️⃣', sight: false, level: 5, anim: 'pop' },
+      { word: 'hive', units: ['h','i:i_long','v','e:_'], emoji: '🐝', sight: false, level: 5, anim: 'pop' },
+      { word: 'slide', units: ['s','l','i:i_long','d','e:_'], emoji: '🛝', sight: false, level: 5, anim: 'pop' },
+      { word: 'smile', units: ['s','m','i:i_long','l','e:_'], emoji: '😊', sight: false, level: 5, anim: 'pop' },
+      { word: 'rope', units: ['r','o:o_long','p','e:_'], emoji: '🪢', sight: false, level: 5, anim: 'pop' },
+      { word: 'home', units: ['h','o:o_long','m','e:_'], emoji: '🏠', sight: false, level: 5, anim: 'pop' },
+      { word: 'hole', units: ['h','o:o_long','l','e:_'], emoji: '🕳️', sight: false, level: 5, anim: 'pop' },
+      { word: 'joke', units: ['j','o:o_long','k','e:_'], emoji: '😂', sight: false, level: 5, anim: 'pop' },
+      { word: 'stone', units: ['s','t','o:o_long','n','e:_'], emoji: '🪨', sight: false, level: 5, anim: 'pop' },
+      { word: 'tube', units: ['t','u:u_long','b','e:_'], emoji: '🧪', sight: false, level: 5, anim: 'pop' },
+      { word: 'cute', units: ['c','u:u_long','t','e:_'], emoji: '🥰', sight: false, level: 5, anim: 'pop' },
+      { word: 'mule', units: ['m','u:u_long','l','e:_'], emoji: '🫏', sight: false, level: 5, anim: 'pop' },
+      { word: 'flute', units: ['f','l','u:u_long','t','e:_'], emoji: '🪈', sight: false, level: 5, anim: 'pop' },
+      { word: 'ice', units: ['i:i_long','c:s','e:_'], emoji: '🧊', sight: false, level: 5, anim: 'pop' },
+      { word: 'face', units: ['f','a:a_long','c:s','e:_'], emoji: '🙂', sight: false, level: 5, anim: 'pop' },
+      { word: 'race', units: ['r','a:a_long','c:s','e:_'], emoji: '🏁', sight: false, level: 5, anim: 'pop' },
+      { word: 'rice', units: ['r','i:i_long','c:s','e:_'], emoji: '🍚', sight: false, level: 5, anim: 'pop' },
+      { word: 'mice', units: ['m','i:i_long','c:s','e:_'], emoji: '🐭', sight: false, level: 5, anim: 'pop' },
+      { word: 'nice', units: ['n','i:i_long','c:s','e:_'], emoji: '😊', sight: false, level: 5, anim: 'pop' },
+      { word: 'cent', units: ['c:s','e','n','t'], emoji: '🪙', sight: false, level: 5, anim: 'pop' },
+      { word: 'gem', units: ['g:j','e','m'], emoji: '💎', sight: false, level: 5, anim: 'pop' },
+      { word: 'cage', units: ['c','a:a_long','g:j','e:_'], emoji: null, sight: false, level: 5, anim: 'pop' },
+      { word: 'page', units: ['p','a:a_long','g:j','e:_'], emoji: '📄', sight: false, level: 5, anim: 'pop' },
+      { word: 'stage', units: ['s','t','a:a_long','g:j','e:_'], emoji: '🎭', sight: false, level: 5, anim: 'pop' },
+      { word: 'fly', units: ['f','l','y:i_long'], emoji: '🪰', sight: false, level: 5, anim: 'pop' },
+      { word: 'sky', units: ['s','k','y:i_long'], emoji: '🌤️', sight: false, level: 5, anim: 'pop' },
+      { word: 'try', units: ['t','r','y:i_long'], emoji: '💪', sight: false, level: 5, anim: 'pop' },
+      { word: 'cry', units: ['c','r','y:i_long'], emoji: '😢', sight: false, level: 5, anim: 'pop' },
+      { word: 'dry', units: ['d','r','y:i_long'], emoji: '🏜️', sight: false, level: 5, anim: 'pop' },
+      { word: 'happy', units: ['h','a','pp:p','y:e_long'], emoji: '😀', sight: false, level: 5, anim: 'pop' },
+      { word: 'candy', units: ['c','a','n','d','y:e_long'], emoji: '🍬', sight: false, level: 5, anim: 'pop' },
+      { word: 'funny', units: ['f','u','nn:n','y:e_long'], emoji: '🤣', sight: false, level: 5, anim: 'pop' },
+      { word: 'puppy', units: ['p','u','pp:p','y:e_long'], emoji: '🐶', sight: false, level: 5, anim: 'pop' },
+      { word: 'bunny', units: ['b','u','nn:n','y:e_long'], emoji: '🐰', sight: false, level: 5, anim: 'pop' },
+      { word: 'jelly', units: ['j','e','ll:l','y:e_long'], emoji: '🍇', sight: false, level: 5, anim: 'pop' },
+      { word: 'penny', units: ['p','e','nn:n','y:e_long'], emoji: '🪙', sight: false, level: 5, anim: 'pop' },
+      { word: 'knee', units: ['kn:n','ee:e_long'], emoji: '🦵', sight: false, level: 5, anim: 'pop' },
+      { word: 'knit', units: ['kn:n','i','t'], emoji: '🧶', sight: false, level: 5, anim: 'pop' },
+      { word: 'knot', units: ['kn:n','o','t'], emoji: '🪢', sight: false, level: 5, anim: 'pop' },
+      { word: 'wrap', units: ['wr:r','a','p'], emoji: '🎁', sight: false, level: 5, anim: 'pop' },
+      { word: 'write', units: ['wr:r','i:i_long','t','e:_'], emoji: '✍️', sight: false, level: 5, anim: 'pop' },
+      { word: 'wrong', units: ['wr:r','o','ng'], emoji: '❌', sight: false, level: 5, anim: 'pop' },
+      { word: 'lamb', units: ['l','a','m','mb:_'], emoji: '🐑', sight: false, level: 5, anim: 'pop' },
+      { word: 'comb', units: ['c','o','m','mb:_'], emoji: null, sight: false, level: 5, anim: 'pop' },
+      { word: 'phone', units: ['ph:f','o:o_long','n','e:_'], emoji: '📱', sight: false, level: 5, anim: 'pop' },
+      { word: 'graph', units: ['g','r','a','ph:f'], emoji: '📊', sight: false, level: 5, anim: 'pop' },
+      { word: 'queen', units: ['qu','ee:e_long','n'], emoji: '👸', sight: false, level: 5, anim: 'pop' },
+      { word: 'quick', units: ['qu','i','ck'], emoji: '⚡', sight: false, level: 5, anim: 'pop' },
+      { word: 'quiz', units: ['qu','i','z'], emoji: '❓', sight: false, level: 5, anim: 'pop' },
+      { word: 'quit', units: ['qu','i','t'], emoji: '🙅', sight: false, level: 5, anim: 'pop' },
+      { word: 'ring', units: ['r','i','ng'], emoji: '💍', sight: false, level: 5, anim: 'pop' },
+      { word: 'king', units: ['k','i','ng'], emoji: '🫅', sight: false, level: 5, anim: 'pop' },
+      { word: 'sing', units: ['s','i','ng'], emoji: '🎤', sight: false, level: 5, anim: 'pop' },
+      { word: 'song', units: ['s','o','ng'], emoji: '🎵', sight: false, level: 5, anim: 'pop' },
+      { word: 'long', units: ['l','o','ng'], emoji: '📏', sight: false, level: 5, anim: 'pop' },
+      { word: 'wing', units: ['w','i','ng'], emoji: '🪽', sight: false, level: 5, anim: 'pop' },
+      { word: 'bank', units: ['b','a','n:ng','k'], emoji: '🏦', sight: false, level: 5, anim: 'pop' },
+      { word: 'pink', units: ['p','i','n:ng','k'], emoji: '🩷', sight: false, level: 5, anim: 'pop' },
+      { word: 'sink', units: ['s','i','n:ng','k'], emoji: '🚰', sight: false, level: 5, anim: 'pop' },
+      { word: 'drink', units: ['d','r','i','n:ng','k'], emoji: '🥤', sight: false, level: 5, anim: 'pop' },
+      { word: 'trunk', units: ['t','r','u','n:ng','k'], emoji: '🐘', sight: false, level: 5, anim: 'pop' },
+      { word: 'think', units: ['th','i','n:ng','k'], emoji: '💭', sight: false, level: 5, anim: 'pop' },
+      { word: 'whale', units: ['wh','a:a_long','l','e:_'], emoji: '🐋', sight: false, level: 5, anim: 'pop' },
+      { word: 'whip', units: ['wh','i','p'], emoji: null, sight: false, level: 5, anim: 'pop' },
+      { word: 'white', units: ['wh','i:i_long','t','e:_'], emoji: '⬜', sight: false, level: 5, anim: 'pop' },
+      { word: 'station', units: ['s','t','a:a_long','tion:shun'], emoji: '🚉', sight: false, level: 6, anim: 'pop' },
+      { word: 'action', units: ['a','c','tion:shun'], emoji: '🎬', sight: false, level: 6, anim: 'pop' },
+      { word: 'lotion', units: ['l','o:o_long','tion:shun'], emoji: '🧴', sight: false, level: 6, anim: 'pop' },
+      { word: 'motion', units: ['m','o:o_long','tion:shun'], emoji: '🌀', sight: false, level: 6, anim: 'pop' },
+      { word: 'unlock', units: ['un','l','o','ck'], emoji: '🔓', sight: false, level: 6, anim: 'pop' },
+      { word: 'unpack', units: ['un','p','a','ck'], emoji: '🎒', sight: false, level: 6, anim: 'pop' },
+      { word: 'undo', units: ['un','d','oo:oo_long'], emoji: '↩️', sight: false, level: 6, anim: 'pop' },
+      { word: 'redo', units: ['re','d','oo:oo_long'], emoji: '🔁', sight: false, level: 6, anim: 'pop' },
+      { word: 'replay', units: ['re','p','l','ay:a_long'], emoji: '▶️', sight: false, level: 6, anim: 'pop' },
+      { word: 'rerun', units: ['re','r','u','n'], emoji: '🔄', sight: false, level: 6, anim: 'pop' },
+      { word: 'jumping', units: ['j','u','m','p','ing'], emoji: '🤸', sight: false, level: 6, anim: 'pop' },
+      { word: 'playing', units: ['p','l','ay:a_long','ing'], emoji: '🧩', sight: false, level: 6, anim: 'pop' },
+      { word: 'fishing', units: ['f','i','sh','ing'], emoji: '🎣', sight: false, level: 6, anim: 'pop' },
+      { word: 'helping', units: ['h','e','l','p','ing'], emoji: '🤝', sight: false, level: 6, anim: 'pop' },
+      { word: 'singing', units: ['s','i','ng','ing'], emoji: '🎶', sight: false, level: 6, anim: 'pop' },
+      { word: 'looking', units: ['l','oo:oo_short','k','ing'], emoji: '🔍', sight: false, level: 6, anim: 'pop' },
+      { word: 'resting', units: ['r','e','s','t','ing'], emoji: '🛌', sight: false, level: 6, anim: 'pop' },
+      { word: 'helper', units: ['h','e','l','p','er'], emoji: '🦸', sight: false, level: 6, anim: 'pop' },
+      { word: 'jumper', units: ['j','u','m','p','er'], emoji: '🤸', sight: false, level: 6, anim: 'pop' },
+      { word: 'farmer', units: ['f','ar','m','er'], emoji: '🧑‍🌾', sight: false, level: 6, anim: 'pop' },
+      { word: 'painter', units: ['p','ai:a_long','n','t','er'], emoji: '🧑‍🎨', sight: false, level: 6, anim: 'pop' },
+      { word: 'teacher', units: ['t','ea:e_long','ch','er'], emoji: '🧑‍🏫', sight: false, level: 6, anim: 'pop' },
+      { word: 'hunter', units: ['h','u','n','t','er'], emoji: '🏹', sight: false, level: 6, anim: 'pop' },
+      { word: 'cupcake', units: ['cup:word-cup','cake:word-cake'], emoji: '🧁', sight: false, level: 6, anim: 'pop' },
+      { word: 'bathtub', units: ['bath:word-bath','tub:word-tub'], emoji: '🛁', sight: false, level: 6, anim: 'pop' },
+      { word: 'catfish', units: ['cat:word-cat','fish:word-fish'], emoji: '🐟', sight: false, level: 6, anim: 'pop' },
+      { word: 'bedbug', units: ['bed:word-bed','bug:word-bug'], emoji: '🐛', sight: false, level: 6, anim: 'pop' },
+      { word: 'hotdog', units: ['hot:word-hot','dog:word-dog'], emoji: '🌭', sight: false, level: 6, anim: 'pop' },
+      { word: 'sunset', units: ['sun:word-sun','set:word-set'], emoji: '🌇', sight: false, level: 6, anim: 'pop' },
+      { word: 'sunshine', units: ['sun:word-sun','shine:word-shine'], emoji: '🌞', sight: false, level: 6, anim: 'pop' },
+      { word: 'rainbow', units: ['rain:word-rain','bow:word-bow'], emoji: '🌈', sight: false, level: 6, anim: 'pop' },
+      { word: 'raincoat', units: ['rain:word-rain','coat:word-coat'], emoji: '🧥', sight: false, level: 6, anim: 'pop' },
+      { word: 'snowman', units: ['snow:word-snow','man:word-man'], emoji: '⛄', sight: false, level: 6, anim: 'pop' },
+      { word: 'snowball', units: ['snow:word-snow','ball:word-ball'], emoji: null, sight: false, level: 6, anim: 'pop' },
+      { word: 'football', units: ['foot:word-foot','ball:word-ball'], emoji: '🏈', sight: false, level: 6, anim: 'pop' },
+      { word: 'sailboat', units: ['sail:word-sail','boat:word-boat'], emoji: '⛵', sight: false, level: 6, anim: 'pop' },
+      { word: 'goldfish', units: ['gold:word-gold','fish:word-fish'], emoji: '🐠', sight: false, level: 6, anim: 'pop' },
+      { word: 'starfish', units: ['star:word-star','fish:word-fish'], emoji: null, sight: false, level: 6, anim: 'pop' },
+      { word: 'jellyfish', units: ['jelly:word-jelly','fish:word-fish'], emoji: '🪼', sight: false, level: 6, anim: 'pop' },
+      { word: 'doghouse', units: ['dog:word-dog','house:word-house'], emoji: null, sight: false, level: 6, anim: 'pop' },
+      { word: 'treehouse', units: ['tree:word-tree','house:word-house'], emoji: null, sight: false, level: 6, anim: 'pop' },
+      { word: 'lighthouse', units: ['light:word-light','house:word-house'], emoji: null, sight: false, level: 6, anim: 'pop' },
+      { word: 'birdhouse', units: ['bird:word-bird','house:word-house'], emoji: null, sight: false, level: 6, anim: 'pop' },
+      { word: 'toothbrush', units: ['tooth:word-tooth','brush:word-brush'], emoji: '🪥', sight: false, level: 6, anim: 'pop' },
+      { word: 'bedroom', units: ['bed:word-bed','room:word-room'], emoji: '🛏️', sight: false, level: 6, anim: 'pop' },
+      { word: 'bathroom', units: ['bath:word-bath','room:word-room'], emoji: '🚿', sight: false, level: 6, anim: 'pop' },
+      { word: 'playground', units: ['play:word-play','ground:word-ground'], emoji: '🛝', sight: false, level: 6, anim: 'pop' },
+      { word: 'backpack', units: ['back:word-back','pack:word-pack'], emoji: '🎒', sight: false, level: 6, anim: 'pop' },
+      { word: 'mailbox', units: ['mail:word-mail','box:word-box'], emoji: '📬', sight: false, level: 6, anim: 'pop' },
+      { word: 'notebook', units: ['note:word-note','book:word-book'], emoji: '📓', sight: false, level: 6, anim: 'pop' },
+      { word: 'popcorn', units: ['pop:word-pop','corn:word-corn'], emoji: '🍿', sight: false, level: 6, anim: 'pop' },
+      { word: 'pancake', units: ['pan:word-pan','cake:word-cake'], emoji: '🥞', sight: false, level: 6, anim: 'pop' },
+      { word: 'butterfly', units: ['butter:word-butter','fly:word-fly'], emoji: '🦋', sight: false, level: 6, anim: 'pop' },
+      { word: 'ladybug', units: ['lady:word-lady','bug:word-bug'], emoji: '🐞', sight: false, level: 6, anim: 'pop' },
+      { word: 'moonlight', units: ['moon:word-moon','light:word-light'], emoji: '🌙', sight: false, level: 6, anim: 'pop' },
+      { word: 'sunlight', units: ['sun:word-sun','light:word-light'], emoji: '☀️', sight: false, level: 6, anim: 'pop' },
+      { word: 'cowboy', units: ['cow:word-cow','boy:word-boy'], emoji: '🤠', sight: false, level: 6, anim: 'pop' },
+      { word: 'airplane', units: ['air:word-air','plane:word-plane'], emoji: '✈️', sight: false, level: 6, anim: 'pop' },
+      { word: 'seashell', units: ['sea:word-sea','shell:word-shell'], emoji: '🐚', sight: false, level: 6, anim: 'pop' },
+      { word: 'sandbox', units: ['sand:word-sand','box:word-box'], emoji: null, sight: false, level: 6, anim: 'pop' },
+      { word: 'firefly', units: ['fire:word-fire','fly:word-fly'], emoji: null, sight: false, level: 6, anim: 'pop' },
+      { word: 'eggshell', units: ['egg:word-egg','shell:word-shell'], emoji: '🥚', sight: false, level: 6, anim: 'pop' },
+      { word: 'rooftop', units: ['roof:word-roof','top:word-top'], emoji: '🏠', sight: false, level: 6, anim: 'pop' },
+
+      // ---- sight words (Dolch lists; level = stage 1-5) ----
+      { word: 'a', units: ['a'], emoji: null, sight: true, level: 1 },
+      { word: 'and', units: ['a','n','d'], emoji: null, sight: true, level: 1 },
+      { word: 'away', units: ['a','w','a','y'], emoji: null, sight: true, level: 1 },
+      { word: 'big', units: ['b','i','g'], emoji: null, sight: true, level: 1 },
+      { word: 'blue', units: ['b','l','u','e'], emoji: null, sight: true, level: 1 },
+      { word: 'can', units: ['c','a','n'], emoji: null, sight: true, level: 1 },
+      { word: 'come', units: ['c','o','m','e'], emoji: null, sight: true, level: 1 },
+      { word: 'down', units: ['d','o','w','n'], emoji: null, sight: true, level: 1 },
+      { word: 'find', units: ['f','i','n','d'], emoji: null, sight: true, level: 1 },
+      { word: 'for', units: ['f','o','r'], emoji: null, sight: true, level: 1 },
+      { word: 'funny', units: ['f','u','n','n','y'], emoji: null, sight: true, level: 1 },
+      { word: 'go', units: ['g','o'], emoji: null, sight: true, level: 1 },
+      { word: 'help', units: ['h','e','l','p'], emoji: null, sight: true, level: 1 },
+      { word: 'here', units: ['h','e','r','e'], emoji: null, sight: true, level: 1 },
+      { word: 'I', units: ['I'], emoji: null, sight: true, level: 1 },
+      { word: 'in', units: ['i','n'], emoji: null, sight: true, level: 1 },
+      { word: 'is', units: ['i','s'], emoji: null, sight: true, level: 1 },
+      { word: 'it', units: ['i','t'], emoji: null, sight: true, level: 1 },
+      { word: 'jump', units: ['j','u','m','p'], emoji: null, sight: true, level: 1 },
+      { word: 'little', units: ['l','i','t','t','l','e'], emoji: null, sight: true, level: 1 },
+      { word: 'look', units: ['l','o','o','k'], emoji: null, sight: true, level: 1 },
+      { word: 'make', units: ['m','a','k','e'], emoji: null, sight: true, level: 1 },
+      { word: 'me', units: ['m','e'], emoji: null, sight: true, level: 1 },
+      { word: 'my', units: ['m','y'], emoji: null, sight: true, level: 1 },
+      { word: 'not', units: ['n','o','t'], emoji: null, sight: true, level: 1 },
+      { word: 'one', units: ['o','n','e'], emoji: null, sight: true, level: 1 },
+      { word: 'play', units: ['p','l','a','y'], emoji: null, sight: true, level: 1 },
+      { word: 'red', units: ['r','e','d'], emoji: null, sight: true, level: 1 },
+      { word: 'run', units: ['r','u','n'], emoji: null, sight: true, level: 1 },
+      { word: 'said', units: ['s','a','i','d'], emoji: null, sight: true, level: 1 },
+      { word: 'see', units: ['s','e','e'], emoji: null, sight: true, level: 1 },
+      { word: 'the', units: ['t','h','e'], emoji: null, sight: true, level: 1 },
+      { word: 'three', units: ['t','h','r','e','e'], emoji: null, sight: true, level: 1 },
+      { word: 'to', units: ['t','o'], emoji: null, sight: true, level: 1 },
+      { word: 'two', units: ['t','w','o'], emoji: null, sight: true, level: 1 },
+      { word: 'up', units: ['u','p'], emoji: null, sight: true, level: 1 },
+      { word: 'we', units: ['w','e'], emoji: null, sight: true, level: 1 },
+      { word: 'where', units: ['w','h','e','r','e'], emoji: null, sight: true, level: 1 },
+      { word: 'yellow', units: ['y','e','l','l','o','w'], emoji: null, sight: true, level: 1 },
+      { word: 'you', units: ['y','o','u'], emoji: null, sight: true, level: 1 },
+      { word: 'all', units: ['a','l','l'], emoji: null, sight: true, level: 2 },
+      { word: 'am', units: ['a','m'], emoji: null, sight: true, level: 2 },
+      { word: 'are', units: ['a','r','e'], emoji: null, sight: true, level: 2 },
+      { word: 'at', units: ['a','t'], emoji: null, sight: true, level: 2 },
+      { word: 'ate', units: ['a','t','e'], emoji: null, sight: true, level: 2 },
+      { word: 'be', units: ['b','e'], emoji: null, sight: true, level: 2 },
+      { word: 'black', units: ['b','l','a','c','k'], emoji: null, sight: true, level: 2 },
+      { word: 'brown', units: ['b','r','o','w','n'], emoji: null, sight: true, level: 2 },
+      { word: 'but', units: ['b','u','t'], emoji: null, sight: true, level: 2 },
+      { word: 'came', units: ['c','a','m','e'], emoji: null, sight: true, level: 2 },
+      { word: 'did', units: ['d','i','d'], emoji: null, sight: true, level: 2 },
+      { word: 'do', units: ['d','o'], emoji: null, sight: true, level: 2 },
+      { word: 'eat', units: ['e','a','t'], emoji: null, sight: true, level: 2 },
+      { word: 'four', units: ['f','o','u','r'], emoji: null, sight: true, level: 2 },
+      { word: 'get', units: ['g','e','t'], emoji: null, sight: true, level: 2 },
+      { word: 'good', units: ['g','o','o','d'], emoji: null, sight: true, level: 2 },
+      { word: 'have', units: ['h','a','v','e'], emoji: null, sight: true, level: 2 },
+      { word: 'he', units: ['h','e'], emoji: null, sight: true, level: 2 },
+      { word: 'into', units: ['i','n','t','o'], emoji: null, sight: true, level: 2 },
+      { word: 'like', units: ['l','i','k','e'], emoji: null, sight: true, level: 2 },
+      { word: 'must', units: ['m','u','s','t'], emoji: null, sight: true, level: 2 },
+      { word: 'new', units: ['n','e','w'], emoji: null, sight: true, level: 2 },
+      { word: 'no', units: ['n','o'], emoji: null, sight: true, level: 2 },
+      { word: 'now', units: ['n','o','w'], emoji: null, sight: true, level: 2 },
+      { word: 'on', units: ['o','n'], emoji: null, sight: true, level: 2 },
+      { word: 'our', units: ['o','u','r'], emoji: null, sight: true, level: 2 },
+      { word: 'out', units: ['o','u','t'], emoji: null, sight: true, level: 2 },
+      { word: 'please', units: ['p','l','e','a','s','e'], emoji: null, sight: true, level: 2 },
+      { word: 'pretty', units: ['p','r','e','t','t','y'], emoji: null, sight: true, level: 2 },
+      { word: 'ran', units: ['r','a','n'], emoji: null, sight: true, level: 2 },
+      { word: 'ride', units: ['r','i','d','e'], emoji: null, sight: true, level: 2 },
+      { word: 'saw', units: ['s','a','w'], emoji: null, sight: true, level: 2 },
+      { word: 'say', units: ['s','a','y'], emoji: null, sight: true, level: 2 },
+      { word: 'she', units: ['s','h','e'], emoji: null, sight: true, level: 2 },
+      { word: 'so', units: ['s','o'], emoji: null, sight: true, level: 2 },
+      { word: 'soon', units: ['s','o','o','n'], emoji: null, sight: true, level: 2 },
+      { word: 'that', units: ['t','h','a','t'], emoji: null, sight: true, level: 2 },
+      { word: 'there', units: ['t','h','e','r','e'], emoji: null, sight: true, level: 2 },
+      { word: 'they', units: ['t','h','e','y'], emoji: null, sight: true, level: 2 },
+      { word: 'this', units: ['t','h','i','s'], emoji: null, sight: true, level: 2 },
+      { word: 'too', units: ['t','o','o'], emoji: null, sight: true, level: 2 },
+      { word: 'under', units: ['u','n','d','e','r'], emoji: null, sight: true, level: 2 },
+      { word: 'want', units: ['w','a','n','t'], emoji: null, sight: true, level: 2 },
+      { word: 'was', units: ['w','a','s'], emoji: null, sight: true, level: 2 },
+      { word: 'well', units: ['w','e','l','l'], emoji: null, sight: true, level: 2 },
+      { word: 'went', units: ['w','e','n','t'], emoji: null, sight: true, level: 2 },
+      { word: 'what', units: ['w','h','a','t'], emoji: null, sight: true, level: 2 },
+      { word: 'white', units: ['w','h','i','t','e'], emoji: null, sight: true, level: 2 },
+      { word: 'who', units: ['w','h','o'], emoji: null, sight: true, level: 2 },
+      { word: 'will', units: ['w','i','l','l'], emoji: null, sight: true, level: 2 },
+      { word: 'with', units: ['w','i','t','h'], emoji: null, sight: true, level: 2 },
+      { word: 'yes', units: ['y','e','s'], emoji: null, sight: true, level: 2 },
+      { word: 'after', units: ['a','f','t','e','r'], emoji: null, sight: true, level: 3 },
+      { word: 'again', units: ['a','g','a','i','n'], emoji: null, sight: true, level: 3 },
+      { word: 'an', units: ['a','n'], emoji: null, sight: true, level: 3 },
+      { word: 'any', units: ['a','n','y'], emoji: null, sight: true, level: 3 },
+      { word: 'as', units: ['a','s'], emoji: null, sight: true, level: 3 },
+      { word: 'ask', units: ['a','s','k'], emoji: null, sight: true, level: 3 },
+      { word: 'by', units: ['b','y'], emoji: null, sight: true, level: 3 },
+      { word: 'could', units: ['c','o','u','l','d'], emoji: null, sight: true, level: 3 },
+      { word: 'every', units: ['e','v','e','r','y'], emoji: null, sight: true, level: 3 },
+      { word: 'fly', units: ['f','l','y'], emoji: null, sight: true, level: 3 },
+      { word: 'from', units: ['f','r','o','m'], emoji: null, sight: true, level: 3 },
+      { word: 'give', units: ['g','i','v','e'], emoji: null, sight: true, level: 3 },
+      { word: 'going', units: ['g','o','i','n','g'], emoji: null, sight: true, level: 3 },
+      { word: 'had', units: ['h','a','d'], emoji: null, sight: true, level: 3 },
+      { word: 'has', units: ['h','a','s'], emoji: null, sight: true, level: 3 },
+      { word: 'her', units: ['h','e','r'], emoji: null, sight: true, level: 3 },
+      { word: 'him', units: ['h','i','m'], emoji: null, sight: true, level: 3 },
+      { word: 'his', units: ['h','i','s'], emoji: null, sight: true, level: 3 },
+      { word: 'how', units: ['h','o','w'], emoji: null, sight: true, level: 3 },
+      { word: 'just', units: ['j','u','s','t'], emoji: null, sight: true, level: 3 },
+      { word: 'know', units: ['k','n','o','w'], emoji: null, sight: true, level: 3 },
+      { word: 'let', units: ['l','e','t'], emoji: null, sight: true, level: 3 },
+      { word: 'live', units: ['l','i','v','e'], emoji: null, sight: true, level: 3 },
+      { word: 'may', units: ['m','a','y'], emoji: null, sight: true, level: 3 },
+      { word: 'of', units: ['o','f'], emoji: null, sight: true, level: 3 },
+      { word: 'old', units: ['o','l','d'], emoji: null, sight: true, level: 3 },
+      { word: 'once', units: ['o','n','c','e'], emoji: null, sight: true, level: 3 },
+      { word: 'open', units: ['o','p','e','n'], emoji: null, sight: true, level: 3 },
+      { word: 'over', units: ['o','v','e','r'], emoji: null, sight: true, level: 3 },
+      { word: 'put', units: ['p','u','t'], emoji: null, sight: true, level: 3 },
+      { word: 'round', units: ['r','o','u','n','d'], emoji: null, sight: true, level: 3 },
+      { word: 'some', units: ['s','o','m','e'], emoji: null, sight: true, level: 3 },
+      { word: 'stop', units: ['s','t','o','p'], emoji: null, sight: true, level: 3 },
+      { word: 'take', units: ['t','a','k','e'], emoji: null, sight: true, level: 3 },
+      { word: 'thank', units: ['t','h','a','n','k'], emoji: null, sight: true, level: 3 },
+      { word: 'them', units: ['t','h','e','m'], emoji: null, sight: true, level: 3 },
+      { word: 'then', units: ['t','h','e','n'], emoji: null, sight: true, level: 3 },
+      { word: 'think', units: ['t','h','i','n','k'], emoji: null, sight: true, level: 3 },
+      { word: 'walk', units: ['w','a','l','k'], emoji: null, sight: true, level: 3 },
+      { word: 'were', units: ['w','e','r','e'], emoji: null, sight: true, level: 3 },
+      { word: 'when', units: ['w','h','e','n'], emoji: null, sight: true, level: 3 },
+      { word: 'always', units: ['a','l','w','a','y','s'], emoji: null, sight: true, level: 4 },
+      { word: 'around', units: ['a','r','o','u','n','d'], emoji: null, sight: true, level: 4 },
+      { word: 'because', units: ['b','e','c','a','u','s','e'], emoji: null, sight: true, level: 4 },
+      { word: 'been', units: ['b','e','e','n'], emoji: null, sight: true, level: 4 },
+      { word: 'before', units: ['b','e','f','o','r','e'], emoji: null, sight: true, level: 4 },
+      { word: 'best', units: ['b','e','s','t'], emoji: null, sight: true, level: 4 },
+      { word: 'both', units: ['b','o','t','h'], emoji: null, sight: true, level: 4 },
+      { word: 'buy', units: ['b','u','y'], emoji: null, sight: true, level: 4 },
+      { word: 'call', units: ['c','a','l','l'], emoji: null, sight: true, level: 4 },
+      { word: 'cold', units: ['c','o','l','d'], emoji: null, sight: true, level: 4 },
+      { word: 'does', units: ['d','o','e','s'], emoji: null, sight: true, level: 4 },
+      { word: 'fast', units: ['f','a','s','t'], emoji: null, sight: true, level: 4 },
+      { word: 'first', units: ['f','i','r','s','t'], emoji: null, sight: true, level: 4 },
+      { word: 'five', units: ['f','i','v','e'], emoji: null, sight: true, level: 4 },
+      { word: 'found', units: ['f','o','u','n','d'], emoji: null, sight: true, level: 4 },
+      { word: 'gave', units: ['g','a','v','e'], emoji: null, sight: true, level: 4 },
+      { word: 'goes', units: ['g','o','e','s'], emoji: null, sight: true, level: 4 },
+      { word: 'green', units: ['g','r','e','e','n'], emoji: null, sight: true, level: 4 },
+      { word: 'its', units: ['i','t','s'], emoji: null, sight: true, level: 4 },
+      { word: 'made', units: ['m','a','d','e'], emoji: null, sight: true, level: 4 },
+      { word: 'many', units: ['m','a','n','y'], emoji: null, sight: true, level: 4 },
+      { word: 'off', units: ['o','f','f'], emoji: null, sight: true, level: 4 },
+      { word: 'or', units: ['o','r'], emoji: null, sight: true, level: 4 },
+      { word: 'pull', units: ['p','u','l','l'], emoji: null, sight: true, level: 4 },
+      { word: 'read', units: ['r','e','a','d'], emoji: null, sight: true, level: 4 },
+      { word: 'right', units: ['r','i','g','h','t'], emoji: null, sight: true, level: 4 },
+      { word: 'sing', units: ['s','i','n','g'], emoji: null, sight: true, level: 4 },
+      { word: 'sit', units: ['s','i','t'], emoji: null, sight: true, level: 4 },
+      { word: 'sleep', units: ['s','l','e','e','p'], emoji: null, sight: true, level: 4 },
+      { word: 'tell', units: ['t','e','l','l'], emoji: null, sight: true, level: 4 },
+      { word: 'their', units: ['t','h','e','i','r'], emoji: null, sight: true, level: 4 },
+      { word: 'these', units: ['t','h','e','s','e'], emoji: null, sight: true, level: 4 },
+      { word: 'those', units: ['t','h','o','s','e'], emoji: null, sight: true, level: 4 },
+      { word: 'upon', units: ['u','p','o','n'], emoji: null, sight: true, level: 4 },
+      { word: 'us', units: ['u','s'], emoji: null, sight: true, level: 4 },
+      { word: 'use', units: ['u','s','e'], emoji: null, sight: true, level: 4 },
+      { word: 'very', units: ['v','e','r','y'], emoji: null, sight: true, level: 4 },
+      { word: 'wash', units: ['w','a','s','h'], emoji: null, sight: true, level: 4 },
+      { word: 'which', units: ['w','h','i','c','h'], emoji: null, sight: true, level: 4 },
+      { word: 'why', units: ['w','h','y'], emoji: null, sight: true, level: 4 },
+      { word: 'wish', units: ['w','i','s','h'], emoji: null, sight: true, level: 4 },
+      { word: 'work', units: ['w','o','r','k'], emoji: null, sight: true, level: 4 },
+      { word: 'would', units: ['w','o','u','l','d'], emoji: null, sight: true, level: 4 },
+      { word: 'write', units: ['w','r','i','t','e'], emoji: null, sight: true, level: 4 },
+      { word: 'your', units: ['y','o','u','r'], emoji: null, sight: true, level: 4 },
+      { word: 'about', units: ['a','b','o','u','t'], emoji: null, sight: true, level: 5 },
+      { word: 'better', units: ['b','e','t','t','e','r'], emoji: null, sight: true, level: 5 },
+      { word: 'bring', units: ['b','r','i','n','g'], emoji: null, sight: true, level: 5 },
+      { word: 'carry', units: ['c','a','r','r','y'], emoji: null, sight: true, level: 5 },
+      { word: 'clean', units: ['c','l','e','a','n'], emoji: null, sight: true, level: 5 },
+      { word: 'cut', units: ['c','u','t'], emoji: null, sight: true, level: 5 },
+      { word: 'done', units: ['d','o','n','e'], emoji: null, sight: true, level: 5 },
+      { word: 'draw', units: ['d','r','a','w'], emoji: null, sight: true, level: 5 },
+      { word: 'drink', units: ['d','r','i','n','k'], emoji: null, sight: true, level: 5 },
+      { word: 'eight', units: ['e','i','g','h','t'], emoji: null, sight: true, level: 5 },
+      { word: 'fall', units: ['f','a','l','l'], emoji: null, sight: true, level: 5 },
+      { word: 'far', units: ['f','a','r'], emoji: null, sight: true, level: 5 },
+      { word: 'full', units: ['f','u','l','l'], emoji: null, sight: true, level: 5 },
+      { word: 'got', units: ['g','o','t'], emoji: null, sight: true, level: 5 },
+      { word: 'grow', units: ['g','r','o','w'], emoji: null, sight: true, level: 5 },
+      { word: 'hold', units: ['h','o','l','d'], emoji: null, sight: true, level: 5 },
+      { word: 'hot', units: ['h','o','t'], emoji: null, sight: true, level: 5 },
+      { word: 'hurt', units: ['h','u','r','t'], emoji: null, sight: true, level: 5 },
+      { word: 'if', units: ['i','f'], emoji: null, sight: true, level: 5 },
+      { word: 'keep', units: ['k','e','e','p'], emoji: null, sight: true, level: 5 },
+      { word: 'kind', units: ['k','i','n','d'], emoji: null, sight: true, level: 5 },
+      { word: 'laugh', units: ['l','a','u','g','h'], emoji: null, sight: true, level: 5 },
+      { word: 'light', units: ['l','i','g','h','t'], emoji: null, sight: true, level: 5 },
+      { word: 'long', units: ['l','o','n','g'], emoji: null, sight: true, level: 5 },
+      { word: 'much', units: ['m','u','c','h'], emoji: null, sight: true, level: 5 },
+      { word: 'myself', units: ['m','y','s','e','l','f'], emoji: null, sight: true, level: 5 },
+      { word: 'never', units: ['n','e','v','e','r'], emoji: null, sight: true, level: 5 },
+      { word: 'only', units: ['o','n','l','y'], emoji: null, sight: true, level: 5 },
+      { word: 'own', units: ['o','w','n'], emoji: null, sight: true, level: 5 },
+      { word: 'pick', units: ['p','i','c','k'], emoji: null, sight: true, level: 5 },
+      { word: 'seven', units: ['s','e','v','e','n'], emoji: null, sight: true, level: 5 },
+      { word: 'shall', units: ['s','h','a','l','l'], emoji: null, sight: true, level: 5 },
+      { word: 'show', units: ['s','h','o','w'], emoji: null, sight: true, level: 5 },
+      { word: 'six', units: ['s','i','x'], emoji: null, sight: true, level: 5 },
+      { word: 'small', units: ['s','m','a','l','l'], emoji: null, sight: true, level: 5 },
+      { word: 'start', units: ['s','t','a','r','t'], emoji: null, sight: true, level: 5 },
+      { word: 'ten', units: ['t','e','n'], emoji: null, sight: true, level: 5 },
+      { word: 'today', units: ['t','o','d','a','y'], emoji: null, sight: true, level: 5 },
+      { word: 'together', units: ['t','o','g','e','t','h','e','r'], emoji: null, sight: true, level: 5 },
+      { word: 'try', units: ['t','r','y'], emoji: null, sight: true, level: 5 },
+      { word: 'warm', units: ['w','a','r','m'], emoji: null, sight: true, level: 5 },
+      { word: "catch", units: ['c', 'a', 'tch:ch'], emoji: "🧤", sight: false, level: 7, anim: 'pop' },
+      { word: "patch", units: ['p', 'a', 'tch:ch'], emoji: "🩹", sight: false, level: 7, anim: 'pop' },
+      { word: "witch", units: ['w', 'i', 'tch:ch'], emoji: "🧙", sight: false, level: 7, anim: 'pop' },
+      { word: "stitch", units: ['s', 't', 'i', 'tch:ch'], emoji: "🪡", sight: false, level: 7, anim: 'pop' },
+      { word: "hatch", units: ['h', 'a', 'tch:ch'], emoji: "🐣", sight: false, level: 7, anim: 'pop' },
+      { word: "pitch", units: ['p', 'i', 'tch:ch'], emoji: "⚾", sight: false, level: 7, anim: 'pop' },
+      { word: "bridge", units: ['b', 'r', 'i', 'dge:j'], emoji: "🌉", sight: false, level: 7, anim: 'pop' },
+      { word: "badge", units: ['b', 'a', 'dge:j'], emoji: "🏅", sight: false, level: 7, anim: 'pop' },
+      { word: "fudge", units: ['f', 'u', 'dge:j'], emoji: "🍫", sight: false, level: 7, anim: 'pop' },
+      { word: "judge", units: ['j', 'u', 'dge:j'], emoji: "🧑‍⚖️", sight: false, level: 7, anim: 'pop' },
+      { word: "new", units: ['n', 'ew:oo_long'], emoji: "🆕", sight: false, level: 7, anim: 'pop' },
+      { word: "flew", units: ['f', 'l', 'ew:oo_long'], emoji: "🕊️", sight: false, level: 7, anim: 'pop' },
+      { word: "drew", units: ['d', 'r', 'ew:oo_long'], emoji: "✏️", sight: false, level: 7, anim: 'pop' },
+      { word: "screw", units: ['s', 'c', 'r', 'ew:oo_long'], emoji: "🔩", sight: false, level: 7, anim: 'pop' },
+      { word: "stew", units: ['s', 't', 'ew:oo_long'], emoji: "🍲", sight: false, level: 7, anim: 'pop' },
+      { word: "chew", units: ['ch', 'ew:oo_long'], emoji: "😋", sight: false, level: 7, anim: 'pop' },
+      { word: "news", units: ['n', 'ew:oo_long', 's:z'], emoji: "📰", sight: false, level: 7, anim: 'pop' },
+      { word: "clue", units: ['c', 'l', 'ue:oo_long'], emoji: "🔍", sight: false, level: 7, anim: 'pop' },
+      { word: "ear", units: ['ear'], emoji: "👂", sight: false, level: 7, anim: 'pop' },
+      { word: "year", units: ['y', 'ear'], emoji: "📅", sight: false, level: 7, anim: 'pop' },
+      { word: "dear", units: ['d', 'ear'], emoji: "💌", sight: false, level: 7, anim: 'pop' },
+      { word: "fear", units: ['f', 'ear'], emoji: "😨", sight: false, level: 7, anim: 'pop' },
+      { word: "hear", units: ['h', 'ear'], emoji: "🦻", sight: false, level: 7, anim: 'pop' },
+      { word: "air", units: ['air'], emoji: "💨", sight: false, level: 7, anim: 'pop' },
+      { word: "chair", units: ['ch', 'air'], emoji: "🪑", sight: false, level: 7, anim: 'pop' },
+      { word: "hair", units: ['h', 'air'], emoji: "💇", sight: false, level: 7, anim: 'pop' },
+      { word: "pair", units: ['p', 'air'], emoji: "🧦", sight: false, level: 7, anim: 'pop' },
+      { word: "fair", units: ['f', 'air'], emoji: "🎡", sight: false, level: 7, anim: 'pop' },
+      { word: "square", units: ['s', 'qu', 'are:air'], emoji: "🟦", sight: false, level: 7, anim: 'pop' },
+      { word: "scare", units: ['s', 'c', 'are:air'], emoji: "😱", sight: false, level: 7, anim: 'pop' },
+      { word: "share", units: ['sh', 'are:air'], emoji: "🤝", sight: false, level: 7, anim: 'pop' },
+      { word: "jumped", units: ['j', 'u', 'm', 'p', 'ed:t'], emoji: "🤸", sight: false, level: 7, anim: 'pop' },
+      { word: "kicked", units: ['k', 'i', 'ck', 'ed:t'], emoji: "⚽", sight: false, level: 7, anim: 'pop' },
+      { word: "helped", units: ['h', 'e', 'l', 'p', 'ed:t'], emoji: "🤝", sight: false, level: 7, anim: 'pop' },
+      { word: "played", units: ['p', 'l', 'ay:a_long', 'ed:d'], emoji: "🧩", sight: false, level: 7, anim: 'pop' },
+      { word: "rained", units: ['r', 'ai:a_long', 'n', 'ed:d'], emoji: "🌧️", sight: false, level: 7, anim: 'pop' },
+      { word: "painted", units: ['p', 'ai:a_long', 'n', 't', 'ed:id'], emoji: "🎨", sight: false, level: 7, anim: 'pop' },
+      { word: "planted", units: ['p', 'l', 'a', 'n', 't', 'ed:id'], emoji: "🌱", sight: false, level: 7, anim: 'pop' },
+      { word: "cats", units: ['c', 'a', 't', 's'], emoji: "🐱🐱", sight: false, level: 7, anim: 'pop' },
+      { word: "hats", units: ['h', 'a', 't', 's'], emoji: "🎩🎩", sight: false, level: 7, anim: 'pop' },
+      { word: "pigs", units: ['p', 'i', 'g', 's:z'], emoji: "🐷🐷", sight: false, level: 7, anim: 'pop' },
+      { word: "dogs", units: ['d', 'o', 'g', 's:z'], emoji: "🐶🐶", sight: false, level: 7, anim: 'pop' },
+      { word: "bugs", units: ['b', 'u', 'g', 's:z'], emoji: "🐛🐛", sight: false, level: 7, anim: 'pop' },
+      { word: "boxes", units: ['b', 'o', 'x', 'es:iz'], emoji: "📦📦", sight: false, level: 7, anim: 'pop' },
+      { word: "foxes", units: ['f', 'o', 'x', 'es:iz'], emoji: "🦊🦊", sight: false, level: 7, anim: 'pop' },
+      { word: "buses", units: ['b', 'u', 's', 'es:iz'], emoji: "🚌🚌", sight: false, level: 7, anim: 'pop' }
     ],
+    stories: [{"title": "The Red Hen", "emoji": "🐔", "lines": ["A red hen sat on a nest.", "A fox came to the nest.", "The hen said no, no, no!", "The fox ran away."]}, {"title": "Pig in the Mud", "emoji": "🐷", "lines": ["The pig can run in the mud.", "Pig got wet.", "Pig got in the tub.", "Now the pig is not wet."]}, {"title": "The Big Bus", "emoji": "🚌", "lines": ["The bus is red.", "The bus can go up the hill.", "We see a dog on the bus.", "The dog can sit."]}, {"title": "Cat and Dog", "emoji": "🐱", "lines": ["The cat sat on the mat.", "The dog came to the mat.", "The cat ran up the tree.", "The dog sat and sat."]}, {"title": "The Frog", "emoji": "🐸", "lines": ["A frog sat on a log.", "The frog can hop and hop.", "Hop, hop, hop, in the pond.", "Splash! The frog can swim."]}, {"title": "A Day at the Park", "emoji": "🏞️", "lines": ["We go to the park.", "I play on the slide.", "My mom sits on the bench.", "We like the park."]}, {"title": "The Sun and Rain", "emoji": "🌈", "lines": ["The sun is up.", "Then the rain came.", "The rain is wet.", "Look at the rainbow."]}, {"title": "The Fish", "emoji": "🐟", "lines": ["A fish can swim.", "The fish can not hop.", "The fish swims in the sea.", "Swim, fish, swim!"]}, {"title": "At the Farm", "emoji": "🚜", "lines": ["We go to the farm.", "I see a cow and a horse.", "The sheep eat the grass.", "The farm is fun."]}, {"title": "Bedtime", "emoji": "🌙", "lines": ["The sun is down.", "The moon is up.", "I get in my bed.", "Good night, moon."]}, {"title": "The Little Bug", "emoji": "🐞", "lines": ["A little bug sat on a leaf.", "The wind blew.", "The bug flew away.", "Bye bye, bug."]}, {"title": "My Dog Max", "emoji": "🐕", "lines": ["I have a dog.", "His name is Max.", "Max can run and jump.", "I like my dog Max."]}],
     // Recorded sounds (optional). Put YOUR OWN recordings in this folder next to index.html.
     // Tile clips are named by the tile text: s.m4a, sh.m4a, ck.m4a ...
     // Whole-word clips (played after the blend) are named word-sun.m4a, word-ship.m4a ...
     // Missing files are simply silent. The grown-ups page lists exactly which files are needed.
     sounds: { folder: 'sounds/', extensions: ['m4a', 'mp3', 'wav'] },
+    // Sentences for "Read a sentence". Use only words that exist above (sound words or sight words).
+    // Clips: sentence-<words-joined-by-dashes>.mp3, e.g. sentence-i-see-a-red-bug.mp3
+    sentences: [
+      { text: 'I see a red bug', emoji: '🐛' },
+      { text: 'the pig is big', emoji: '🐷' },
+      { text: 'my dog can run', emoji: '🐶' },
+      { text: 'I like the sun', emoji: '☀️' },
+      { text: 'the fish can swim', emoji: '🐟' },
+      { text: 'a cat and a dog', emoji: '🐱' },
+      { text: 'you can see the moon', emoji: '🌙' },
+      { text: 'my cat can hop', emoji: '🐱' },
+      { text: 'the frog can hop', emoji: '🐸' },
+      { text: 'I see the star', emoji: '⭐' },
+      { text: 'we like the rain', emoji: '🌧️' },
+      { text: 'I see a fox', emoji: '🦊' },
+      { text: 'the hen is red', emoji: '🐔' },
+      { text: 'we can go', emoji: '🏃' },
+      { text: 'I see a big dog.', emoji: '🐶' },
+      { text: 'the cat is on the mat.', emoji: '🐱' },
+      { text: 'I can run and jump.', emoji: '🏃' },
+      { text: 'we like to play.', emoji: '🧸' },
+      { text: 'look at the red bus.', emoji: '🚌' },
+      { text: 'the sun is hot.', emoji: '☀️' },
+      { text: 'my dog can sit.', emoji: '🐕' },
+      { text: 'I see a fish.', emoji: '🐟' },
+      { text: 'a duck can swim.', emoji: '🦆' },
+      { text: 'the pig is in the mud.', emoji: '🐷' },
+      { text: 'I can see a bug.', emoji: '🐛' },
+      { text: 'we go to the zoo.', emoji: '🦁' },
+      { text: 'the hen has a nest.', emoji: '🐔' },
+      { text: 'can you help me?', emoji: '🤝' },
+      { text: 'I like to read a book.', emoji: '📖' },
+      { text: 'the frog can jump.', emoji: '🐸' },
+      { text: 'a fox is in the box.', emoji: '🦊' },
+      { text: 'she has a pink hat.', emoji: '👒' },
+      { text: 'he can run fast.', emoji: '💨' },
+      { text: 'the boat is on the sea.', emoji: '⛵' },
+      { text: 'look at the green leaf.', emoji: '🍃' },
+      { text: 'I see the moon at night.', emoji: '🌙' },
+      { text: 'the sheep eat the grass.', emoji: '🐑' },
+      { text: 'we can paint a house.', emoji: '🎨' },
+      { text: 'the train is big.', emoji: '🚂' },
+      { text: 'my mom has a red coat.', emoji: '🧥' },
+      { text: 'the king has a crown.', emoji: '👑' },
+      { text: 'the girl can sing.', emoji: '👧' },
+      { text: 'I can draw a star.', emoji: '⭐' },
+      { text: 'the farm has a barn.', emoji: '🚜' },
+      { text: 'a shark can swim fast.', emoji: '🦈' },
+      { text: 'the horse can run.', emoji: '🐴' },
+      { text: 'we play in the park.', emoji: '🏞️' },
+      { text: 'I have a toy car.', emoji: '🚗' },
+      { text: 'the cloud is in the sky.', emoji: '☁️' },
+      { text: 'the snail is slow.', emoji: '🐌' },
+      { text: 'my cat can jump on the bed.', emoji: '🛏️' },
+      { text: 'the clown has a red nose.', emoji: '🤡' },
+      { text: 'we go to the beach.', emoji: '🏖️' },
+      { text: 'I will draw a big whale.', emoji: '🐋' },
+      { text: 'the owl can see at night.', emoji: '🦉' },
+      { text: 'a rainbow is in the sky.', emoji: '🌈' },
+      { text: 'we eat a cupcake.', emoji: '🧁' },
+      { text: 'the snowman has a hat.', emoji: '⛄' },
+      { text: 'I see a butterfly.', emoji: '🦋' },
+      { text: 'my brother has a backpack.', emoji: '🎒' },
+      { text: 'the goldfish can swim.', emoji: '🐠' },
+      { text: 'she will write a note.', emoji: '📝' },
+      { text: 'he took a walk in the rain.', emoji: '🌧️' },
+      { text: 'we can play in the playground.', emoji: '🛝' },
+      { text: 'I ride my bike to school.', emoji: '🚲' },
+      { text: 'the bird has a nest in the tree.', emoji: '🪺' },
+      { text: 'what did you see at the farm?', emoji: '🚜' },
+      { text: 'my friend is very kind.', emoji: '🤗' },
+      { text: 'it is time for bed.', emoji: '🛏️' },
+      { text: 'the sun will rise in the morning.', emoji: '🌅' }
+    ],
+    // Letters activity: letter name clip is letter-<x>, its sound clip is <x>, the picture word clip is word-<word>.
+    letters: [
+      { l: 'a', name: 'Ay', word: 'apple', emoji: '🍎' },
+      { l: 'b', name: 'Bee', word: 'ball', emoji: '⚽' },
+      { l: 'c', name: 'Cee', word: 'cat', emoji: '🐱' },
+      { l: 'd', name: 'Dee', word: 'dog', emoji: '🐶' },
+      { l: 'e', name: 'Ee', word: 'egg', emoji: '🥚' },
+      { l: 'f', name: 'Eff', word: 'fish', emoji: '🐟' },
+      { l: 'g', name: 'Gee', word: 'goat', emoji: '🐐' },
+      { l: 'h', name: 'Aitch', word: 'hat', emoji: '🎩' },
+      { l: 'i', name: 'Eye', word: 'iguana', emoji: '🦎' },
+      { l: 'j', name: 'Jay', word: 'jar', emoji: '🫙' },
+      { l: 'k', name: 'Kay', word: 'kite', emoji: '🪁' },
+      { l: 'l', name: 'El', word: 'lion', emoji: '🦁' },
+      { l: 'm', name: 'Em', word: 'moon', emoji: '🌙' },
+      { l: 'n', name: 'En', word: 'nest', emoji: '🪺' },
+      { l: 'o', name: 'Oh', word: 'octopus', emoji: '🐙' },
+      { l: 'p', name: 'Pee', word: 'pig', emoji: '🐷' },
+      { l: 'q', name: 'Cue', word: 'queen', emoji: '👸' },
+      { l: 'r', name: 'Ar', word: 'rain', emoji: '🌧️' },
+      { l: 's', name: 'Ess', word: 'sun', emoji: '☀️' },
+      { l: 't', name: 'Tee', word: 'tree', emoji: '🌳' },
+      { l: 'u', name: 'You', word: 'umbrella', emoji: '☂️' },
+      { l: 'v', name: 'Vee', word: 'van', emoji: '🚐' },
+      { l: 'w', name: 'Double you', word: 'web', emoji: '🕸️' },
+      { l: 'x', name: 'Ex', word: 'box', emoji: '📦' },
+      { l: 'y', name: 'Why', word: 'yellow', emoji: '🟡' },
+      { l: 'z', name: 'Zee', word: 'zip', emoji: '🤐' }
+    ],
     // Short lines for the optional "Say the word" activity. Use words from this list.
     phrases: [
       'I see a cat',
@@ -549,7 +1322,7 @@
   }
 
   /* ---------------- navigation ---------------- */
-  const TITLES = { home: 'Word play', sound: 'Sound it out', sight: 'Sight words', say: 'Say the word', grown: 'For grown-ups' };
+  const TITLES = { home: 'Word play', sound: 'Sound it out', sight: 'Sight words', read: 'Read a sentence', say: 'Say the word', letters: 'Letters', rhyme: 'Rhyme time', detective: 'Sound detective', trace: 'Trace letters', stories: 'Little stories', grown: 'For grown-ups' };
   const hooks = { enter: {}, leave: {} };
   let current = 'home';
 
@@ -586,7 +1359,7 @@
     const args = Array.prototype.slice.call(arguments, 1);
     (listeners[name] || []).forEach(fn => { try { fn.apply(null, args); } catch (e) {} });
   }
-  window.WordPlay = { go, render, hooks, on, emit, CONTENT, store, get settings() { return settings; }, saveSettings, sleep, reduced, pick, shuffle, mark, $ };
+  window.WordPlay = { stageLimit, go, render, hooks, on, emit, CONTENT, store, get settings() { return settings; }, saveSettings, sleep, reduced, pick, shuffle, mark, $ };
 
   /* =====================================================================
      ACTIVITY 1: Sound it out
@@ -601,7 +1374,13 @@
   function unitText(u) { return String(u).split(':')[0]; }
   function unitKey(u) { const p = String(u).split(':'); return (p.length > 1 ? p[1] : p[0]).toLowerCase(); }
   window.WordPlayUnit = { text: unitText, key: unitKey };
-  const LEVELS = [['all', 'All'], ['1', '1 · short vowels'], ['2', '2 · blends, sh ch th ck'], ['3', '3 · long vowels'], ['4', '4 · ar er or ou oi']];
+  const LEVELS = [['all', 'All'], ['1', '1 · short vowels'], ['2', '2 · blends, sh ch th ck'], ['3', '3 · long vowels'], ['4', '4 · ar er or ou oi'], ['5', '5 · vowel teams, word families'], ['6', '6 · compound words'], ['7', '7 · more spelling patterns']];
+  function stageLimit() { return settings.level === 'all' ? 99 : Number(settings.level) || 99; }
+  function sightByStage() {
+    const lim = stageLimit();
+    const list = sightAll.filter(w => (w.level || 1) <= lim);
+    return list.length ? list : sightAll;
+  }
   function levelWords() {
     const L = settings.level;
     const list = L === 'all' ? soundWords : soundWords.filter(w => (w.level || 1) <= Number(L));
@@ -734,7 +1513,7 @@
   let deck = [], card = null;
 
   function buildDeck() {
-    let d = shuffle(sightAll);
+    let d = shuffle(sightByStage());
     if (settings.remember) {
       const p = new Set(progress.sightPractice), g = new Set(progress.sightGot);
       const rank = w => p.has(w.word) ? 0 : g.has(w.word) ? 2 : 1;
@@ -1052,6 +1831,76 @@
   'use strict';
   const W = window.WordPlay;
   if (!W) return;
+  const { $, CONTENT, hooks } = W;
+  const sentences = CONTENT.sentences || [];
+  const box = $('rwords'), stage = $('rstage'), emo = $('remo'), praise = $('rpraise'), sr = $('rsr');
+  let order = [], oi = -1, cur = null, lit = new Set(), token = 0;
+  // a sentence's stage is the highest stage among its words
+  const stageOfWord = {};
+  CONTENT.words.forEach(w => { const k = String(w.word).toLowerCase(); stageOfWord[k] = Math.min(stageOfWord[k] || 99, w.level || 1); });
+  const sentenceStage = sn => sn.text.toLowerCase().replace(/[^a-z ]/g, '').split(' ').filter(Boolean).reduce((m, w) => Math.max(m, stageOfWord[w] || 1), 1);
+  function sentencesForStage() {
+    const lim = W.stageLimit();
+    const list = sentences.filter(sn => sentenceStage(sn) <= lim);
+    return list.length ? list : sentences;
+  }
+
+  function load(sn) {
+    token++;
+    cur = sn; lit = new Set();
+    box.innerHTML = '';
+    sn.text.split(' ').forEach((w, i) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'chip'; b.textContent = w; b.dataset.i = i;
+      b.setAttribute('aria-label', 'word ' + w);
+      b.setAttribute('aria-pressed', 'false');
+      b.addEventListener('click', () => tap(i, b, w));
+      box.appendChild(b);
+    });
+    stage.classList.remove('show');
+    emo.className = 'emo'; emo.textContent = '';
+    praise.textContent = ''; sr.textContent = '';
+  }
+  async function tap(i, b, w) {
+    if (!cur) return;
+    b.classList.add('lit'); b.setAttribute('aria-pressed', 'true');
+    b.classList.remove('wiggle'); void b.offsetWidth; b.classList.add('wiggle');
+    W.emit('readWord', w);
+    if (W.playKey) W.playKey(W.wordKeyOf(w));
+    lit.add(i);
+    if (lit.size === cur.text.split(' ').length) {
+      const my = token, sn = cur;
+      await W.sleep(900);
+      if (my !== token) return;
+      sr.textContent = 'The sentence is: ' + sn.text + '.';
+      emo.textContent = sn.emoji || '';
+      emo.className = 'emo anim-pop'; void emo.offsetWidth;
+      stage.classList.add('show');
+      praise.textContent = W.pick(CONTENT.praise);
+      if (W.playKey) W.playKey(W.sentenceKeyOf(sn.text));
+    }
+  }
+  function next() {
+    if (!sentences.length) return;
+    if (!order.length || oi >= order.length - 1) {
+      order = W.shuffle(sentencesForStage());
+      if (cur && order.length > 1 && order[0] === cur) { const t = order[0]; order[0] = order[1]; order[1] = t; }
+      oi = -1;
+    }
+    oi++;
+    load(order[oi]);
+  }
+  $('rAgain').addEventListener('click', () => { if (W.stopSound) W.stopSound(); if (cur) load(cur); });
+  $('rNext').addEventListener('click', () => { if (W.stopSound) W.stopSound(); next(); });
+  hooks.enter.read = next;
+  hooks.leave.read = () => { token++; if (W.stopSound) W.stopSound(); };
+})();
+</script>
+<script>
+(function () {
+  'use strict';
+  const W = window.WordPlay;
+  if (!W) return;
   const { $, CONTENT } = W;
   const cfg = CONTENT.sounds || {};
   const FOLDER = cfg.folder || 'sounds/';
@@ -1062,7 +1911,11 @@
 
   const soundWords = CONTENT.words.filter(w => !w.sight);
   const tileKeys = Array.from(new Set(soundWords.reduce((a, w) => a.concat(w.units.map(tileKey)), []))).filter(k => k !== '_');
-  const wordKeys = soundWords.map(wordKey);
+  const sightKeys = CONTENT.words.filter(w => w.sight).map(wordKey);
+  const sentenceKeys = (CONTENT.sentences || []).concat((CONTENT.stories || []).reduce((a, s) => a.concat(s.lines.map(t => ({ text: t }))), [])).map(x => 'sentence-' + x.text.toLowerCase().replace(/[^a-z ]/g, '').trim().replace(/ +/g, '-'));
+  const letterList = CONTENT.letters || [];
+  const letterKeys = letterList.map(x => 'letter-' + x.l).concat(letterList.map(x => 'word-' + x.word));
+  const wordKeys = soundWords.map(wordKey).concat(sightKeys.filter(k => k !== 'word-can'), sentenceKeys, letterKeys);
 
   /* ---- which files exist? (same-folder HEAD requests; nothing leaves the site) ---- */
   const found = {};        // key -> url, or null once checked and missing
@@ -1180,10 +2033,15 @@
   W.on('tileLit', unit => enqueue(tileKey(unit)));
   W.on('wordBlended', w => enqueue(wordKey(w)));
   W.on('leaveSound', stop);
+  // for the Read a sentence screen
+  W.playKey = key => resolve(key).then(() => enqueue(key));
+  W.stopSound = stop;
+  W.wordKeyOf = x => 'word-' + String(x).toLowerCase().replace(/[^a-z]/g, '');
+  W.sentenceKeyOf = t => 'sentence-' + String(t).toLowerCase().replace(/[^a-z ]/g, '').trim().replace(/ +/g, '-');
 
   /* ---- grown-ups panel ---- */
-  $('needTiles').textContent = tileKeys.join(', ') + '  (each saved like ' + tileKeys[0] + '.' + EXTS[0] + ')';
-  $('needWords').textContent = soundWords.map(w => w.word).join(', ') + '  (each saved like word-' + soundWords[0].word + '.' + EXTS[0] + ')';
+  $('needTiles').textContent = tileKeys.length + ' sounds, like ' + tileKeys.slice(0, 12).join(', ') + ' … (each saved like ' + tileKeys[0] + '.' + EXTS[0] + ')';
+  $('needWords').textContent = soundWords.length + ' sound words, ' + sightKeys.length + ' sight words, ' + sentenceKeys.length + ' sentences and 26 letters (saved like word-' + soundWords[0].word + '.' + EXTS[0] + ', sentence-i-see-a-red-bug.' + EXTS[0] + ', letter-a.' + EXTS[0] + '). Tap “Check sound files” to see which are missing.';
 
   async function check() {
     const msg = $('soundCheck'), list = $('soundList');
@@ -1229,6 +2087,315 @@
   W.onReset = () => { if (prevReset) prevReset(); stop(); refresh(); };
   refresh();
 })();
+</script>
+
+<script>
+(function () {
+  'use strict';
+  const W = window.WordPlay;
+  if (!W) return;
+  const { $, CONTENT, hooks } = W;
+
+  // Play several clips one after another (each waits for the file check, so the order is always right).
+  let seq = 0;
+  async function playSeq(keys) {
+    if (!W.playKey) return;
+    const my = ++seq;
+    if (W.stopSound) W.stopSound();
+    for (const k of keys) { if (my !== seq) return; await W.playKey(k); }
+  }
+  const stopSeq = () => { seq++; if (W.stopSound) W.stopSound(); };
+
+  /* ================= LETTERS ================= */
+  const letters = CONTENT.letters || [];
+  const grid = $('lgrid'), card = $('lcard');
+  let li = -1;
+  letters.forEach((x, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'chip'; b.textContent = x.l.toUpperCase();
+    b.setAttribute('aria-label', 'letter ' + x.l);
+    b.addEventListener('click', () => showLetter(i));
+    grid.appendChild(b);
+  });
+  function showLetter(i) {
+    li = i;
+    const x = letters[i];
+    Array.prototype.forEach.call(grid.children, (b, j) => b.classList.toggle('lit', j === i));
+    card.hidden = false;
+    $('lbig').textContent = x.l.toUpperCase() + x.l;
+    $('lemo').textContent = x.emoji;
+    $('lword').textContent = x.word;
+    $('lsr').textContent = x.name + '. ' + x.l + ' is for ' + x.word + '.';
+    playSeq(['letter-' + x.l, x.l, 'word-' + x.word]);
+  }
+  $('lAgain').addEventListener('click', () => { if (li >= 0) showLetter(li); });
+  $('lNext').addEventListener('click', () => showLetter((li + 1) % letters.length));
+  hooks.enter.letters = () => { li = -1; card.hidden = true; $('lsr').textContent = ''; Array.prototype.forEach.call(grid.children, b => b.classList.remove('lit')); };
+  hooks.leave.letters = stopSeq;
+
+  /* ================= RHYME TIME ================= */
+  // Words rhyme when the spelling after the first vowel matches. These few spellings sound different, so they get their own family.
+  const RIME_FIX = { cow: 'ow-ou', food: 'ood-long', wood: 'ood-short', good: 'ood-short', one: 'one-un', foot: 'oot-short' };
+  function rimeOf(w) {
+    if (RIME_FIX[w]) return RIME_FIX[w];
+    const m = /^[^aeiou]*/.exec(w);
+    return w.slice(m[0].length);
+  }
+  function families() {
+    const lim = W.stageLimit(), fam = {};
+    CONTENT.words.forEach(w => {
+      if (w.sight || !w.emoji || (w.level || 1) > Math.min(lim, 5)) return;
+      const r = rimeOf(w.word);
+      if (!r) return;
+      (fam[r] = fam[r] || []).push(w);
+    });
+    return Object.keys(fam).filter(r => fam[r].length >= 2).map(r => fam[r]);
+  }
+  const tgt = $('rtarget'), choicesEl = $('rchoices'), rpraise = $('rhPraise');
+  let curTarget = null, solved = false, lastWord = null, rtoken = 0;
+  function newRound() {
+    rtoken++; solved = false;
+    stopSeq();
+    const fams = families();
+    if (fams.length < 2) return;
+    let fam = W.pick(fams), tries = 0;
+    while (tries++ < 6 && lastWord && fam.some(w => w.word === lastWord)) fam = W.pick(fams);
+    const pair = W.shuffle(fam).slice(0, 2);
+    curTarget = pair[0]; lastWord = curTarget.word;
+    const answer = pair[1];
+    const others = W.shuffle(fams.filter(f => f !== fam)).slice(0, 2).map(f => W.pick(f));
+    const opts = W.shuffle([answer].concat(others));
+    $('rtEmo').textContent = curTarget.emoji;
+    $('rtWord').textContent = curTarget.word;
+    rpraise.textContent = '';
+    choicesEl.innerHTML = '';
+    opts.forEach(w => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'rchoice';
+      b.setAttribute('aria-label', w.word);
+      const e = document.createElement('span'); e.className = 'rce'; e.textContent = w.emoji; e.setAttribute('aria-hidden', 'true');
+      const t = document.createElement('span'); t.className = 'rcw'; t.setAttribute('aria-hidden', 'true');
+      b.appendChild(e); b.appendChild(t);
+      b.addEventListener('click', () => choose(b, w, answer));
+      choicesEl.appendChild(b);
+    });
+    playSeq(['word-' + curTarget.word]);
+  }
+  function choose(b, w, answer) {
+    if (solved) return;
+    b.querySelector('.rcw').textContent = w.word;      // the word appears when the picture is touched
+    if (w === answer) {
+      solved = true;
+      b.classList.add('right');
+      rpraise.textContent = curTarget.word + ' and ' + w.word + ' rhyme! ' + W.pick(CONTENT.praise);
+      playSeq(['word-' + curTarget.word, 'word-' + w.word]);
+    } else {
+      b.classList.add('heard-it');                    // never a "wrong" message: just hear it and try another
+      rpraise.textContent = 'Listen to the end. Try another picture.';
+      playSeq(['word-' + curTarget.word, 'word-' + w.word]);
+    }
+  }
+  tgt.addEventListener('click', () => { if (curTarget) playSeq(['word-' + curTarget.word]); });
+  $('rhNext').addEventListener('click', newRound);
+  hooks.enter.rhyme = newRound;
+  hooks.leave.rhyme = () => { rtoken++; stopSeq(); };
+})();
+</script>
+
+<script>
+(function () {
+  'use strict';
+  const W = window.WordPlay;
+  if (!W) return;
+  const { $, CONTENT, hooks } = W;
+  const U = window.WordPlayUnit;
+  let seq = 0;
+  async function playSeq(keys) {
+    if (!W.playKey) return;
+    const my = ++seq;
+    if (W.stopSound) W.stopSound();
+    for (const k of keys) { if (my !== seq) return; await W.playKey(k); }
+  }
+  const stopSeq = () => { seq++; if (W.stopSound) W.stopSound(); };
+  const sounding = w => w.units.filter(u => U.key(u) !== '_');
+
+  /* ================= SOUND DETECTIVE ================= */
+  let mode = 'begin', dWord = null, dSolved = false, dLast = null;
+  const dChoices = $('dChoices'), dPraise = $('dPraise');
+  const plain = w => w.units.some(u => U.key(u).indexOf('word-') === 0);
+  function dPool() {
+    const lim = Math.min(W.stageLimit(), 6);
+    const p = CONTENT.words.filter(w => !w.sight && w.emoji && (w.level || 1) <= lim && sounding(w).length >= 2 && !plain(w));
+    return p.length >= 6 ? p : CONTENT.words.filter(w => !w.sight && w.emoji && sounding(w).length >= 2 && (w.level || 1) <= 3 && !plain(w));
+  }
+  const target = w => { const s = sounding(w); return mode === 'end' ? s[s.length - 1] : s[0]; };
+  function dRound() {
+    stopSeq(); dSolved = false; dPraise.textContent = '';
+    const pool = dPool();
+    let w = W.pick(pool), t = 0;
+    while (t++ < 8 && w.word === dLast) w = W.pick(pool);
+    dWord = w; dLast = w.word;
+    $('dEmo').textContent = w.emoji;
+    $('dPrompt').textContent = mode === 'begin' ? 'What sound does it start with?' : mode === 'end' ? 'What sound does it end with?' : 'How many sounds do you hear?';
+    dChoices.innerHTML = '';
+    let opts = [];
+    if (mode === 'count') {
+      const n = sounding(w).length;
+      const vals = [n];
+      [n - 1, n + 1, n + 2, n - 2].forEach(v => { if (v >= 2 && v <= 6 && vals.length < 3 && vals.indexOf(v) < 0) vals.push(v); });
+      opts = W.shuffle(vals).map(v => ({ label: String(v), correct: v === n, key: null }));
+    } else {
+      const tu = target(w), tk = U.key(tu);
+      const seen = { [tk]: true }, others = [];
+      W.shuffle(pool).forEach(x => {
+        const u = target(x), k = U.key(u);
+        if (!seen[k] && others.length < 2) { seen[k] = true; others.push(u); }
+      });
+      opts = W.shuffle([tu].concat(others)).map(u => ({ label: U.text(u), correct: U.key(u) === tk, key: U.key(u) }));
+    }
+    opts.forEach(o => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'dchoice'; b.textContent = o.label;
+      b.setAttribute('aria-label', mode === 'count' ? o.label + ' sounds' : 'the sound ' + o.label);
+      b.addEventListener('click', () => dChoose(b, o));
+      dChoices.appendChild(b);
+    });
+    playSeq(['word-' + w.word]);
+  }
+  function dChoose(b, o) {
+    if (dSolved) return;
+    const w = dWord, units = sounding(w).map(U.key);
+    if (o.correct) {
+      dSolved = true; b.classList.add('right');
+      dPraise.textContent = mode === 'count'
+        ? w.word + ' has ' + o.label + ' sounds! ' + W.pick(CONTENT.praise)
+        : w.word + ' ' + (mode === 'begin' ? 'starts' : 'ends') + ' with ' + o.label + '. ' + W.pick(CONTENT.praise);
+      playSeq(mode === 'count' ? units.concat('word-' + w.word) : [o.key, 'word-' + w.word]);
+    } else {
+      b.classList.add('heard-it');
+      dPraise.textContent = mode === 'count' ? "Let's count the sounds together." : 'Listen to the word again. Try another one.';
+      playSeq(mode === 'count' ? units : [o.key, 'word-' + w.word]);
+    }
+  }
+  $('dPic').addEventListener('click', () => { if (dWord) playSeq(['word-' + dWord.word]); });
+  $('dNext').addEventListener('click', dRound);
+  Array.prototype.forEach.call(document.querySelectorAll('[data-dmode]'), b => b.addEventListener('click', () => {
+    mode = b.getAttribute('data-dmode');
+    Array.prototype.forEach.call(document.querySelectorAll('[data-dmode]'), x => x.setAttribute('aria-pressed', x === b ? 'true' : 'false'));
+    dLast = null; dRound();
+  }));
+  hooks.enter.detective = dRound;
+  hooks.leave.detective = stopSeq;
+
+  /* ================= TRACE LETTERS ================= */
+  const letters = CONTENT.letters || [];
+  const guide = $('tGuide'), ink = $('tInk');
+  const gctx = guide.getContext('2d'), ictx = ink.getContext('2d');
+  let ti = 0, upper = true, drawing = false, lastPt = null, drew = false, S = 300;
+  const accent = (getComputedStyle(document.documentElement).getPropertyValue('--accent') || '#2a62c0').trim();
+  function tSize() {
+    const wrap = $('tWrap');
+    S = Math.max(200, wrap.clientWidth - 8);
+    const dpr = window.devicePixelRatio || 1;
+    [guide, ink].forEach(c => { c.width = Math.round(S * dpr); c.height = Math.round(S * dpr); });
+    gctx.setTransform(dpr, 0, 0, dpr, 0, 0); ictx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    drawGuide();
+  }
+  function drawGuide() {
+    gctx.clearRect(0, 0, S, S);
+    const L = letters[ti]; if (!L) return;
+    const ch = upper ? L.l.toUpperCase() : L.l;
+    gctx.strokeStyle = '#8791b8'; gctx.lineWidth = 2; gctx.setLineDash([6, 6]);
+    [0.30, 0.55, 0.78].forEach(f => { gctx.beginPath(); gctx.moveTo(10, S * f); gctx.lineTo(S - 10, S * f); gctx.stroke(); });
+    gctx.setLineDash([]);
+    gctx.font = '800 ' + Math.round(S * 0.8) + 'px system-ui, -apple-system, "Segoe UI", sans-serif';
+    gctx.textAlign = 'center'; gctx.textBaseline = 'alphabetic';
+    gctx.fillStyle = '#dfe4f6'; gctx.strokeStyle = '#7c87b6'; gctx.lineWidth = 3;
+    gctx.fillText(ch, S / 2, S * 0.78); gctx.strokeText(ch, S / 2, S * 0.78);
+  }
+  function tClear() { ictx.clearRect(0, 0, S, S); drew = false; $('tPraise').textContent = ''; }
+  function tShow(i, say) {
+    ti = (i + letters.length) % letters.length;
+    tClear(); drawGuide();
+    if (say) playSeq(['letter-' + letters[ti].l, letters[ti].l]);
+  }
+  const pt = e => { const r = ink.getBoundingClientRect(); return { x: (e.clientX - r.left) * (S / r.width), y: (e.clientY - r.top) * (S / r.height) }; };
+  ink.addEventListener('pointerdown', e => {
+    e.preventDefault(); drawing = true; drew = true; lastPt = pt(e);
+    try { ink.setPointerCapture(e.pointerId); } catch (x) {}
+    ictx.fillStyle = accent; ictx.beginPath(); ictx.arc(lastPt.x, lastPt.y, 9, 0, 6.283); ictx.fill();
+  });
+  ink.addEventListener('pointermove', e => {
+    if (!drawing) return; e.preventDefault();
+    const p = pt(e);
+    ictx.strokeStyle = accent; ictx.lineWidth = 18; ictx.lineCap = 'round'; ictx.lineJoin = 'round';
+    ictx.beginPath(); ictx.moveTo(lastPt.x, lastPt.y); ictx.lineTo(p.x, p.y); ictx.stroke();
+    lastPt = p;
+  });
+  const endDraw = () => { if (drawing && drew) $('tPraise').textContent = 'You traced it! ' + W.pick(CONTENT.praise); drawing = false; };
+  ink.addEventListener('pointerup', endDraw);
+  ink.addEventListener('pointercancel', () => { drawing = false; });
+  $('tClear').addEventListener('click', tClear);
+  $('tCase').addEventListener('click', () => { upper = !upper; $('tCase').textContent = upper ? 'Aa' : 'aA'; tClear(); drawGuide(); });
+  $('tHear').addEventListener('click', () => playSeq(['letter-' + letters[ti].l, letters[ti].l, 'word-' + letters[ti].word]));
+  $('tNext').addEventListener('click', () => tShow(ti + 1, true));
+  $('tPrev').addEventListener('click', () => tShow(ti - 1, true));
+  hooks.enter.trace = () => { tSize(); tShow(ti, false); };
+  hooks.leave.trace = () => { drawing = false; stopSeq(); };
+  window.addEventListener('resize', () => { if ($('screen-trace') && !$('screen-trace').hidden) { tSize(); } });
+
+  /* ================= LITTLE STORIES ================= */
+  const stories = CONTENT.stories || [];
+  let cur = null, stoken = 0;
+  stories.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'menu-card';
+    b.setAttribute('aria-label', 'Story: ' + s.title);
+    b.innerHTML = '<span class="big" aria-hidden="true"></span><span><strong></strong></span>';
+    b.querySelector('.big').textContent = s.emoji;
+    b.querySelector('strong').textContent = s.title;
+    b.addEventListener('click', () => openStory(i));
+    $('sBooks').appendChild(b);
+  });
+  function openStory(i) {
+    stoken++; stopSeq(); cur = stories[i];
+    $('sList').hidden = true; $('sRead').hidden = false;
+    $('sTitle').textContent = cur.emoji + ' ' + cur.title;
+    const box = $('sLines'); box.innerHTML = '';
+    cur.lines.forEach((t, n) => {
+      const row = document.createElement('div'); row.className = 'sline';
+      const num = document.createElement('button');
+      num.type = 'button'; num.className = 'snum'; num.textContent = String(n + 1);
+      num.setAttribute('aria-label', 'Hear line ' + (n + 1));
+      num.addEventListener('click', () => { stoken++; litLine(n); playSeq([W.sentenceKeyOf(t)]); });
+      row.appendChild(num);
+      t.split(' ').forEach(tok => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'sword'; b.textContent = tok;
+        b.addEventListener('click', () => { stoken++; playSeq([W.wordKeyOf(tok)]); });
+        row.appendChild(b);
+      });
+      box.appendChild(row);
+    });
+    window.scrollTo(0, 0);
+  }
+  function litLine(n) { Array.prototype.forEach.call($('sLines').children, (r, j) => r.classList.toggle('lit', j === n)); }
+  $('sPlay').addEventListener('click', async () => {
+    if (!cur) return;
+    const my = ++stoken;
+    for (let n = 0; n < cur.lines.length; n++) {
+      if (my !== stoken) return;
+      litLine(n);
+      await playSeq([W.sentenceKeyOf(cur.lines[n])]);
+      await W.sleep(250);
+    }
+    if (my === stoken) litLine(-1);
+  });
+  $('sAll').addEventListener('click', () => { stoken++; stopSeq(); litLine(-1); $('sRead').hidden = true; $('sList').hidden = false; window.scrollTo(0, 0); });
+  hooks.enter.stories = () => { $('sRead').hidden = true; $('sList').hidden = false; };
+  hooks.leave.stories = () => { stoken++; stopSeq(); };
+})();
+
 </script>
 </body>
 </html>
