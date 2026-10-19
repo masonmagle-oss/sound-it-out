@@ -14,6 +14,7 @@ const fs = require('fs');
   const screens = ['sound','sight','read','say','letters','rhyme','detective','spell','silly','trace','stories','grown'];
   for (const s of screens) {
     await p.goto(url);
+    await p.click('#moreGamesBtn');
     if (!(await p.locator('.menu-card[data-go="' + s + '"]').isVisible())) { console.log('skip ' + s + ' (hidden by default)'); continue; }
     await p.click('[data-go="' + s + '"]');
     await p.waitForTimeout(300);
@@ -21,6 +22,16 @@ const fs = require('fs');
     console.log((visible ? 'ok   ' : 'FAIL ') + s);
     if (!visible) errs.push('screen not visible: ' + s);
   }
+  // Home: Play picks games in a fixed order and More games reveals the full list.
+  await p.goto(url);
+  const menuHidden = !(await p.locator('#menu').isVisible());
+  await p.click('#playBtn');
+  const first = await p.evaluate(() => WordPlay.current());
+  await p.evaluate(() => WordPlay.go('home'));
+  await p.click('#playBtn');
+  const second = await p.evaluate(() => WordPlay.current());
+  const okPlay = menuHidden && first === 'sound' && second === 'rhyme';
+  console.log((okPlay ? 'ok   ' : 'FAIL ') + 'play button picks the next game'); if (!okPlay) errs.push('play: ' + [menuHidden, first, second]);
   // Backup: save a file, wipe, load it back, and reject junk.
   await p.goto(url);
   await p.evaluate(() => { const W = window.WordPlay; W.go('grown'); });

@@ -23,11 +23,11 @@ Read `docs/ROADMAP.md` for where we are going and `docs/WORKFLOWS.md` for how to
   praise, exposed as `window.WORDPLAY_CONTENT`), `js/app.js` (core helpers, router, Sound it out, Sight words, grown-ups
   page; defines `window.WordPlay`, alias `W`), `js/speech.js`, `js/read.js`, `js/audio.js` (sound clip lookup),
   `js/letters-rhyme.js` (Letters incl. mouth + ASL art, Rhyme time), `js/games.js` (Sound detective, Spell it, Silly words,
-  Trace letters, Stories), `js/session.js` ("All done for today": counts praise lines, shows the ending card). Later files use `W`. Keep this order when adding a file.
+  Trace letters, Stories), `js/session.js` ("All done for today": counts praise lines, shows the ending card), `js/home.js` (big Play button picks the next game in a fixed order; the full menu is behind "More games"). Later files use `W`. Keep this order when adding a file.
 - Word entries: `{word, units:['c','a','tch:ch'], emoji, sight, level, anim}`. A unit `text:key` shows `text`
   and plays `sounds/<key>.mp3`; key `_` is silent. `window.WordPlayUnit.key(u)` / `.text(u)` resolve them.
 - Router: `TITLES`, `render`, `go`, `hooks.enter/leave`, delegated `[data-go]` clicks.
-  Menu cards are `<button class="menu-card" data-go="X">`; screens are `<section id="screen-X" hidden>`.
+  Menu cards (inside `#menu`, hidden until "More games") are `<button class="menu-card" data-go="X">`; screens are `<section id="screen-X" hidden>`.
 - Helpers on `W`: `playKey`, `wordKeyOf`, `sentenceKeyOf`, `pick`, `shuffle`, `sleep`, `stageLimit`,
   `track(key, ok)`, `pickAdaptive(list, keysOf)`, `wordKeys`, `skillSummary`.
 - Adaptive practice: skills live in memory per visit; saved only when the grown-up turns "Remember" on.

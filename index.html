@@ -17,7 +17,12 @@
   <main>
     <!-- HOME -->
     <section id="screen-home" aria-label="Choose something to play">
-      <div class="menu">
+      <button id="playBtn" class="play-btn" type="button" aria-label="Play. The app picks the next game for you.">
+        <span class="big" aria-hidden="true">▶</span>
+        <span class="play-label">Play</span>
+      </button>
+      <div class="row"><button id="moreGamesBtn" class="btn ghost" type="button" aria-expanded="false" aria-controls="menu">More games</button></div>
+      <div id="menu" class="menu" hidden>
         <button class="menu-card" type="button" data-go="sound" aria-label="Sound it out. Touch each sound and watch the word come together.">
           <span class="big" aria-hidden="true">👆</span>
           <span><strong>Sound it out</strong><span class="sub">Touch each sound. Watch the word come together.</span></span>
@@ -378,5 +383,6 @@
 
 <script src="js/games.js"></script>
 <script src="js/session.js"></script>
+<script src="js/home.js"></script>
 </body>
 </html>

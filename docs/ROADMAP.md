@@ -19,6 +19,8 @@ Unverified: trimmed clips (never heard by Claude), newest two games with the act
   DONE: Add to Home Screen note on the grown-ups page.
 
 ## Phase 2 — Motivation   (gate: he asks to play and stops happily)
+- DONE: home is one big Play button (he can't choose between 10 games); games rotate in a fixed order; list under "More games".
+  Next idea: pick the next game from the adaptive data, and spoken/picture labels for pre-readers.
 - Sticker-book / garden progress world filled by effort, not score. Visible, never lost.
 - DONE: "All done for today" ending after a short session (6/10/15 praised rounds, grown-up setting; Finish returns to the menu,
   a small "grown-up says: a little more" adds 4 rounds). No autoplay of another round. Needs watching with him.
