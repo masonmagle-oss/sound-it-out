@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sound check 9</title>
+<style>
+:root{color-scheme:light dark;--bg:#fff;--fg:#111;--card:#f1f3f7;--acc:#0b5fff}
+@media (prefers-color-scheme:dark){:root{--bg:#111;--fg:#fff;--card:#222a38;--acc:#7aa7ff}}
+body{margin:0;padding:16px;background:var(--bg);color:var(--fg);font:18px/1.4 -apple-system,system-ui,sans-serif}
+h1{font-size:24px}h2{font-size:20px;margin:24px 0 8px}
+.row{display:flex;gap:10px;align-items:center;background:var(--card);border-radius:14px;padding:8px 12px;margin:8px 0;flex-wrap:wrap}
+button{min-height:56px;min-width:56px;font:inherit;border-radius:12px;border:2px solid var(--acc);background:transparent;color:var(--fg);padding:0 16px}
+button[aria-pressed=true]{background:var(--acc);color:#fff}
+.lbl{flex:1;min-width:6rem}
+.w{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.w .row{margin:0;flex-wrap:nowrap}
+#out{white-space:pre-wrap;background:var(--card);padding:12px;border-radius:12px}
+</style></head><body>
+<h1>Sound check 9</h1>
+<p>Tap ▶ to hear each take. For jumped and helped, listen for the ending sound (t). Tap Best on your favorite for each, or leave it unpicked if none work. Then tap “Show my results”.</p>
+<div id="groups"></div>
+<p><button id="show">Show my results</button></p>
+<div id="out" role="status"></div>
+<script>
+const G={"jumped": ["word-jumped","c9-jumpt-a","c9-jumpt-b","c9-jumpedup-a-w1","c9-jumpedup-b-w1","c9-jumpedup-a","c9-jumpedup-b"],
+"helped": ["word-helped","c9-helpt-a","c9-helpt-b","c9-helpedout-a-w1","c9-helpedout-b-w1","c9-helpedout-a","c9-helpedout-b"],
+"long o (go)": ["o_long","c9-owe-a","c9-owe-b","c9-ohx-a","c9-ohx-b","c9-ohokay-a","c9-ohokay-b"]};
+const LB={"c9-jumpt-a":"jumpt (1st)","c9-jumpt-b":"jumpt (2nd)","c9-jumpedup-a-w1":"jumped, from 'jumped up' (1st)","c9-jumpedup-b-w1":"jumped, from 'jumped up' (2nd)","c9-jumpedup-a":"jumped up (1st)","c9-jumpedup-b":"jumped up (2nd)","c9-helpt-a":"helpt (1st)","c9-helpt-b":"helpt (2nd)","c9-helpedout-a-w1":"helped, from 'helped out' (1st)","c9-helpedout-b-w1":"helped, from 'helped out' (2nd)","c9-helpedout-a":"helped out (1st)","c9-helpedout-b":"helped out (2nd)","c9-owe-a":"owe (1st)","c9-owe-b":"owe (2nd)","c9-ohx-a":"oh! (1st)","c9-ohx-b":"oh! (2nd)","c9-ohokay-a":"oh, okay (1st)","c9-ohokay-b":"oh, okay (2nd)"};
+const au=new Audio(),picks={},bad={};
+const play=(url)=>{au.src=url+'?v=9';au.play().catch(()=>{})};
+const box=document.getElementById('groups');
+for(const g in G){const h=document.createElement('h3');h.textContent=g;box.appendChild(h);
+ G[g].forEach((n,i)=>{const d=document.createElement('div');d.className='row';d.dataset.g=g;
+  const p=document.createElement('button');p.textContent='\u25B6';p.setAttribute('aria-label','play '+n);
+  p.onclick=()=>play((i?'candidates/':'sounds/')+n+'.mp3');
+  const l=document.createElement('span');l.className='lbl';l.textContent=i?LB[n]:'Current';
+  const b=document.createElement('button');b.textContent='Best';b.setAttribute('aria-pressed','false');
+  b.onclick=()=>{picks[g]=n;document.querySelectorAll('[data-g="'+g+'"] button:last-child').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true')};
+  d.append(p,l,b);box.appendChild(d)})}
+document.getElementById('show').onclick=()=>{
+ const pk=Object.keys(G).map(g=>g+': '+(picks[g]||'(not picked)')).join('\n');
+ 
+ document.getElementById('out').textContent=pk};
+</script></body></html>
