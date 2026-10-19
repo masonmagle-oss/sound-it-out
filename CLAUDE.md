@@ -14,8 +14,35 @@ Read `docs/ROADMAP.md` for where we are going and `docs/WORKFLOWS.md` for how to
 - Touch targets 56px or bigger, high contrast, an always-visible Back button, aria labels,
   `prefers-reduced-motion` respected, localStorage optional and wrapped in try/catch, with a Reset.
 - Data stays on the device. Speech recognition stays off by default and clearly labelled.
-- Engagement design: predictable rewards, surprise in content not in rewards, a clear end to each session.
-  No streak guilt, no random-reward loops, no endless autoplay.
+- Engagement design: see "Engagement: allowed and never" below. Every reward is predictable and permanent.
+
+## Engagement: allowed and never
+Goal: keep a young child interested and learning without borrowing the mechanics built to create compulsion.
+The teaching (sound-by-sound practice, adaptive difficulty, spacing, feedback) does the work; rewards only support it.
+Every reward must be predictable and permanent: it is always given, it is never lost, and it is tied to effort.
+
+Allowed (use these):
+- Visible progress that is never lost: a sticker book or garden that fills in.
+- A progress bar toward the next sticker (goal gradient). It is predictable and always reaches the sticker.
+- Surprise in the content: a different word, picture, animation or silly joke each time.
+- Celebrations that vary in style but never in whether they happen (he always gets the sticker; the fireworks differ).
+- Personal-best framing ("you tried a new sound today"), never comparison with other people.
+- Co-play: a grown-up or sibling joins in. Best supported for young children.
+- Mastery feedback that is immediate, specific and about effort.
+- Short sessions at about the right difficulty, ending with "All done for today".
+
+Never (do not build these, even cosmetically or "just a little"):
+- Streaks, or any loss framing ("don't lose your streak").
+- Random or mystery rewards, loot boxes, spin wheels (variable rewards are the most habit-forming mechanic there is).
+- Countdown timers, "last chance", or fear of missing out.
+- Endless autoplay: the next round never starts by itself.
+- Notifications, reminders or guilt messages.
+- Rankings or scores compared with other children.
+
+Rule changes: these two lists were agreed with Mason on 2026-10-19. Change them only when Mason says so.
+The grown-ups page should say plainly which rewards the app gives and when (a "reward audit" line).
+A wrong answer is not failure: show the right answer and move on. One miss is not proof of a gap (the child
+sometimes answers silly on purpose), so treat a sound as wobbly only after repeated misses.
 
 ## How the app is built
 - `index.html` holds the markup only. `css/style.css` is the styling. Scripts load in this order (plain `<script src>`,
