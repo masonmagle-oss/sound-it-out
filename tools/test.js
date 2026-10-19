@@ -47,6 +47,22 @@ const fs = require('fs');
   const msg = await p.textContent('#backupMsg');
   const goodReject = /not a Sound it out backup/.test(msg);
   console.log((goodReject ? 'ok   ' : 'FAIL ') + 'junk file rejected'); if (!goodReject) errs.push('junk accepted');
+  // All done for today: after the chosen number of praised rounds the ending card appears and never restarts play.
+  await p.goto(url);
+  await p.evaluate(() => { WordPlay.settings.sessionLen = 6; WordPlay.go('rhyme'); });
+  const praise = async t => p.evaluate(x => { const e = document.getElementById('rhPraise'); e.textContent = ''; return new Promise(r => setTimeout(() => { e.textContent = x; r(); }, 20)); }, t);
+  for (let i = 0; i < 5; i++) await praise('Nice work');
+  await p.waitForTimeout(2600);
+  const early = await p.locator('#doneOverlay').isVisible();
+  await praise('Nice work');
+  await p.waitForTimeout(2600);
+  const shown = await p.locator('#doneOverlay').isVisible();
+  const okEnd = !early && shown;
+  console.log((okEnd ? 'ok   ' : 'FAIL ') + 'all done card appears after 6 rounds'); if (!okEnd) errs.push('done card: early=' + early + ' shown=' + shown);
+  await p.click('#doneBtn');
+  const home = await p.evaluate(() => WordPlay.current());
+  const hidden = !(await p.locator('#doneOverlay').isVisible());
+  console.log((home === 'home' && hidden ? 'ok   ' : 'FAIL ') + 'finish returns to menu'); if (!(home === 'home' && hidden)) errs.push('finish failed');
   await p.goto(url);
   const need = await p.evaluate(() => {
     const C = window.WordPlay.CONTENT, U = window.WordPlayUnit, keys = new Set();

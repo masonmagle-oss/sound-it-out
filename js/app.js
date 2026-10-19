@@ -125,7 +125,7 @@
     const args = Array.prototype.slice.call(arguments, 1);
     (listeners[name] || []).forEach(fn => { try { fn.apply(null, args); } catch (e) {} });
   }
-  window.WordPlay = { track, pickAdaptive, wordKeys, skillSummary, stageLimit, go, render, hooks, on, emit, CONTENT, store, get settings() { return settings; }, saveSettings, sleep, reduced, pick, shuffle, mark, $ };
+  window.WordPlay = { track, pickAdaptive, wordKeys, skillSummary, stageLimit, go, render, current: () => current, hooks, on, emit, CONTENT, store, get settings() { return settings; }, saveSettings, sleep, reduced, pick, shuffle, mark, $ };
 
   /* =====================================================================
      ACTIVITY 1: Sound it out

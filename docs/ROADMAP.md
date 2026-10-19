@@ -16,11 +16,12 @@ Unverified: trimmed clips (never heard by Claude), newest two games with the act
   single-file build inlines them; behaviour unchanged.
 - Smoke test now opens every visible screen and checks clips exist. Backup save/load is tested. Still to do: reach the hidden Say screen.
 - DONE: progress backup (Save backup / Load backup on the grown-ups page; a JSON file, merged on load, nothing uploaded).
-  Still to do: suggest adding to Home Screen.
+  DONE: Add to Home Screen note on the grown-ups page.
 
 ## Phase 2 — Motivation   (gate: he asks to play and stops happily)
 - Sticker-book / garden progress world filled by effort, not score. Visible, never lost.
-- "All done for today" ending after a short session. No autoplay of another round.
+- DONE: "All done for today" ending after a short session (6/10/15 praised rounds, grown-up setting; Finish returns to the menu,
+  a small "grown-up says: a little more" adds 4 rounds). No autoplay of another round. Needs watching with him.
 - Friendlier parent view: sound names with example words and a one-line "try this together" suggestion.
 - A character who reacts (optional, only if it stays light).
 
