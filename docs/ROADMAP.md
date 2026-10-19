@@ -14,8 +14,9 @@ Unverified: trimmed clips (never heard by Claude), newest two games with the act
 - Keep this CLAUDE.md current.
 - DONE: split `index.html` into `css/style.css` and `js/*.js` (content, app, speech, read, audio, letters-rhyme, games);
   single-file build inlines them; behaviour unchanged.
-- Smoke test now opens every visible screen and checks clips exist. Still to do: reach the hidden Say and Grown-ups screens.
-- Progress export/import (Safari may clear site data after weeks of non-use). Suggest adding to Home Screen.
+- Smoke test now opens every visible screen and checks clips exist. Backup save/load is tested. Still to do: reach the hidden Say screen.
+- DONE: progress backup (Save backup / Load backup on the grown-ups page; a JSON file, merged on load, nothing uploaded).
+  Still to do: suggest adding to Home Screen.
 
 ## Phase 2 — Motivation   (gate: he asks to play and stops happily)
 - Sticker-book / garden progress world filled by effort, not score. Visible, never lost.

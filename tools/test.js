@@ -21,6 +21,32 @@ const fs = require('fs');
     console.log((visible ? 'ok   ' : 'FAIL ') + s);
     if (!visible) errs.push('screen not visible: ' + s);
   }
+  // Backup: save a file, wipe, load it back, and reject junk.
+  await p.goto(url);
+  await p.evaluate(() => { const W = window.WordPlay; W.go('grown'); });
+  await p.waitForTimeout(200);
+  if (!(await p.locator('#screen-grown').isVisible())) errs.push('grown-ups screen not visible');
+  await p.click('#swRemember');
+  await p.evaluate(() => { WordPlay.track('m', true); WordPlay.track('m', true); WordPlay.track('a', false); });
+  const [dl] = await Promise.all([p.waitForEvent('download'), p.click('#exportBtn')]);
+  const file = path.join(require('os').tmpdir(), 'sio-backup-test.json');
+  await dl.saveAs(file);
+  const saved = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const goodSave = saved.kind === 'sound-it-out-progress' && saved.skills.m.r === 2 && saved.skills.a.m === 1;
+  console.log((goodSave ? 'ok   ' : 'FAIL ') + 'backup file contents'); if (!goodSave) errs.push('backup contents wrong');
+  await p.click('#resetBtn'); await p.click('#resetBtn');
+  const wiped = await p.evaluate(() => WordPlay.skillSummary().solid.length + WordPlay.skillSummary().weak.length);
+  await p.setInputFiles('#importFile', file);
+  await p.waitForTimeout(300);
+  const back = await p.evaluate(() => { const b = WordPlay.backup.make(); return { m: b.skills.m && b.skills.m.r, a: b.skills.a && b.skills.a.m, rem: JSON.parse(localStorage.getItem('wordplay.settings.v1') || '{}').remember }; });
+  const goodLoad = wiped === 0 && back.m === 2 && back.a === 1 && back.rem === true;
+  console.log((goodLoad ? 'ok   ' : 'FAIL ') + 'backup load restores progress'); if (!goodLoad) errs.push('backup load failed ' + JSON.stringify(back));
+  fs.writeFileSync(file, '{"hello":1}');
+  await p.setInputFiles('#importFile', file);
+  await p.waitForTimeout(300);
+  const msg = await p.textContent('#backupMsg');
+  const goodReject = /not a Sound it out backup/.test(msg);
+  console.log((goodReject ? 'ok   ' : 'FAIL ') + 'junk file rejected'); if (!goodReject) errs.push('junk accepted');
   await p.goto(url);
   const need = await p.evaluate(() => {
     const C = window.WordPlay.CONTENT, U = window.WordPlayUnit, keys = new Set();

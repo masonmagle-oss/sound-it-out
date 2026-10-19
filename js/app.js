@@ -398,7 +398,57 @@
     renderGrown();
     msg.textContent = 'Erased. Nothing is saved on this device now.';
   });
-  hooks.enter.grown = () => { $('resetMsg').textContent = ''; renderGrown(); };
+  hooks.enter.grown = () => { $('resetMsg').textContent = ''; $('backupMsg').textContent = ''; renderGrown(); };
+  /* ---------------- backup: save to a file, load from a file ---------------- */
+  const BACKUP_KIND = 'sound-it-out-progress';
+  function say(msg) { $('backupMsg').textContent = msg; }
+  function makeBackup() {
+    return { kind: BACKUP_KIND, version: 1, saved: new Date().toISOString().slice(0, 10), level: settings.level, progress: normProgress(progress), skills: skills };
+  }
+  function mergeBackup(b) {                  // adds to what is here; never removes anything
+    if (!b || b.kind !== BACKUP_KIND || !b.progress) return false;
+    const inc = normProgress(b.progress);
+    ['soundedOut', 'sightGot', 'sightPractice'].forEach(k => inc[k].forEach(w => { if (progress[k].indexOf(w) < 0) progress[k].push(w); }));
+    progress.sightPractice = progress.sightPractice.filter(w => progress.sightGot.indexOf(w) < 0);
+    const n = v => (typeof v === 'number' && isFinite(v) && v >= 0) ? Math.floor(v) : 0;
+    Object.keys(b.skills && typeof b.skills === 'object' ? b.skills : {}).forEach(k => {
+      const e = b.skills[k] || {}, mine = skills[k];
+      const inEntry = { r: n(e.r), m: n(e.m), s: n(e.s) };
+      if (!mine || inEntry.r + inEntry.m > mine.r + mine.m) skills[k] = inEntry;   // keep the one with more practice
+    });
+    if (b.level === 'all' || LEVELS.some(l => l[0] === String(b.level))) settings.level = String(b.level);
+    settings.remember = true;                // restored progress is only kept if saving is on
+    store.write(PROGRESS_KEY, progress); store.write(SKILLS_KEY, skills); saveSettings();
+    return true;
+  }
+  $('exportBtn').addEventListener('click', () => {
+    try {
+      const b = makeBackup();
+      const blob = new Blob([JSON.stringify(b, null, 1)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'sound-it-out-backup-' + b.saved + '.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      say('Backup saved. Look in your Downloads or Files app.');
+    } catch (e) { say('Could not save a backup on this browser.'); }
+  });
+  $('importBtn').addEventListener('click', () => $('importFile').click());
+  $('importFile').addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0];
+    e.target.value = '';
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      let ok = false;
+      try { ok = mergeBackup(JSON.parse(String(r.result))); } catch (err) {}
+      renderGrown();
+      say(ok ? 'Backup loaded. Saving is now on.' : 'That file is not a Sound it out backup. Nothing changed.');
+    };
+    r.onerror = () => say('Could not read that file. Nothing changed.');
+    r.readAsText(f);
+  });
+  window.WordPlay.backup = { make: makeBackup, merge: mergeBackup };
+
 
   render('home');
 })();

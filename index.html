@@ -285,6 +285,16 @@
         <p class="small">Reset erases everything this app saved in this browser, including the switches on this page.</p>
       </div>
       <div class="panel">
+        <h2>Back up progress</h2>
+        <p class="small">Safari can erase saved data if the app isn't opened for a few weeks. Save a backup file now and then, or use it to move progress to another device. The file stays with you; nothing is uploaded.</p>
+        <div class="row">
+          <button id="exportBtn" class="btn" type="button">Save backup</button>
+          <button id="importBtn" class="btn ghost" type="button">Load backup</button>
+        </div>
+        <input id="importFile" type="file" accept=".json,application/json" hidden aria-label="Choose a backup file">
+        <p id="backupMsg" class="small" role="status" aria-live="polite"></p>
+      </div>
+      <div class="panel">
         <h2>About the sounds</h2>
         <p>The sound tiles are silent unless you add your own recordings (see “Sounds” below). The app does not use text-to-speech for letter sounds because it can't make true phonics sounds (it would say letter names or garble them). Until you add recordings, say each sound out loud together.</p>
         <p>The app never grades pronunciation and never measures reading level. There are no scores, streaks or timers.</p>
