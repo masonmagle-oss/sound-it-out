@@ -182,6 +182,11 @@
   .lgrid .chip{min-width:0; min-height:3.6rem; padding:0; font-size:1.7rem}
   .lcard{display:flex; flex-direction:column; align-items:center; gap:.25rem; margin:.5rem 0; padding:.75rem 1rem;
          background:#fff; border:4px solid var(--ink); border-radius:1.5rem}
+  .lrow{display:flex; gap:1.25rem; justify-content:center; align-items:flex-end; flex-wrap:wrap; margin-top:.25rem}
+  .lfig{margin:0; display:flex; flex-direction:column; align-items:center; gap:.2rem}
+  .lfig figcaption{font-size:1.15rem; font-weight:700}
+  .lmouth svg{width:11rem; height:auto; display:block}
+  .lcue{font-size:1.1rem; text-align:center; max-width:22rem; margin-top:.25rem}
   .lbig{font-size:4.5rem; font-weight:800; line-height:1}
   .lpic{font-size:4.5rem; line-height:1}
   .lword{font-size:1.9rem; font-weight:800}
@@ -325,8 +330,11 @@
       <div id="lgrid" class="lgrid" role="group" aria-label="Letters of the alphabet"></div>
       <div id="lcard" class="lcard" hidden>
         <div id="lbig" class="lbig" aria-hidden="true"></div>
-        <div class="lpic"><span id="lemo" aria-hidden="true"></span></div>
-        <div id="lword" class="lword"></div>
+        <div class="lrow">
+          <figure class="lfig"><div id="lmouth" class="lmouth" aria-hidden="true"></div><figcaption>Mouth</figcaption></figure>
+          <figure class="lfig"><div class="lpic"><span id="lemo" aria-hidden="true"></span></div><figcaption id="lword" class="lword"></figcaption></figure>
+        </div>
+        <div id="lcue" class="lcue"></div>
       </div>
       <div id="lsr" class="sr" role="status" aria-live="polite"></div>
       <div class="row">
@@ -2117,6 +2125,63 @@
     b.addEventListener('click', () => showLetter(i));
     grid.appendChild(b);
   });
+  /* ---- mouth pictures: drawn here, one per letter sound (front view). o = how open, w = half-width, t = teeth, g = tongue ---- */
+  const MOUTH = {
+    a:{o:24,w:26,t:'top',g:'low',c:'Mouth open wide, tongue flat and low.'},
+    b:{closed:1,w:22,c:'Lips pressed together, then pop them open.'},
+    c:{o:8,w:24,t:'both',g:'back',c:'Mouth a little open. The back of your tongue lifts up.'},
+    d:{o:9,w:26,t:'both',g:'tip',c:'Tip of your tongue taps behind your top teeth.'},
+    e:{o:15,w:30,t:'both',g:'low',c:'Mouth open a bit, lips relaxed and wide.'},
+    f:{bite:1,w:26,c:'Top teeth rest on your bottom lip. Blow.'},
+    g:{o:8,w:24,t:'both',g:'back',c:'Mouth a little open. The back of your tongue lifts up.'},
+    h:{o:14,w:26,t:'top',g:'low',c:'Mouth open and relaxed. Just breathe out.'},
+    i:{o:9,w:30,t:'both',g:'mid',c:'Mouth just a little open, lips wide.'},
+    j:{o:8,w:17,t:'both',g:'mid',c:'Lips pushed out a little, teeth close together.'},
+    k:{o:8,w:24,t:'both',g:'back',c:'Mouth a little open. The back of your tongue lifts up.'},
+    l:{o:11,w:26,t:'both',g:'tip',c:'Tip of your tongue touches behind your top teeth.'},
+    m:{closed:1,w:22,c:'Lips pressed together. Hum.'},
+    n:{o:8,w:26,t:'both',g:'tip',c:'Tip of your tongue is behind your top teeth. Hum.'},
+    o:{o:22,w:17,t:'top',g:'low',c:'Mouth open and tall, like a round O.'},
+    p:{closed:1,w:22,c:'Lips pressed together, then pop them open.'},
+    q:{o:9,w:13,t:'none',g:'none',c:'Lips round and pushed out: kw.'},
+    r:{o:9,w:17,t:'both',g:'mid',c:'Lips a little round, tongue pulled back.'},
+    s:{o:8,w:32,t:'both',g:'none',c:'Teeth together, lips wide. Hiss.'},
+    t:{o:9,w:26,t:'both',g:'tip',c:'Tip of your tongue taps behind your top teeth.'},
+    u:{o:15,w:23,t:'top',g:'mid',c:'Mouth open a little, jaw relaxed: uh.'},
+    v:{bite:1,w:26,c:'Top teeth rest on your bottom lip. Hum.'},
+    w:{o:6,w:10,t:'none',g:'none',c:'Lips in a small tight circle.'},
+    x:{o:8,w:32,t:'both',g:'none',c:'Teeth together, lips wide: ks.'},
+    y:{o:7,w:32,t:'both',g:'mid',c:'Lips wide, tongue high in the middle.'},
+    z:{o:8,w:32,t:'both',g:'none',c:'Teeth together, lips wide. Buzz.'}
+  };
+  function mouthSVG(m) {
+    const L = '#d9657a', LD = '#b84a60', IN = '#5a1f2b', TG = '#f08a9b', cx = 60, cy = 45;
+    let s = '<svg viewBox="6 4 108 82" role="img" focusable="false">';
+    if (m.closed) {
+      s += '<path d="M' + (cx - m.w) + ' ' + cy + ' Q' + cx + ' ' + (cy - 15) + ' ' + (cx + m.w) + ' ' + cy + ' Q' + cx + ' ' + (cy + 2) + ' ' + (cx - m.w) + ' ' + cy + 'Z" fill="' + L + '"/>' +
+           '<path d="M' + (cx - m.w) + ' ' + cy + ' Q' + cx + ' ' + (cy + 20) + ' ' + (cx + m.w) + ' ' + cy + ' Q' + cx + ' ' + (cy - 2) + ' ' + (cx - m.w) + ' ' + cy + 'Z" fill="' + L + '"/>' +
+           '<path d="M' + (cx - m.w + 2) + ' ' + cy + ' Q' + cx + ' ' + (cy + 3) + ' ' + (cx + m.w - 2) + ' ' + cy + '" stroke="' + LD + '" stroke-width="2" fill="none" stroke-linecap="round"/>';
+    } else if (m.bite) {
+      const w = m.w;
+      s += '<path d="M' + (cx - w) + ' ' + cy + ' Q' + cx + ' ' + (cy - 17) + ' ' + (cx + w) + ' ' + cy + 'Z" fill="' + L + '"/>' +
+           '<rect x="' + (cx - w * .62) + '" y="' + (cy - 8) + '" width="' + (w * 1.24) + '" height="15" rx="4" fill="#fff" stroke="#d8d8d8" stroke-width="1"/>' +
+           '<path d="M' + (cx - w) + ' ' + (cy + 1) + ' Q' + cx + ' ' + (cy + 24) + ' ' + (cx + w) + ' ' + (cy + 1) + ' Q' + cx + ' ' + (cy - 3) + ' ' + (cx - w) + ' ' + (cy + 1) + 'Z" fill="' + L + '"/>';
+    } else {
+      const o = m.o, w = m.w, id = 'mc' + Math.round(Math.random() * 1e6);
+      const op = 'M' + (cx - w) + ' ' + cy + ' Q' + cx + ' ' + (cy - o * 1.5) + ' ' + (cx + w) + ' ' + cy + ' Q' + cx + ' ' + (cy + o * 1.5) + ' ' + (cx - w) + ' ' + cy + 'Z';
+      s += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + (w + 9) + '" ry="' + (o + 12) + '" fill="' + L + '"/>' +
+           '<defs><clipPath id="' + id + '"><path d="' + op + '"/></clipPath></defs><path d="' + op + '" fill="' + IN + '"/><g clip-path="url(#' + id + ')">';
+      const th = Math.min(9, o * .55);
+      if (m.g === 'low') s += '<ellipse cx="' + cx + '" cy="' + (cy + o * .75) + '" rx="' + (w * .7) + '" ry="' + (o * .55) + '" fill="' + TG + '"/>';
+      if (m.g === 'mid') s += '<ellipse cx="' + cx + '" cy="' + (cy + o * .3) + '" rx="' + (w * .65) + '" ry="' + (o * .55) + '" fill="' + TG + '"/>';
+      if (m.g === 'back') s += '<ellipse cx="' + cx + '" cy="' + (cy + o * .55) + '" rx="' + (w * .55) + '" ry="' + (o * .45) + '" fill="' + TG + '"/>';
+      if (m.g === 'tip') s += '<ellipse cx="' + cx + '" cy="' + (cy - o * .2) + '" rx="' + (w * .42) + '" ry="' + (o * .5) + '" fill="' + TG + '"/>';
+      if (m.t === 'top' || m.t === 'both') s += '<rect x="' + (cx - w) + '" y="' + (cy - o * 1.5) + '" width="' + (w * 2) + '" height="' + (th + o * .25) + '" rx="3" fill="#fff"/>';
+      if (m.t === 'both') s += '<rect x="' + (cx - w) + '" y="' + (cy + o * 1.5 - th - o * .25) + '" width="' + (w * 2) + '" height="' + (th + o * .25) + '" rx="3" fill="#fff"/>';
+      s += '</g>';
+    }
+    return s + '</svg>';
+  }
   function showLetter(i) {
     li = i;
     const x = letters[i];
@@ -2125,7 +2190,8 @@
     $('lbig').textContent = x.l.toUpperCase() + x.l;
     $('lemo').textContent = x.emoji;
     $('lword').textContent = x.word;
-    $('lsr').textContent = x.name + '. ' + x.l + ' is for ' + x.word + '.';
+    const mo = MOUTH[x.l]; $('lmouth').innerHTML = mo ? mouthSVG(mo) : ''; $('lcue').textContent = mo ? mo.c : '';
+    $('lsr').textContent = x.name + '. ' + x.l + ' is for ' + x.word + '.' + (MOUTH[x.l] ? ' ' + MOUTH[x.l].c : '');
     playSeq(['letter-' + x.l, x.l, 'word-' + x.word]);
   }
   $('lAgain').addEventListener('click', () => { if (li >= 0) showLetter(li); });
