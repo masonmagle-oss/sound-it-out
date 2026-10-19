@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sound check 7</title>
+<style>
+:root{color-scheme:light dark;--bg:#fff;--fg:#111;--card:#f1f3f7;--acc:#0b5fff}
+@media (prefers-color-scheme:dark){:root{--bg:#111;--fg:#fff;--card:#222a38;--acc:#7aa7ff}}
+body{margin:0;padding:16px;background:var(--bg);color:var(--fg);font:18px/1.4 -apple-system,system-ui,sans-serif}
+h1{font-size:24px}h2{font-size:20px;margin:24px 0 8px}
+.row{display:flex;gap:10px;align-items:center;background:var(--card);border-radius:14px;padding:8px 12px;margin:8px 0;flex-wrap:wrap}
+button{min-height:56px;min-width:56px;font:inherit;border-radius:12px;border:2px solid var(--acc);background:transparent;color:var(--fg);padding:0 16px}
+button[aria-pressed=true]{background:var(--acc);color:#fff}
+.lbl{flex:1;min-width:6rem}
+.w{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.w .row{margin:0;flex-wrap:nowrap}
+#out{white-space:pre-wrap;background:var(--card);padding:12px;border-radius:12px}
+</style></head><body>
+<h1>Sound check 8</h1>
+<p>Part 1: pick the best take for each sound. Part 2: the -ed words were redone. Tap each and tell me if you can hear the end (t / d). Then tap “Show my results”.</p>
+<h2>Part 1 · Sounds</h2><div id="groups"></div>
+<h2>Part 2 · -ed words</h2><div id="words" class="w"></div>
+<p><button id="show">Show my results</button></p>
+<div id="out" role="status"></div>
+<script>
+const G={"er (her, bird)": ["er", "c8-er1", "c8-er2"], "ar (car)": ["ar", "c8-ar1", "c8-ar2"], "long o (go)": ["o_long", "c8-o1", "c8-o2"], "y (yes)": ["y", "c8-y1", "c8-y2"], "z (zip)": ["z", "c8-z1", "c8-z2"]}, WORDS=["jumped", "helped", "played", "rained", "painted", "planted", "year"];
+const au=new Audio(),picks={},bad={};
+const play=(url)=>{au.src=url+'?v=8';au.play().catch(()=>{})};
+const box=document.getElementById('groups');
+for(const g in G){const h=document.createElement('h3');h.textContent=g;box.appendChild(h);
+ G[g].forEach((n,i)=>{const d=document.createElement('div');d.className='row';d.dataset.g=g;
+  const p=document.createElement('button');p.textContent='\u25B6';p.setAttribute('aria-label','play '+n);
+  p.onclick=()=>play((i?'candidates/':'sounds/')+n+'.mp3');
+  const l=document.createElement('span');l.className='lbl';l.textContent=i?('Take '+i):'Current';
+  const b=document.createElement('button');b.textContent='Best';b.setAttribute('aria-pressed','false');
+  b.onclick=()=>{picks[g]=n;document.querySelectorAll('[data-g="'+g+'"] button:last-child').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true')};
+  d.append(p,l,b);box.appendChild(d)})}
+const wb=document.getElementById('words');
+WORDS.forEach(w=>{const d=document.createElement('div');d.className='row';
+ const p=document.createElement('button');p.textContent=w;p.onclick=()=>play('sounds/word-'+w+'.mp3');
+ const x=document.createElement('button');x.textContent='\u2717';x.setAttribute('aria-label','mark '+w+' as wrong');x.setAttribute('aria-pressed','false');
+ x.onclick=()=>{bad[w]=!bad[w];x.setAttribute('aria-pressed',bad[w]?'true':'false')};
+ d.append(p,x);wb.appendChild(d)});
+document.getElementById('show').onclick=()=>{
+ const pk=Object.keys(G).map(g=>g+': '+(picks[g]||'(not picked)')).join('\n');
+ const bd=Object.keys(bad).filter(k=>bad[k]);
+ document.getElementById('out').textContent=pk+'\n\nStill wrong: '+(bd.length?bd.join(', '):'none')};
+</script></body></html>
