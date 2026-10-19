@@ -1,0 +1,229 @@
+  :root{
+    --bg:#f3f7fb; --ink:#1d2b46; --ink-soft:#44546f; --card:#ffffff;
+    --accent:#2a62c0; --lit:#ffd447; --lit-edge:#7a5a00; --good:#2e7d4f;
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none !important}
+  html{font-size:100%; -webkit-text-size-adjust:100%; text-size-adjust:100%;
+       font-family: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif}
+  /* On iPhone this makes text follow the "Text Size" accessibility setting. */
+  @supports (font: -apple-system-body){
+    html{font: -apple-system-body;
+         font-family: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, sans-serif}
+  }
+  body{margin:0; background:var(--bg); color:var(--ink); min-height:100vh; min-height:100dvh;
+       -webkit-tap-highlight-color:transparent}
+  #app{max-width:34rem; margin:0 auto;
+       padding:max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+               max(20px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left))}
+
+  /* ---------- header ---------- */
+  .top{display:flex; align-items:center; gap:12px; min-height:3.5rem}
+  .top h1{flex:1; margin:0; font-size:1.4rem; line-height:1.2; outline:none}
+
+  /* ---------- buttons ---------- */
+  .btn{min-height:max(56px,3.5rem); min-width:56px; padding:0 1.25rem; border-radius:1rem;
+       border:3px solid var(--accent); background:var(--accent); color:#fff;
+       font:inherit; font-weight:700; font-size:1.1rem; cursor:pointer; touch-action:manipulation}
+  .btn.ghost{background:#fff; color:var(--accent)}
+  .btn:focus-visible, .menu-card:focus-visible, .switch:focus-visible, .tile:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
+  .btn:active{transform:scale(.98)}
+  .row{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:1rem 0}
+  .row .btn{flex:1 1 9rem}
+
+  /* ---------- home ---------- */
+  .menu{display:grid; gap:14px; margin-top:1rem}
+  .menu-card{display:flex; align-items:center; gap:1rem; width:100%; min-height:7rem; padding:1rem 1.25rem;
+       background:var(--card); color:var(--ink); border:4px solid var(--ink); border-radius:1.5rem;
+       font:inherit; text-align:left; cursor:pointer; touch-action:manipulation}
+  .menu-card:active{transform:scale(.99)}
+  .menu-card .big{font-size:2.6rem; line-height:1; flex:none}
+  .menu-card strong{font-size:1.35rem}
+  .menu-card .sub{display:block; margin-top:.2rem; font-size:1rem; color:var(--ink-soft)}
+  .foot{margin-top:1.5rem; text-align:center}
+
+  /* ---------- shared text ---------- */
+  .hint{font-size:1.15rem; text-align:center; margin:.5rem 0}
+  .note{font-size:1rem; color:var(--ink-soft); text-align:center; margin:.5rem 0}
+  .praise{font-size:1.35rem; font-weight:800; text-align:center; min-height:2rem; margin:.75rem 0 0}
+  .sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+
+  /* ---------- Sound it out: tiles ---------- */
+  .tiles{display:flex; flex-wrap:wrap; justify-content:center; align-content:center;
+         min-height:9rem; padding:.5rem 0;
+         touch-action:none; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none}
+  .tile{margin:5px; min-width:5rem; min-height:6.5rem; padding:0 1rem;
+        display:flex; align-items:center; justify-content:center;
+        border:4px solid var(--ink); border-radius:1.25rem; background:#fff; color:var(--ink);
+        font:inherit; font-size:clamp(3rem,17vw,4.5rem); font-weight:800; line-height:1;
+        cursor:pointer; touch-action:none; -webkit-user-select:none; user-select:none;
+        transition:margin .7s ease, background-color .25s ease, box-shadow .25s ease, border-radius .5s ease}
+  .tile.lit{background:var(--lit); border-color:var(--lit-edge);
+            box-shadow:0 0 0 6px rgba(255,212,71,.45), 0 0 28px 8px rgba(255,212,71,.8)}
+  .tile.wiggle{animation:wiggle .5s ease}
+  @keyframes wiggle{0%{transform:scale(1)}30%{transform:scale(1.15) rotate(-4deg)}60%{transform:scale(1.1) rotate(3deg)}100%{transform:scale(1)}}
+  /* blend: tiles slide together, then read as one word */
+  .tiles.blend .tile{margin:5px 0; border-radius:0}
+  .tiles.blend .tile + .tile{margin-left:-4px}
+  .tiles.blend .tile:first-child{border-top-left-radius:1.25rem; border-bottom-left-radius:1.25rem}
+  .tiles.blend .tile:last-child{border-top-right-radius:1.25rem; border-bottom-right-radius:1.25rem}
+  .tiles.blend .tile:only-child{border-radius:1.25rem}
+
+  /* ---------- Sound it out: picture stage ---------- */
+  .stage{position:relative; height:9.5rem; margin-top:.5rem; overflow:hidden; border-radius:1.25rem;
+         border:3px solid #cfe0f3; background:linear-gradient(#dff1ff,#f3faff)}
+  .ground{position:absolute; left:0; right:0; bottom:0; height:2.2rem; background:#bfe3b0; z-index:2}
+  .stage[data-ground="water"] .ground{background:#8cc7f0}
+  .pic{position:absolute; left:0; right:0; bottom:1.7rem; text-align:center; font-size:5.5rem; line-height:1; z-index:1}
+  .emo{display:inline-block; opacity:0}
+  .stage.show .emo{opacity:1}
+  @keyframes k-rise{from{transform:translateY(160%)}to{transform:none}}
+  @keyframes k-hop{0%{transform:translate(-200%,0)}12%{transform:translate(-165%,-55%)}24%{transform:translate(-130%,0)}36%{transform:translate(-95%,-55%)}48%{transform:translate(-60%,0)}60%{transform:translate(-30%,-45%)}72%{transform:translate(-8%,0)}86%{transform:translate(0,-20%)}100%{transform:none}}
+  @keyframes k-sail{0%{transform:translateX(250%) rotate(-5deg)}25%{transform:translateX(185%) rotate(5deg)}50%{transform:translateX(115%) rotate(-5deg)}75%{transform:translateX(45%) rotate(4deg)}100%{transform:none}}
+  @keyframes k-run{0%{transform:translateX(-250%)}15%{transform:translate(-205%,-14%)}30%{transform:translate(-160%,0)}45%{transform:translate(-110%,-14%)}60%{transform:translate(-65%,0)}75%{transform:translate(-25%,-10%)}100%{transform:none}}
+  @keyframes k-drive{0%{transform:translateX(260%)}65%{transform:translateX(8%)}78%{transform:translate(0,-4%)}100%{transform:none}}
+  @keyframes k-swim{0%{transform:translate(250%,10%) rotate(6deg)}25%{transform:translate(185%,-10%) rotate(-6deg)}50%{transform:translate(115%,10%) rotate(6deg)}75%{transform:translate(45%,-8%) rotate(-5deg)}100%{transform:none}}
+  @keyframes k-waddle{0%{transform:translateX(120%)}15%{transform:translateX(98%) rotate(-10deg)}30%{transform:translateX(74%) rotate(10deg)}45%{transform:translateX(50%) rotate(-10deg)}60%{transform:translateX(28%) rotate(10deg)}75%{transform:translateX(8%) rotate(-8deg)}100%{transform:none}}
+  @keyframes k-wiggle{0%{transform:scale(.3)}30%{transform:scale(1.1) rotate(-12deg)}50%{transform:rotate(12deg)}70%{transform:rotate(-8deg)}85%{transform:rotate(5deg)}100%{transform:none}}
+  @keyframes k-wag{0%{transform:translateY(60%) scale(.6)}25%{transform:translateY(-20%) rotate(-10deg)}40%{transform:rotate(10deg)}55%{transform:translateY(-10%) rotate(-8deg)}70%{transform:rotate(8deg)}100%{transform:none}}
+  @keyframes k-toss{0%{transform:translateY(0) rotate(0)}40%{transform:translateY(-70%) rotate(300deg)}70%{transform:translateY(-70%) rotate(360deg)}100%{transform:translateY(0) rotate(360deg)}}
+  @keyframes k-unfold{0%{transform:scaleX(.05) rotate(-6deg)}60%{transform:scaleX(1.1)}80%{transform:scaleX(.95)}100%{transform:none}}
+  @keyframes k-pop{0%{transform:scale(0) rotate(-30deg)}60%{transform:scale(1.25) rotate(8deg)}80%{transform:scale(.95)}100%{transform:none}}
+  .anim-rise{animation:k-rise 2s ease-out both}
+  .anim-hop{animation:k-hop 2.4s ease-in-out both}
+  .anim-sail{animation:k-sail 3s ease-in-out both}
+  .anim-run{animation:k-run 2.2s ease-out both}
+  .anim-drive{animation:k-drive 2s ease-out both}
+  .anim-swim{animation:k-swim 2.8s ease-in-out both}
+  .anim-waddle{animation:k-waddle 2.6s ease-in-out both}
+  .anim-wiggle{animation:k-wiggle 1.6s ease-in-out both}
+  .anim-wag{animation:k-wag 1.8s ease-in-out both}
+  .anim-toss{animation:k-toss 1.8s ease-in-out both}
+  .anim-unfold{animation:k-unfold 1.4s ease-out both}
+  .anim-pop{animation:k-pop 1.2s ease-out both}
+
+  /* ---------- Sight words ---------- */
+  .flash{min-height:12rem; display:grid; place-items:center; margin:1rem 0; padding:1rem;
+         background:#fff; border:4px solid var(--ink); border-radius:1.5rem}
+  .sightword{font-size:clamp(4rem,24vw,7rem); font-weight:800; line-height:1; letter-spacing:.02em}
+  .ch{display:inline-block; opacity:0; animation:letterIn .6s ease forwards; animation-delay:calc(var(--i) * .45s)}
+  @keyframes letterIn{from{opacity:0; transform:translateY(.4em) scale(.8)}to{opacity:1; transform:none}}
+  .grownbar{margin-top:1.25rem; padding:.75rem 1rem 0; border-top:3px dashed #9db4d3}
+  .grownbar p{margin:0; text-align:center; font-size:1rem; color:var(--ink-soft)}
+  .done{text-align:center; margin:1rem 0}
+  .done p{font-size:1.5rem; font-weight:800}
+
+  /* ---------- Grown-ups ---------- */
+  .panel{background:#fff; border:3px solid #cfe0f3; border-radius:1.25rem; padding:1rem 1.25rem; margin:1rem 0}
+  .panel h2{margin:.1rem 0 .5rem; font-size:1.2rem}
+  .panel p{margin:.4rem 0; line-height:1.45}
+  .panel ul{margin:.4rem 0; padding-left:1.2rem; line-height:1.5}
+  .switch{display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:3.5rem;
+          padding:.5rem 1rem; background:#fff; color:var(--ink); border:3px solid var(--ink); border-radius:1rem;
+          font:inherit; font-size:1.05rem; font-weight:700; text-align:left; cursor:pointer; touch-action:manipulation; margin:.5rem 0}
+  .switch .state{margin-left:auto; font-size:.95rem}
+  .switch .track{flex:none; width:3.5rem; height:2rem; border-radius:1rem; background:#8a97ad; position:relative; transition:background .2s}
+  .switch .track::after{content:""; position:absolute; top:.2rem; left:.2rem; width:1.6rem; height:1.6rem; border-radius:50%; background:#fff; transition:transform .2s}
+  .switch.on .track{background:var(--good)}
+  .switch.on .track::after{transform:translateX(1.5rem)}
+  .small{font-size:1rem; color:var(--ink-soft)}
+
+
+  /* ---------- Sound detective / Trace / Stories ---------- */
+  .dchoices{display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin:1rem 0}
+  .dchoice{min-width:5.5rem; min-height:5.5rem; padding:0 1.1rem; background:#fff; color:var(--ink); border:4px solid var(--ink); border-radius:1.25rem;
+           font:inherit; font-size:clamp(2.4rem,13vw,3.4rem); font-weight:800; cursor:pointer; touch-action:manipulation}
+  .dchoice.right{background:#d8f1e2; border-color:var(--good)}
+  .dchoice.heard-it{background:#fff3c4}
+  .dchoice:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
+  .twrap{position:relative; margin:.5rem auto; width:100%; max-width:360px; aspect-ratio:1/1; background:#fff; border:4px solid var(--ink); border-radius:1.25rem; overflow:hidden}
+  .twrap canvas{position:absolute; inset:0; width:100%; height:100%}
+  #tInk{touch-action:none; -webkit-user-select:none; user-select:none}
+  .stitle{text-align:center; font-size:1.5rem; margin:.5rem 0}
+  .sline{display:flex; align-items:center; flex-wrap:wrap; gap:6px; padding:8px; margin:8px 0; border:3px solid transparent; border-radius:1rem}
+  .sline.lit{background:var(--lit); border-color:var(--lit-edge)}
+  .snum{min-width:56px; min-height:56px; border-radius:50%; border:3px solid var(--accent); background:#fff; color:var(--accent); font:inherit; font-weight:800; font-size:1.2rem; cursor:pointer; touch-action:manipulation}
+  .sword{min-height:56px; min-width:56px; padding:0 .6rem; border:0; background:transparent; color:var(--ink); font:inherit; font-size:clamp(1.7rem,8vw,2.3rem); font-weight:700; border-radius:.75rem; cursor:pointer; touch-action:manipulation}
+  .sword:active{background:rgba(255,212,71,.5)}
+  .sword:focus-visible,.snum:focus-visible{outline:4px solid var(--ink); outline-offset:2px}
+
+  /* ---------- Spell it / Silly words ---------- */
+  .spslots{display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin:.75rem 0; min-height:5.4rem}
+  .spslot{min-width:4.2rem; min-height:5.2rem; padding:0 .6rem; border:4px dashed var(--ink-soft); border-radius:1.1rem; background:#fff; color:var(--ink);
+          font:inherit; font-size:clamp(2.2rem,11vw,3rem); font-weight:800; cursor:pointer; touch-action:manipulation}
+  .spslot.full{border-style:solid; border-color:var(--ink)}
+  .spslot.match{background:#d8f1e2; border-color:var(--good)}
+  .spslot.near{background:#fff3c4; border-color:var(--lit-edge)}
+  .spslot:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
+  .dchoice.used{opacity:.35}
+  .chip.blank{border-style:dashed; color:var(--ink-soft)}
+  @media (prefers-reduced-motion:no-preference){
+    @keyframes syshake{0%,100%{transform:rotate(0) scale(1)}25%{transform:rotate(-12deg) scale(1.15)}75%{transform:rotate(12deg) scale(1.15)}}
+    @keyframes sypop{0%{transform:scale(.6)}60%{transform:scale(1.25)}100%{transform:scale(1)}}
+    .rtemo.silly{animation:syshake .6s ease}
+    .rtemo.popit{animation:sypop .5s ease}
+  }
+
+  /* ---------- Say the word (speech, optional) ---------- */
+  .chips{display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:1rem 0; min-height:5rem}
+  .chip{display:flex; align-items:center; justify-content:center; min-width:4rem; min-height:4.25rem; padding:0 1rem;
+        background:#fff; border:4px solid var(--ink); border-radius:1.1rem;
+        font-size:clamp(1.9rem,9vw,2.6rem); font-weight:800; line-height:1;
+        transition:background-color .25s ease, box-shadow .25s ease}
+  .chip.lit{background:var(--lit); border-color:var(--lit-edge);
+            box-shadow:0 0 0 5px rgba(255,212,71,.45), 0 0 22px 6px rgba(255,212,71,.8)}
+  .chip.wiggle{animation:wiggle .5s ease}
+  button.chip{font-family:inherit; color:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent}
+  .heard{min-height:1.6rem; margin:.25rem 0; text-align:center; font-size:1.05rem; color:var(--ink-soft); overflow-wrap:anywhere}
+  .status{min-height:3.2rem; margin:.5rem 0; text-align:center; font-size:1.15rem; font-weight:700; line-height:1.35}
+  .btn.on{background:var(--good); border-color:var(--good); color:#fff}
+  .dot{display:inline-block; width:.8rem; height:.8rem; margin-right:.5rem; border-radius:50%; background:#fff; animation:pulse 1.2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{transform:scale(.7); opacity:.6}50%{transform:scale(1.2); opacity:1}}
+
+  .soundlist{display:flex; flex-wrap:wrap; gap:8px; margin:.5rem 0}
+  .soundlist .btn{flex:0 0 auto; padding:0 1rem}
+  code{background:#eef2f8; padding:.05rem .35rem; border-radius:.35rem; font-size:.95em}
+
+  /* ---------- small / landscape screens ---------- */
+
+  /* ---------- Letters and Rhyme time ---------- */
+  .lgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(3.6rem,1fr)); gap:8px; margin:.75rem 0}
+  .lgrid .chip{min-width:0; min-height:3.6rem; padding:0; font-size:1.7rem}
+  .lcard{display:flex; flex-direction:column; align-items:center; gap:.25rem; margin:.5rem 0; padding:.75rem 1rem;
+         background:#fff; border:4px solid var(--ink); border-radius:1.5rem}
+  .lrow{display:flex; gap:1.25rem; justify-content:center; align-items:flex-end; flex-wrap:wrap; margin-top:.25rem}
+  .lfig{margin:0; display:flex; flex-direction:column; align-items:center; gap:.2rem}
+  .lfig figcaption{font-size:1.15rem; font-weight:700}
+  .lhand svg{height:9rem; width:auto; max-width:8rem; display:block}
+  .lmouth svg{width:11rem; height:auto; display:block}
+  .lcue{font-size:1.1rem; text-align:center; max-width:22rem; margin-top:.25rem}
+  .lbig{font-size:4.5rem; font-weight:800; line-height:1}
+  .lpic{font-size:4.5rem; line-height:1}
+  .lword{font-size:1.9rem; font-weight:800}
+  .rtarget{display:flex; align-items:center; justify-content:center; gap:1rem; width:100%; min-height:7rem; margin:.5rem 0;
+           background:#fff; border:4px solid var(--ink); border-radius:1.5rem; color:var(--ink); font-family:inherit; cursor:pointer;
+           -webkit-tap-highlight-color:transparent}
+  .rtemo{font-size:4rem; line-height:1}
+  .rtword{font-size:2.4rem; font-weight:800}
+  .rchoices{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:1rem 0}
+  .rchoice{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.25rem; min-height:7rem; padding:.5rem;
+           background:#fff; border:4px solid var(--ink); border-radius:1.25rem; color:var(--ink); font-family:inherit; cursor:pointer;
+           -webkit-tap-highlight-color:transparent; transition:background-color .25s ease, box-shadow .25s ease}
+  .rchoice .rce{font-size:3rem; line-height:1}
+  .rchoice .rcw{font-size:1.3rem; font-weight:800; min-height:1.5rem}
+  .rchoice.heard-it{background:#eef3fb}
+  .rchoice.right{background:var(--lit); border-color:var(--lit-edge); box-shadow:0 0 0 5px rgba(255,212,71,.45), 0 0 22px 6px rgba(255,212,71,.8)}
+  .rchoice:focus-visible, .rtarget:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
+
+  @media (max-height:520px){
+    .stage{height:6.5rem} .pic{font-size:3.5rem; bottom:1.2rem} .ground{height:1.4rem}
+    .tiles{min-height:5.5rem} .tile{min-height:4.5rem; font-size:2.6rem}
+    .flash{min-height:7rem} .sightword{font-size:4rem} .menu-card{min-height:5.5rem}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{animation:none !important; transition:none !important}
+    .ch{opacity:1}
+    .emo{opacity:1}
+    .btn:active, .menu-card:active{transform:none}
+  }

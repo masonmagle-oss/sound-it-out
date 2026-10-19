@@ -1,6 +1,6 @@
 # Sound it out ("Word play") — project rules for Claude Code
 
-A one-file vanilla HTML/CSS/JS phonics app for a young child (the owner's son). Runs on iPhone Safari.
+A vanilla HTML/CSS/JS phonics app (a few plain files, no build step) for a young child (the owner's son). Runs on iPhone Safari.
 Live: https://masonmagle-oss.github.io/sound-it-out/  (GitHub Pages, branch `main`, folder `/`)
 Repo: https://github.com/masonmagle-oss/sound-it-out
 
@@ -18,8 +18,12 @@ Read `docs/ROADMAP.md` for where we are going and `docs/WORKFLOWS.md` for how to
   No streak guilt, no random-reward loops, no endless autoplay.
 
 ## How the app is built
-- `index.html` holds everything: CSS, markup, one `CONTENT` object (words, sentences, letters, stories, praise)
-  and several `<script>` blocks, one per activity. Later blocks use `window.WordPlay` (alias `W`).
+- `index.html` holds the markup only. `css/style.css` is the styling. Scripts load in this order (plain `<script src>`,
+  no modules, so it still works from file://): `js/content.js` (the `CONTENT` data: words, sentences, letters, stories,
+  praise, exposed as `window.WORDPLAY_CONTENT`), `js/app.js` (core helpers, router, Sound it out, Sight words, grown-ups
+  page; defines `window.WordPlay`, alias `W`), `js/speech.js`, `js/read.js`, `js/audio.js` (sound clip lookup),
+  `js/letters-rhyme.js` (Letters incl. mouth + ASL art, Rhyme time), `js/games.js` (Sound detective, Spell it, Silly words,
+  Trace letters, Stories). Later files use `W`. Keep this order when adding a file.
 - Word entries: `{word, units:['c','a','tch:ch'], emoji, sight, level, anim}`. A unit `text:key` shows `text`
   and plays `sounds/<key>.mp3`; key `_` is silent. `window.WordPlayUnit.key(u)` / `.text(u)` resolve them.
 - Router: `TITLES`, `render`, `go`, `hooks.enter/leave`, delegated `[data-go]` clicks.
@@ -33,12 +37,12 @@ Read `docs/ROADMAP.md` for where we are going and `docs/WORKFLOWS.md` for how to
   via Wikimedia Commons).
 
 ## Testing and shipping
-- Test: `node tools/test.js` (Playwright, 390x844). Navigate by clicking `[data-go="..."]`; hash routes do not load on file://.
+- Test: `node tools/test.js` (Playwright, 390x844; also checks every word/unit clip exists). `TARGET=dist/sound-it-out-single-file.html node tools/test.js` tests the phone build. Navigate by clicking `[data-go="..."]`; hash routes do not load on file://.
 - Audio fetches fail on file://; those console errors are expected. Use `npx http-server` for real audio.
 - Before pushing: run the tests, open the changed screen at phone size, check there are no page errors.
 - Commit to `main` and push; Pages updates in about a minute.
 - Single-file copy for phones: `python3 tools/build-single-file.py` -> `dist/sound-it-out-single-file.html`
-  (sounds base64-embedded). Rebuild it whenever sounds or code change; stale copies confuse testing.
+  (css, js and sounds inlined/base64-embedded). Rebuild it whenever sounds or code change; stale copies confuse testing.
 
 ## About the owner
 Mason is a technical architect, not a front-end specialist. Explain choices briefly in plain language.

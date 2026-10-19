@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
-"""Build dist/sound-it-out-single-file.html: index.html with every sound embedded as base64 (64 kbps mono)."""
+"""Build dist/sound-it-out-single-file.html: index.html (css and js inlined) with every sound embedded as base64 (64 kbps mono)."""
 import base64, os, re, subprocess, sys, tempfile
 root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 html = open(os.path.join(root, 'index.html'), encoding='utf-8').read()
+def read(rel): return open(os.path.join(root, rel), encoding='utf-8').read().rstrip('\n')
+# Inline the split-out css and js so the phone copy is one self-contained file.
+html = re.sub(r'<link rel="stylesheet" href="([^"]+)">', lambda m: '<style>\n' + read(m.group(1)) + '\n</style>', html)
+html = re.sub(r'<script src="([^"]+)"></script>', lambda m: '<script>\n' + read(m.group(1)) + '\n</script>', html)
 snd = os.path.join(root, 'sounds')
 data = {}
 with tempfile.TemporaryDirectory() as tmp:

@@ -12,9 +12,9 @@ Unverified: trimmed clips (never heard by Claude), newest two games with the act
 
 ## Phase 1 — Set up   (gate: sounds unchanged, tests pass)
 - Keep this CLAUDE.md current.
-- Split `index.html` into a few files (css, content, per-activity js) while keeping offline use and the
-  single-file build working.
-- Grow `tools/test.js` into a real smoke test for every screen.
+- DONE: split `index.html` into `css/style.css` and `js/*.js` (content, app, speech, read, audio, letters-rhyme, games);
+  single-file build inlines them; behaviour unchanged.
+- Smoke test now opens every visible screen and checks clips exist. Still to do: reach the hidden Say and Grown-ups screens.
 - Progress export/import (Safari may clear site data after weeks of non-use). Suggest adding to Home Screen.
 
 ## Phase 2 — Motivation   (gate: he asks to play and stops happily)
