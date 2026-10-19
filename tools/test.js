@@ -22,6 +22,20 @@ const fs = require('fs');
     console.log((visible ? 'ok   ' : 'FAIL ') + s);
     if (!visible) errs.push('screen not visible: ' + s);
   }
+  // Pacing: Next is locked until the round is tried, a locked tap does nothing, and it re-locks after use.
+  await p.goto(url);
+  await p.evaluate(() => WordPlay.go('rhyme'));
+  await p.waitForTimeout(300);
+  const lockedAtStart = await p.evaluate(() => WordPlay.pace.isLocked('rhNext'));
+  await p.click('#rhNext', { force: true });   // aria-disabled buttons otherwise make Playwright wait
+  const pill = await p.locator('#paceMsg').isVisible();
+  await p.evaluate(() => { document.getElementById('rhPraise').textContent = 'Nice work'; });
+  await p.waitForTimeout(50);
+  const unlocked = !(await p.evaluate(() => WordPlay.pace.isLocked('rhNext')));
+  await p.click('#rhNext');
+  const relocked = await p.evaluate(() => WordPlay.pace.isLocked('rhNext'));
+  const okPace = lockedAtStart && pill && unlocked && relocked;
+  console.log((okPace ? 'ok   ' : 'FAIL ') + 'next button is paced'); if (!okPace) errs.push('pace: ' + [lockedAtStart, pill, unlocked, relocked]);
   // Home: Play picks games in a fixed order and More games reveals the full list.
   await p.goto(url);
   const menuHidden = !(await p.locator('#menu').isVisible());

@@ -10,6 +10,7 @@ Read `docs/ROADMAP.md` for where we are going and `docs/WORKFLOWS.md` for how to
 - No frameworks, no build step, no backend, no accounts, no analytics, no external scripts, fonts or images.
 - Everything works offline once loaded. System fonts only.
 - Praise is for effort only. No timers, no scores, no streaks, no fail states, no loss framing.
+  (Short pacing waits, like Next unlocking after a round is tried, are fine. Never show a countdown to the child.)
 - Never fake phonics with text-to-speech. Sounds are the recorded files in `sounds/`.
 - Touch targets 56px or bigger, high contrast, an always-visible Back button, aria labels,
   `prefers-reduced-motion` respected, localStorage optional and wrapped in try/catch, with a Reset.
@@ -50,7 +51,7 @@ sometimes answers silly on purpose), so treat a sound as wobbly only after repea
   praise, exposed as `window.WORDPLAY_CONTENT`), `js/app.js` (core helpers, router, Sound it out, Sight words, grown-ups
   page; defines `window.WordPlay`, alias `W`), `js/speech.js`, `js/read.js`, `js/audio.js` (sound clip lookup),
   `js/letters-rhyme.js` (Letters incl. mouth + ASL art, Rhyme time), `js/games.js` (Sound detective, Spell it, Silly words,
-  Trace letters, Stories), `js/session.js` ("All done for today": counts praise lines, shows the ending card), `js/home.js` (big Play button picks the next game in a fixed order; the full menu is behind "More games"). Later files use `W`. Keep this order when adding a file.
+  Trace letters, Stories), `js/session.js` ("All done for today": counts praise lines, shows the ending card), `js/home.js` (big Play button picks the next game in a fixed order; the full menu is behind "More games"), `js/pace.js` (Next buttons stay locked until the round is tried, or a few seconds pass), `js/help.js` (spoken "how to play" per game from `sounds/help-<screen>.mp3`; hidden if a clip is missing). Later files use `W`. Keep this order when adding a file.
 - Word entries: `{word, units:['c','a','tch:ch'], emoji, sight, level, anim}`. A unit `text:key` shows `text`
   and plays `sounds/<key>.mp3`; key `_` is silent. `window.WordPlayUnit.key(u)` / `.text(u)` resolve them.
 - Router: `TITLES`, `render`, `go`, `hooks.enter/leave`, delegated `[data-go]` clicks.
