@@ -35,3 +35,21 @@ Every new word needs a clip (see WORKFLOWS, "Make or fix sounds"), approved by e
 - The reference list is mine, so a teacher or the UFLI / Letters and Sounds documents should be checked before spending recording credits.
 - Counts are by spelling, so words that sound different (ow in cow vs snow) are not separated.
 - No child testing has been done; his real gaps may differ.
+
+## Compared with the research (what the app follows and where it differs)
+Sources: Ehri et al. 2001 (National Reading Panel meta-analysis), Rehfeld et al. 2022 (phonemic awareness meta-analysis), Verhoeven et al. 2020 (computer-supported early literacy meta-analysis), and the picture-with-word studies (Solman 1992, Harzem 1976, Kennedy 2023 review). Found with one literature search each; not a full review. Bowers 2018 argues the phonics evidence is weaker than claimed, but the rebuttals (Buckingham 2020, Fletcher 2020) still support explicit phonics inside a broader programme.
+
+Following:
+- Systematic, explicit phonics in a set order, started early (the strongest effects were before grade 1).
+- Blending and segmenting with the letters shown (graphemes in phonemic-awareness work).
+- Real recorded phonemes, not text-to-speech letter names.
+- Nonsense words, spelling (encoding) and letter tracing alongside reading.
+- Short sessions, effort-only praise, and the next round never starting by itself.
+
+Different, or open questions:
+- **Picture and word together.** The picture-text studies mostly (about 65% of 37 experiments in the Kennedy review) found that a picture shown with a word can slow word learning, because children use the picture instead of the letters. The app mostly avoids this: Sound it out shows the picture only after the word is blended, and Which picture? gives no word audio until he answers. Silly words shows the picture, the written word and the spoken word together, so watch that one. Evidence is mixed, so treat it as a flag, not a fault.
+- **Sight words are self-rated** ("Got it" / "Needs practice"), not tested. A grown-up or a quick check would be more reliable.
+- **Little phoneme manipulation** (deleting or swapping sounds) and no syllable work.
+- **No comprehension or vocabulary**; the research treats these as part of a full programme, not just phonics.
+- **Apps alone** gave only a small average gain in the preschool/kindergarten meta-analysis (g about 0.28), and did better when part of a wider classroom programme. Co-play with a grown-up is the better use of this app.
+- **Not found:** a search on app rewards and gamification hit a rate limit, so the "no streaks, scores or timers" stance rests on the project rules, not on evidence I checked.
