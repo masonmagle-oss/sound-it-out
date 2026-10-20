@@ -57,7 +57,7 @@ const seconds = f => Number(execFileSync('ffprobe', ['-v', 'error', '-show_entri
     }
   }
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
-  const rows = Object.entries(manifest).map(([k, m]) => {
+  const rows = Object.entries(manifest).filter(([k]) => !have.has(k)).map(([k, m]) => {
     const good = m.takes.filter(t => t.match), shown = good.length ? good : m.takes;
     return `<section><h3>${esc(m.text)} <small>${esc(k)}${good.length ? '' : ' &mdash; no take passed the transcript check'}</small></h3>` +
       shown.map(t => `<label><audio controls preload="none" src="${t.file}"></audio> <input type="radio" name="${k}" value="${t.file}"> Best <small>${t.secs}s, heard: ${esc(t.heard)}</small></label>`).join('<br>') +

@@ -382,6 +382,28 @@ window.WORDPLAY_CONTENT = {
     { word: 'eggshell', units: ['egg:word-egg','shell:word-shell'], emoji: '🥚', sight: false, level: 6, anim: 'pop' },
     { word: 'rooftop', units: ['roof:word-roof','top:word-top'], emoji: '🏠', sight: false, level: 6, anim: 'pop' },
 
+    { word: 'pie', units: ['p', 'ie:i_long'], emoji: '🥧', sight: false, level: 5, anim: 'pop' },
+    { word: 'tie', units: ['t', 'ie:i_long'], emoji: '👔', sight: false, level: 5, anim: 'pop' },
+    { word: 'key', units: ['k', 'ey:e_long'], emoji: '🔑', sight: false, level: 5, anim: 'pop' },
+    { word: 'monkey', units: ['m', 'o', 'n', 'k', 'ey:e_long'], emoji: '🐒', sight: false, level: 5, anim: 'pop' },
+    { word: 'turkey', units: ['t', 'ur:er', 'k', 'ey:e_long'], emoji: '🦃', sight: false, level: 5, anim: 'pop' },
+    { word: 'dress', units: ['d', 'r', 'e', 'ss:s'], emoji: '👗', sight: false, level: 2, anim: 'pop' },
+    { word: 'glass', units: ['g', 'l', 'a', 'ss:s'], emoji: '🥛', sight: false, level: 2, anim: 'pop' },
+    { word: 'kiss', units: ['k', 'i', 'ss:s'], emoji: '💋', sight: false, level: 2, anim: 'pop' },
+    { word: 'buzz', units: ['b', 'u', 'zz:z'], emoji: '🐝', sight: false, level: 2, anim: 'pop' },
+    { word: 'jazz', units: ['j', 'a', 'zz:z'], emoji: '🎷', sight: false, level: 2, anim: 'pop' },
+    { word: 'puff', units: ['p', 'u', 'ff:f'], emoji: '💨', sight: false, level: 2, anim: 'pop' },
+    { word: 'sniff', units: ['s', 'n', 'i', 'ff:f'], emoji: '👃', sight: false, level: 2, anim: 'pop' },
+    { word: 'skunk', units: ['s', 'k', 'u', 'n', 'k'], emoji: '🦨', sight: false, level: 2, anim: 'pop' },
+    { word: 'wink', units: ['w', 'i', 'n', 'k'], emoji: '😉', sight: false, level: 2, anim: 'pop' },
+    { word: 'rose', units: ['r', 'o:o_long', 's', 'e:_'], emoji: '🌹', sight: false, level: 3, anim: 'pop' },
+    { word: 'lake', units: ['l', 'a:a_long', 'k', 'e:_'], emoji: '🏞️', sight: false, level: 3, anim: 'pop' },
+    { word: 'dice', units: ['d', 'i:i_long', 'c:s', 'e:_'], emoji: '🎲', sight: false, level: 3, anim: 'pop' },
+    { word: 'mane', units: ['m', 'a:a_long', 'n', 'e:_'], emoji: '🐴', sight: false, level: 3, anim: 'pop' },
+    { word: 'running', units: ['r', 'u', 'nn:n', 'ing'], emoji: '🏃', sight: false, level: 7, anim: 'pop' },
+    { word: 'swimming', units: ['s', 'w', 'i', 'mm:m', 'ing'], emoji: '🏊', sight: false, level: 7, anim: 'pop' },
+    { word: 'digging', units: ['d', 'i', 'gg:g', 'ing'], emoji: '⛏️', sight: false, level: 7, anim: 'pop' },
+
     // ---- sight words (Dolch lists; level = stage 1-5) ----
     { word: 'a', units: ['a'], emoji: null, sight: true, level: 1 },
     // ---- words used in stories and sentences that are not taught as sounds yet (added so the reading material only uses listed words) ----
