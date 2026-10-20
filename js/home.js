@@ -14,7 +14,12 @@
     $('moreGamesBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
     $('moreGamesBtn').textContent = open ? 'Fewer games' : 'More games';
   }
-  $('playBtn').addEventListener('click', () => { const next = ORDER[i % ORDER.length]; i++; W.go(next); });
+  let lastPlay = 0;
+  $('playBtn').addEventListener('click', () => {
+    if (Date.now() - lastPlay < 1500) return;      // a second quick tap does nothing
+    lastPlay = Date.now();
+    const next = ORDER[i % ORDER.length]; i++; W.go(next);
+  });
   $('moreGamesBtn').addEventListener('click', () => setMore($('menu').hidden));
   const prev = W.hooks.enter.home;
   W.hooks.enter.home = () => { if (prev) prev(); setMore(false); };

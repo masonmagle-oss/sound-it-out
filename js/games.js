@@ -15,7 +15,8 @@
   const sounding = w => w.units.filter(u => U.key(u) !== '_');
 
   /* ================= SOUND DETECTIVE ================= */
-  let mode = 'begin', dWord = null, dSolved = false, dLast = null;
+  W.reveal = W.reveal || {};   // pace.js calls these when a round has been stuck for a while: show the answer, never praise it
+  let mode = 'begin', dWord = null, dSolved = false, dLast = null, dRight = null;
   const dChoices = $('dChoices'), dPraise = $('dPraise');
   const plain = w => w.units.some(u => U.key(u).indexOf('word-') === 0);
   function dPool() {
@@ -54,6 +55,7 @@
       b.type = 'button'; b.className = 'dchoice'; b.textContent = o.label;
       b.setAttribute('aria-label', mode === 'count' ? o.label + ' sounds' : 'the sound ' + o.label);
       b.addEventListener('click', () => dChoose(b, o));
+      if (o.correct) dRight = { b, o };
       dChoices.appendChild(b);
     });
     playSeq(['word-' + w.word]);
@@ -75,6 +77,14 @@
       playSeq(mode === 'count' ? units : [o.key, 'word-' + w.word]);
     }
   }
+  W.reveal.detective = () => {
+    if (dSolved || !dRight) return;
+    dSolved = true; dRight.b.classList.add('right');
+    const w = dWord, o = dRight.o, units = sounding(w).map(U.key);
+    dPraise.textContent = mode === 'count' ? 'Let us count together: ' + w.word + ' has ' + o.label + ' sounds.'
+      : 'Listen: ' + w.word + ' ' + (mode === 'begin' ? 'starts' : 'ends') + ' with ' + o.label + '.';
+    playSeq(mode === 'count' ? units.concat('word-' + w.word) : [o.key, 'word-' + w.word]);
+  };
   $('dPic').addEventListener('click', () => { if (dWord) playSeq(['word-' + dWord.word]); });
   $('dNext').addEventListener('click', dRound);
   Array.prototype.forEach.call(document.querySelectorAll('[data-dmode]'), b => b.addEventListener('click', () => {
@@ -167,6 +177,18 @@
     $('spCheck').disabled = true;
     playSeq(w.units.map(U.key).concat('word-' + w.word));
   }
+  W.reveal.spell = () => {
+    if (spDone || !spWord) return;
+    spDone = true;
+    const w = spWord;
+    Array.prototype.forEach.call(spSlots.children, (b, i) => {
+      b.classList.add('near'); b.textContent = U.text(w.units[i]);
+      b.setAttribute('aria-label', 'sound ' + (i + 1) + ' is ' + U.text(w.units[i]));
+    });
+    spMsg.textContent = 'Here is how ' + w.word + ' is spelled.';
+    $('spCheck').disabled = true;
+    playSeq(w.units.map(U.key).concat('word-' + w.word));
+  };
   $('spPic').addEventListener('click', () => { if (spWord) playSeq(['word-' + spWord.word]); });
   $('spCheck').addEventListener('click', spShow);
   $('spAgain').addEventListener('click', () => spRound(true));
@@ -265,6 +287,14 @@
     }
     playSeq([U.key(x.units[0]), 'word-' + x.word]);
   }
+  W.reveal.silly = () => {
+    if (syDone || !syTarget) return;
+    syDone = true;
+    syWordRow(syTarget, false);
+    const em = $('syEmo'); em.textContent = syTarget.emoji;
+    syPraise.textContent = 'This is ' + syTarget.word + '.';
+    playSeq(['word-' + syTarget.word]);
+  };
   $('syPic').addEventListener('click', () => { if (syShown) playSeq(['word-' + syShown.word]); });
   $('syNext').addEventListener('click', syRound);
   Array.prototype.forEach.call(document.querySelectorAll('[data-smode]'), b => b.addEventListener('click', () => {

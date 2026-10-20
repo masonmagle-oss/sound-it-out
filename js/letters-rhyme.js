@@ -120,7 +120,8 @@
     return Object.keys(fam).filter(r => fam[r].length >= 2).map(r => fam[r]);
   }
   const tgt = $('rtarget'), choicesEl = $('rchoices'), rpraise = $('rhPraise');
-  let curTarget = null, solved = false, lastWord = null, rtoken = 0;
+  W.reveal = W.reveal || {};
+  let curTarget = null, solved = false, lastWord = null, rtoken = 0, curAnswer = null, rightBtn = null;
   function newRound() {
     rtoken++; solved = false;
     stopSeq();
@@ -130,7 +131,7 @@
     while (tries++ < 6 && lastWord && fam.some(w => w.word === lastWord)) fam = W.pick(fams);
     const pair = W.shuffle(fam).slice(0, 2);
     curTarget = pair[0]; lastWord = curTarget.word;
-    const answer = pair[1];
+    const answer = pair[1]; curAnswer = answer;
     const others = W.shuffle(fams.filter(f => f !== fam)).slice(0, 2).map(f => W.pick(f));
     const opts = W.shuffle([answer].concat(others));
     $('rtEmo').textContent = curTarget.emoji;
@@ -145,6 +146,7 @@
       const t = document.createElement('span'); t.className = 'rcw'; t.setAttribute('aria-hidden', 'true');
       b.appendChild(e); b.appendChild(t);
       b.addEventListener('click', () => choose(b, w, answer));
+      if (w === answer) rightBtn = b;
       choicesEl.appendChild(b);
     });
     playSeq(['word-' + curTarget.word]);
@@ -163,6 +165,13 @@
       playSeq(['word-' + curTarget.word, 'word-' + w.word]);
     }
   }
+  W.reveal.rhyme = () => {
+    if (solved || !rightBtn) return;
+    solved = true; rightBtn.classList.add('right');
+    rightBtn.querySelector('.rcw').textContent = curAnswer.word;
+    rpraise.textContent = 'Listen: ' + curTarget.word + ' and ' + curAnswer.word + ' rhyme.';
+    playSeq(['word-' + curTarget.word, 'word-' + curAnswer.word]);
+  };
   tgt.addEventListener('click', () => { if (curTarget) playSeq(['word-' + curTarget.word]); });
   $('rhNext').addEventListener('click', newRound);
   hooks.enter.rhyme = newRound;

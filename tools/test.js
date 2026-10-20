@@ -22,30 +22,60 @@ const fs = require('fs');
     console.log((visible ? 'ok   ' : 'FAIL ') + s);
     if (!visible) errs.push('screen not visible: ' + s);
   }
-  // Pacing: Next is locked until the round is tried, a locked tap does nothing, and it re-locks after use.
+  // Pacing: Next is locked until the round is FINISHED. A wrong answer does not unlock it, a locked tap does nothing,
+  // and it re-locks after use. A stuck round reveals its answer (no praise) and then unlocks.
   await p.goto(url);
+  await p.evaluate(() => { window.__PACE_STUCK_MS = 1500; });
   await p.evaluate(() => WordPlay.go('rhyme'));
   await p.waitForTimeout(300);
   const lockedAtStart = await p.evaluate(() => WordPlay.pace.isLocked('rhNext'));
   await p.click('#rhNext', { force: true });   // aria-disabled buttons otherwise make Playwright wait
   const pill = await p.locator('#paceMsg').isVisible();
-  await p.evaluate(() => { document.getElementById('rhPraise').textContent = 'Nice work'; });
-  await p.waitForTimeout(50);
+  await p.evaluate(() => { document.getElementById('rhPraise').textContent = 'Listen to the end. Try another picture.'; });
+  await p.waitForTimeout(1800);
+  const wrongStaysLocked = await p.evaluate(() => WordPlay.pace.isLocked('rhNext'));
+  await p.evaluate(() => { document.getElementById('rhPraise').textContent = 'cat and hat rhyme! You kept going!'; });
+  await p.waitForTimeout(1800);
   const unlocked = !(await p.evaluate(() => WordPlay.pace.isLocked('rhNext')));
   await p.click('#rhNext');
   const relocked = await p.evaluate(() => WordPlay.pace.isLocked('rhNext'));
-  const okPace = lockedAtStart && pill && unlocked && relocked;
-  console.log((okPace ? 'ok   ' : 'FAIL ') + 'next button is paced'); if (!okPace) errs.push('pace: ' + [lockedAtStart, pill, unlocked, relocked]);
+  const okPace = lockedAtStart && pill && wrongStaysLocked && unlocked && relocked;
+  console.log((okPace ? 'ok   ' : 'FAIL ') + 'next button is paced'); if (!okPace) errs.push('pace: ' + [lockedAtStart, pill, wrongStaysLocked, unlocked, relocked]);
+  // Stuck for a while: the answer is shown (no praise phrase), and Next unlocks.
+  await p.waitForTimeout(1500 + 1800);
+  const reveal = await p.evaluate(() => ({ locked: WordPlay.pace.isLocked('rhNext'), text: document.getElementById('rhPraise').textContent, right: !!document.querySelector('#rchoices .right') }));
+  const noPraise = await p.evaluate(t => !WordPlay.CONTENT.praise.some(x => t.indexOf(x) >= 0), reveal.text);
+  const okStuck = !reveal.locked && reveal.right && noPraise;
+  console.log((okStuck ? 'ok   ' : 'FAIL ') + 'stuck round shows the answer and unlocks'); if (!okStuck) errs.push('stuck: ' + JSON.stringify(reveal));
+  // Wrong tap: the answer buttons rest for a moment.
+  await p.click('#rhNext');
+  await p.waitForTimeout(300);
+  const rested = await p.evaluate(() => { const bs = [...document.querySelectorAll('#rchoices .rchoice')]; bs.find(b => !b.classList.contains('right')).classList.add('heard-it'); return new Promise(r => setTimeout(() => r(document.getElementById('rchoices').classList.contains('resting')), 100)); });
+  console.log((rested ? 'ok   ' : 'FAIL ') + 'wrong tap makes the choices rest'); if (!rested) errs.push('resting class missing');
+  // Softer misses: one miss is not a gap, two of the last five is; a miss before he could hear the word is ignored.
+  await p.goto(url);
+  const soft = await p.evaluate(async () => {
+    const W = WordPlay; W.roundStart = Date.now() - 5000;
+    W.track('zzq', false); const one = W.skillSummary().weak.includes('zzq');
+    W.track('zzq', false); const two = W.skillSummary().weak.includes('zzq');
+    W.roundStart = Date.now(); W.track('zzr', false); W.track('zzr', false); const fast = W.skillSummary().weak.includes('zzr');
+    return [one, two, fast];
+  });
+  const okSoft = soft[0] === false && soft[1] === true && soft[2] === false;
+  console.log((okSoft ? 'ok   ' : 'FAIL ') + 'misses are softened'); if (!okSoft) errs.push('soft: ' + soft);
   // Home: Play picks games in a fixed order and More games reveals the full list.
   await p.goto(url);
   const menuHidden = !(await p.locator('#menu').isVisible());
   await p.click('#playBtn');
   const first = await p.evaluate(() => WordPlay.current());
   await p.evaluate(() => WordPlay.go('home'));
+  await p.click('#playBtn');                      // a quick second tap is ignored
+  const quick = await p.evaluate(() => WordPlay.current());
+  await p.waitForTimeout(1600);
   await p.click('#playBtn');
   const second = await p.evaluate(() => WordPlay.current());
-  const okPlay = menuHidden && first === 'sound' && second === 'rhyme';
-  console.log((okPlay ? 'ok   ' : 'FAIL ') + 'play button picks the next game'); if (!okPlay) errs.push('play: ' + [menuHidden, first, second]);
+  const okPlay = menuHidden && first === 'sound' && quick === 'home' && second === 'rhyme';
+  console.log((okPlay ? 'ok   ' : 'FAIL ') + 'play button picks the next game'); if (!okPlay) errs.push('play: ' + [menuHidden, first, quick, second]);
   // Backup: save a file, wipe, load it back, and reject junk.
   await p.goto(url);
   await p.evaluate(() => { const W = window.WordPlay; W.go('grown'); });
@@ -74,16 +104,17 @@ const fs = require('fs');
   console.log((goodReject ? 'ok   ' : 'FAIL ') + 'junk file rejected'); if (!goodReject) errs.push('junk accepted');
   // All done for today: after the chosen number of praised rounds the ending card appears and never restarts play.
   await p.goto(url);
-  await p.evaluate(() => { WordPlay.settings.sessionLen = 6; WordPlay.go('rhyme'); });
+  await p.evaluate(() => { WordPlay.settings.sessionRounds = 15; WordPlay.go('rhyme'); });
   const praise = async t => p.evaluate(x => { const e = document.getElementById('rhPraise'); e.textContent = ''; return new Promise(r => setTimeout(() => { e.textContent = x; r(); }, 20)); }, t);
-  for (let i = 0; i < 5; i++) await praise('Nice work');
+  for (let i = 0; i < 14; i++) await praise('You kept going!');
+  for (let i = 0; i < 3; i++) await praise('Listen to the end. Try another picture.');   // wrong answers do not count
   await p.waitForTimeout(2600);
   const early = await p.locator('#doneOverlay').isVisible();
-  await praise('Nice work');
+  await praise('You kept going!');
   await p.waitForTimeout(2600);
   const shown = await p.locator('#doneOverlay').isVisible();
   const okEnd = !early && shown;
-  console.log((okEnd ? 'ok   ' : 'FAIL ') + 'all done card appears after 6 rounds'); if (!okEnd) errs.push('done card: early=' + early + ' shown=' + shown);
+  console.log((okEnd ? 'ok   ' : 'FAIL ') + 'all done card appears after 15 rounds'); if (!okEnd) errs.push('done card: early=' + early + ' shown=' + shown);
   await p.click('#doneBtn');
   const home = await p.evaluate(() => WordPlay.current());
   const hidden = !(await p.locator('#doneOverlay').isVisible());

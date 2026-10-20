@@ -43,7 +43,7 @@ Never (do not build these, even cosmetically or "just a little"):
 Rule changes: these two lists were agreed with Mason on 2026-10-19. Change them only when Mason says so.
 The grown-ups page should say plainly which rewards the app gives and when (a "reward audit" line).
 A wrong answer is not failure: show the right answer and move on. One miss is not proof of a gap (the child
-sometimes answers silly on purpose), so treat a sound as wobbly only after repeated misses.
+sometimes answers silly on purpose), so treat a sound as wobbly only after repeated misses (2 or more of its last 5 tries; a wrong tap within 1.2 s of the round starting is ignored).
 
 ## How the app is built
 - `index.html` holds the markup only. `css/style.css` is the styling. Scripts load in this order (plain `<script src>`,
@@ -51,7 +51,7 @@ sometimes answers silly on purpose), so treat a sound as wobbly only after repea
   praise, exposed as `window.WORDPLAY_CONTENT`), `js/app.js` (core helpers, router, Sound it out, Sight words, grown-ups
   page; defines `window.WordPlay`, alias `W`), `js/speech.js`, `js/read.js`, `js/audio.js` (sound clip lookup),
   `js/letters-rhyme.js` (Letters incl. mouth + ASL art, Rhyme time), `js/games.js` (Sound detective, Spell it, Silly words,
-  Trace letters, Stories), `js/session.js` ("All done for today": counts praise lines, shows the ending card), `js/home.js` (big Play button picks the next game in a fixed order; the full menu is behind "More games"), `js/pace.js` (Next buttons stay locked until the round is tried, or a few seconds pass), `js/help.js` (spoken "how to play" per game from `sounds/help-<screen>.mp3`; hidden if a clip is missing). Later files use `W`. Keep this order when adding a file.
+  Trace letters, Stories), `js/session.js` ("All done for today": counts finished rounds (a real praise phrase only), 15/30/45, default 30 ≈ 10-15 min, shows the ending card), `js/home.js` (big Play button picks the next game in a fixed order; the full menu is behind "More games"), `js/pace.js` (Next buttons stay locked until the round is finished: its praise line shows and the sound has played. A wrong answer never unlocks it. After 15 s stuck, the game's `W.reveal[screen]` shows the answer without praise and Next unlocks. Wrong taps make the choices rest 1.2 s), `js/help.js` (spoken "how to play" per game from `sounds/help-<screen>.mp3`; hidden if a clip is missing). Later files use `W`. Keep this order when adding a file.
 - Word entries: `{word, units:['c','a','tch:ch'], emoji, sight, level, anim}`. A unit `text:key` shows `text`
   and plays `sounds/<key>.mp3`; key `_` is silent. `window.WordPlayUnit.key(u)` / `.text(u)` resolve them.
 - Router: `TITLES`, `render`, `go`, `hooks.enter/leave`, delegated `[data-go]` clicks.

@@ -63,15 +63,23 @@
   (function () { const s = settings.remember ? store.read(SKILLS_KEY, {}) : {}; if (s && typeof s === 'object') skills = s; })();
   function track(key, ok) {
     if (!key || key === '_' || String(key).indexOf('word-') === 0) return;
-    const e = skills[key] || (skills[key] = { r: 0, m: 0, s: 0 });
+    if (!ok && Date.now() - ((window.WordPlay && window.WordPlay.roundStart) || 0) < 1200) return;   // a wrong tap before he could even hear the word is a joke or a guess, not a gap
+    const e = skills[key] || (skills[key] = { r: 0, m: 0, s: 0, h: '' });
+    e.h = ((e.h || '') + (ok ? '1' : '0')).slice(-5);              // last five tries
     if (ok) { e.r++; e.s++; } else { e.m++; e.s = 0; }
     if (settings.remember) store.write(SKILLS_KEY, skills);
+  }
+  // wobbly = two or more misses in the last five tries (older saved data has no history, so it uses its totals)
+  function wobbly(e) {
+    if (e.s >= 3) return false;
+    return e.h ? (e.h.match(/0/g) || []).length >= 2 : (e.m >= 2 && e.s < 2);
   }
   function need(key) {                       // how much a sound should show up
     const e = skills[key];
     if (!e) return 2;                        // new: introduce it
     if (e.s >= 3) return 0.4;                // secure: keep it rare
-    return e.m > 0 && e.s < 2 ? 4 : 1;       // wobbly: bring it back soon
+    if (wobbly(e)) return 4;                 // wobbly: bring it back soon
+    return e.m > 0 && e.s < 2 ? 2 : 1;       // one miss: a little more, not a gap yet
   }
   function pickAdaptive(list, keysOf) {
     const wts = list.map(x => Math.max.apply(null, keysOf(x).map(need).concat(0.4)));
@@ -82,7 +90,7 @@
   const wordKeys = w => w.units.map(u => String(u).split(':').length > 1 ? String(u).split(':')[1].toLowerCase() : String(u).toLowerCase());
   function skillSummary() {
     const weak = [], solid = [];
-    Object.keys(skills).forEach(k => { const e = skills[k]; if (e.s >= 3) solid.push(k); else if (e.m > 0 && e.s < 2) weak.push(k); });
+    Object.keys(skills).forEach(k => { const e = skills[k]; if (e.s >= 3) solid.push(k); else if (wobbly(e)) weak.push(k); });
     return { weak, solid };
   }
   function clearSkills() { skills = {}; store.clear(SKILLS_KEY); }
@@ -413,7 +421,7 @@
     const n = v => (typeof v === 'number' && isFinite(v) && v >= 0) ? Math.floor(v) : 0;
     Object.keys(b.skills && typeof b.skills === 'object' ? b.skills : {}).forEach(k => {
       const e = b.skills[k] || {}, mine = skills[k];
-      const inEntry = { r: n(e.r), m: n(e.m), s: n(e.s) };
+      const inEntry = { r: n(e.r), m: n(e.m), s: n(e.s), h: /^[01]{0,5}$/.test(e.h) ? e.h : '' };
       if (!mine || inEntry.r + inEntry.m > mine.r + mine.m) skills[k] = inEntry;   // keep the one with more practice
     });
     if (b.level === 'all' || LEVELS.some(l => l[0] === String(b.level))) settings.level = String(b.level);

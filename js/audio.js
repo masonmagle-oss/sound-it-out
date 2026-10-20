@@ -137,6 +137,7 @@
   // for the Read a sentence screen
   W.playKey = key => resolve(key).then(() => enqueue(key));
   W.stopSound = stop;
+  W.audioBusy = () => playing || queue.length > 0;
   W.hasKey = key => resolve(key).then(u => !!u);
   W.wordKeyOf = x => 'word-' + String(x).toLowerCase().replace(/[^a-z]/g, '');
   W.sentenceKeyOf = t => 'sentence-' + String(t).toLowerCase().replace(/[^a-z ]/g, '').trim().replace(/ +/g, '-');

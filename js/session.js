@@ -1,16 +1,17 @@
 /* "All done for today": a clear end to each session.
-   A round counts when an activity shows its praise line. After the chosen number, a calm ending card
+   A round counts when an activity shows its praise line for a finished round (not for a wrong answer or a shown answer). After the chosen number, a calm ending card
    appears. It never starts another round by itself; a grown-up can choose "a little more" (a few extra rounds). */
 (function () {
   'use strict';
   const W = window.WordPlay;
   if (!W) return;
   const $ = id => document.getElementById(id);
-  const LENGTHS = [['6', 'Short (6)'], ['10', 'Medium (10)'], ['15', 'Long (15)']];
-  const EXTRA = 4;
+  const LENGTHS = [['15', 'Short (15)'], ['30', 'Medium (30)'], ['45', 'Long (45)']];
+  const EXTRA = 6;
   let count = 0, limit = null, timer = null;
 
-  const size = () => { const n = Number(W.settings.sessionLen); return n === 6 || n === 15 ? n : 10; };
+  const size = () => { const n = Number(W.settings.sessionRounds); return n === 15 || n === 45 ? n : 30; };
+  const isPraise = t => W.CONTENT.praise.some(p => t.indexOf(p) >= 0);   // wrong answers and shown answers carry no praise phrase
   function counting() { return !$('doneOverlay').hidden ? false : ['home', 'grown'].indexOf(W.current ? W.current() : '') < 0; }
   function show() {
     clearTimeout(timer);
@@ -31,7 +32,7 @@
     const t = el.textContent.trim();
     const was = seen.get(el) || '';
     seen.set(el, t);
-    if (!t || t === was || !counting()) return;
+    if (!t || t === was || !counting() || !isPraise(t)) return;
     count++;
     if (count >= (limit || size())) show();
   }
@@ -54,7 +55,7 @@
       b.type = 'button'; b.className = 'btn' + (String(size()) === val ? '' : ' ghost');
       b.textContent = label;
       b.setAttribute('aria-pressed', String(size()) === val ? 'true' : 'false');
-      b.addEventListener('click', () => { W.settings.sessionLen = Number(val); W.saveSettings(); limit = null; renderLengths(); });
+      b.addEventListener('click', () => { W.settings.sessionRounds = Number(val); W.saveSettings(); limit = null; renderLengths(); });
       box.appendChild(b);
     });
   }
