@@ -4,3 +4,7 @@ candidates/audition-help.html
 candidates/audition-all-sounds.html
 candidates/review-pictures.html
 raw15/
+
+.elevenlabs-key
+_new-clips/
+results.json
