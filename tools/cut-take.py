@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Cut an ElevenLabs take into separate sounds at silent gaps. Usage: cut-take.py take.mp3 out-prefix [stem]
+"""Cut an ElevenLabs take into separate sounds at silent gaps. Usage: cut-take.py take.mp3 out-prefix [stem|head:MS|skip:MS]
+'head:MS' keeps only the first MS of each piece, 'skip:MS' drops the first MS.
 'stem' ends each piece at the first dip after its loudest point, to keep a vowel and drop a closing k (ack -> a).
 Writes <out-prefix>-1.mp3, -2.mp3 ... (10 ms RMS windows, gap >= 70 ms splits, 60 ms fade, adelay 40, loudnorm -18, 44.1 kHz mono 128 kbps)."""
 import array, math, subprocess, sys
@@ -19,7 +20,10 @@ for i, r in enumerate(rms):
         if gap >= 7: segs.append((start, end)); start = None
 if start is not None: segs.append((start, end))
 for n, (a, b) in enumerate(segs, 1):
-    if len(sys.argv) > 3 and sys.argv[3] == 'stem':
+    for opt in sys.argv[3:]:
+        if opt.startswith('head:'): b = min(b, a + int(opt[5:]) // 10)
+        if opt.startswith('skip:'): a = min(b, a + int(opt[5:]) // 10)
+    if 'stem' in sys.argv[3:]:
         pk = max(range(a, b + 1), key=lambda i: rms[i])
         b = next((i for i in range(pk, b + 1) if rms[i] < rms[pk] * 0.12), b)
     a = max(0, a - 1); d = (b - a + 2) * 0.01
