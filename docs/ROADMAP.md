@@ -20,7 +20,7 @@ Unverified: trimmed clips (never heard by Claude), newest two games with the act
 
 ## Phase 2 — Motivation   (gate: he asks to play and stops happily)
 - DONE: Next buttons are paced (locked until the round is tried, or 3.5-7 s) so tapping Next repeatedly can't skip games.
-- Spoken how-to-play clips: 10 candidates in `candidates/help/` waiting for Mason's ears; move approved ones to `sounds/` (names help-<screen>.mp3).
+- DONE: spoken how-to-play clips (`sounds/help-<screen>.mp3`), approved by Mason's ears on 2026-10-19.
 - DONE: home is one big Play button (he can't choose between 10 games); games rotate in a fixed order; list under "More games".
   Next idea: pick the next game from the adaptive data, and spoken/picture labels for pre-readers.
 - Sticker-book / garden progress world filled by effort, not score. Visible, never lost.
