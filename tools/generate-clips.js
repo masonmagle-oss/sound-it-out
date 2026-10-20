@@ -2,7 +2,7 @@
 // transcribes each take as a sanity check, and builds an audition page. It never touches sounds/.
 //   node tools/generate-clips.js --dry                       what it would make and the credit cost (no key needed)
 //   node tools/generate-clips.js --kind lines --takes 2      story lines (kinds: lines, questions, prompts, words, all)
-// Your ElevenLabs API key goes in the file .elevenlabs-key (one line, git-ignored) or the ELEVENLABS_API_KEY variable.
+// The key is in .env.local (git-ignored, made by `npx @elevenlabs/cli onboard init`); run with: node --env-file=.env.local tools/generate-clips.js ...
 // Credits are about 1 per character per take. --max N stops a run that would cost more (default 12000).
 // Then open _new-clips/audition.html, pick the best takes, and run: node tools/install-clips.js results.json
 const fs = require('fs'), path = require('path'), { execFileSync } = require('child_process');
@@ -25,27 +25,26 @@ const chars = todo.reduce((a, j) => a + j.text.length, 0), cost = chars * takes;
 console.log(`${todo.length} clips (${kind}), ${takes} take(s) each, about ${cost} credits`);
 if (dry) { todo.forEach(j => console.log(' ', j.key, '|', j.text)); process.exit(0); }
 if (cost > max) { console.error(`Stopping: ${cost} credits is over --max ${max}. Raise --max or use --limit.`); process.exit(1); }
-const key = process.env.ELEVENLABS_API_KEY || (fs.existsSync(path.join(root, '.elevenlabs-key')) ? fs.readFileSync(path.join(root, '.elevenlabs-key'), 'utf8').trim() : '');
-if (!key) { console.error('No API key: put it in .elevenlabs-key (one line) or set ELEVENLABS_API_KEY.'); process.exit(1); }
+if (!process.env.ELEVENLABS_API_KEY) { console.error('No key loaded. Run: node --env-file=.env.local tools/generate-clips.js ...'); process.exit(1); }
 const out = path.join(root, '_new-clips'), raw = path.join(out, 'raw');
 fs.mkdirSync(raw, { recursive: true });
 const norm = t => t.toLowerCase().replace(/[^a-z ]/g, ' ').replace(/ +/g, ' ').trim();
 const manifestFile = path.join(out, 'manifest.json');
 const manifest = fs.existsSync(manifestFile) ? JSON.parse(fs.readFileSync(manifestFile, 'utf8')) : {};
+let client;
 async function tts(text) {
-  const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE}?output_format=mp3_44100_128`, { method: 'POST', headers: { 'xi-api-key': key, 'Content-Type': 'application/json' }, body: JSON.stringify({ text, model_id: MODEL }) });
-  if (!r.ok) throw new Error('text-to-speech ' + r.status + ' ' + (await r.text()).slice(0, 200));
-  return Buffer.from(await r.arrayBuffer());
+  const stream = await client.textToSpeech.convert(VOICE, { text, modelId: MODEL, outputFormat: 'mp3_44100_128' });
+  const chunks = []; for await (const c of stream) chunks.push(c);   // convert() returns a web ReadableStream
+  return Buffer.concat(chunks);
 }
 async function stt(file) {
-  const f = new FormData(); f.append('model_id', 'scribe_v1'); f.append('file', new Blob([fs.readFileSync(file)]), 'clip.mp3');
-  const r = await fetch('https://api.elevenlabs.io/v1/speech-to-text', { method: 'POST', headers: { 'xi-api-key': key }, body: f });
-  if (!r.ok) return null;
-  return (await r.json()).text || '';
+  try { return (await client.speechToText.convert({ file: fs.createReadStream(file), modelId: 'scribe_v2' })).text || ''; } catch (e) { return null; }
 }
 const clean = (src, dst) => execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', src, '-af', 'silenceremove=start_periods=1:start_threshold=-50dB,adelay=40|40,apad=pad_dur=0.1,loudnorm=I=-18:TP=-1.5:LRA=11', '-ac', '1', '-ar', '44100', '-b:a', '128k', dst]);
 const seconds = f => Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).toString().trim());
 (async () => {
+  const { ElevenLabsClient } = await import('@elevenlabs/elevenlabs-js');
+  client = new ElevenLabsClient();
   for (const j of todo) {
     const m = manifest[j.key] = manifest[j.key] || { text: j.text, kind: j.kind, takes: [] };
     for (let n = m.takes.length + 1; n <= takes; n++) {

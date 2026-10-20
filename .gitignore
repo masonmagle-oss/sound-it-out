@@ -8,3 +8,4 @@ raw15/
 .elevenlabs-key
 _new-clips/
 results.json
+.env.local

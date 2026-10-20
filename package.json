@@ -1,6 +1,14 @@
 {
   "name": "sound-it-out",
   "private": true,
-  "scripts": { "test": "node tools/test.js" },
-  "devDependencies": { "playwright": "^1.60.0" }
+  "scripts": {
+    "test": "node tools/test.js",
+    "clips": "node --env-file=.env.local tools/generate-clips.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  },
+  "dependencies": {
+    "@elevenlabs/elevenlabs-js": "^2.74.0"
+  }
 }
