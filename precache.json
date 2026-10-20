@@ -1,13 +1,13 @@
 {
- "version": "85b9708064",
+ "version": "87ad7a3520",
  "files": {
-  "index.html": "cb761379f1",
+  "index.html": "779a08b9f9",
   "manifest.webmanifest": "606961f5a1",
   "css/style.css": "b6486d15be",
   "js/app.js": "bad98e6bae",
   "js/audio.js": "2e68cb19cb",
-  "js/content.js": "e3326846d4",
-  "js/games.js": "4cb9f7bb77",
+  "js/content.js": "2963aae995",
+  "js/games.js": "64ceb37162",
   "js/help.js": "07c586f6c7",
   "js/home.js": "23ffa5f0d6",
   "js/letters-rhyme.js": "34bde1f7c8",
