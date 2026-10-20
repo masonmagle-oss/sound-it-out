@@ -58,7 +58,8 @@ sometimes answers silly on purpose), so treat a sound as wobbly only after repea
   Menu cards (inside `#menu`, hidden until "More games") are `<button class="menu-card" data-go="X">`; screens are `<section id="screen-X" hidden>`.
 - Helpers on `W`: `playKey`, `wordKeyOf`, `sentenceKeyOf`, `pick`, `shuffle`, `sleep`, `stageLimit`,
   `track(key, ok)`, `pickAdaptive(list, keysOf)`, `wordKeys`, `skillSummary`.
-- Adaptive practice: skills live in memory per visit; saved only when the grown-up turns "Remember" on.
+- Children: two profiles, no accounts ("Who's playing?" opens first, every visit). The first child keeps the original localStorage keys; the second adds `.p2` (`wordplay.progress.v1.p2`, `wordplay.skills.v1.p2`, `wordplay.child.v1.p2`). Names, pictures and Play order are in `wordplay.profiles.v1`; level and session length are per child (`wordplay.child.v1[.p2]`); sound, speech and Remember are per device (`wordplay.settings.v1`). Backups, resets and the level/session buttons act on the child currently playing. `W.on('profileChanged')` tells modules to reset per-child state.
+- Adaptive practice: skills are kept per child and saved when "Remember" is on (it is ON by default now that there are two children).
 - Reusable CSS: `.dchoices .dchoice` (answer buttons), `.rtarget/.rtemo` (big emoji), `.praise`, `.hint`, `.btn`, `.row`, `.chip`.
 - Clip names: `word-<w>.mp3`, `sentence-<dash-words>.mp3`, `letter-<x>.mp3`, `<key>.mp3`.
 - Letters screen: `MOUTH` + `mouthSVG()` (drawn mouth shapes) and `ASL` (public-domain hand signs from wpclipart.com

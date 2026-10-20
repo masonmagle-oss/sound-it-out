@@ -6,8 +6,14 @@
   const W = window.WordPlay;
   if (!W) return;
   const $ = id => document.getElementById(id);
-  const ORDER = ['sound', 'rhyme', 'sight', 'detective', 'read', 'silly', 'spell', 'stories', 'letters', 'trace'];
+  // Each child has a Play order (set on the grown-ups page). Same every time: predictable.
+  const ORDERS = {
+    start: ['sound', 'rhyme', 'sight', 'detective', 'read', 'silly', 'spell', 'stories', 'letters', 'trace'],
+    reader: ['read', 'stories', 'spell', 'silly', 'rhyme', 'detective', 'sight', 'sound', 'letters', 'trace']
+  };
+  let ORDER = ORDERS.start;
   let i = 0;
+  W.on('profileChanged', k => { ORDER = ORDERS[k && k.order] || ORDERS.start; i = 0; W.home.order = ORDER; });
 
   function setMore(open) {
     $('menu').hidden = !open;

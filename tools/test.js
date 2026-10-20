@@ -8,6 +8,7 @@ const fs = require('fs');
 (async () => {
   const b = await chromium.launch(process.env.CHROMIUM ? { executablePath: process.env.CHROMIUM } : {});
   const p = await b.newPage({ viewport: { width: 390, height: 844 } });
+  await p.addInitScript(() => { window.__AUTO_KID = 'p1'; });   // the main checks skip the "Who's playing?" picker
   const errs = [];
   p.on('pageerror', e => errs.push(e.message));
   const url = 'file://' + path.resolve(__dirname, '..', process.env.TARGET || 'index.html');
@@ -43,6 +44,7 @@ const fs = require('fs');
   console.log((okPace ? 'ok   ' : 'FAIL ') + 'next button is paced'); if (!okPace) errs.push('pace: ' + [lockedAtStart, pill, wrongStaysLocked, unlocked, relocked]);
   // Stuck for a while: the answer is shown (no praise phrase), and Next unlocks.
   await p.waitForTimeout(1500 + 1800);
+  await p.waitForFunction(() => !WordPlay.pace.isLocked('rhNext'), null, { timeout: 12000 }).catch(() => {});   // real clips (phone build) must finish playing first
   const reveal = await p.evaluate(() => ({ locked: WordPlay.pace.isLocked('rhNext'), text: document.getElementById('rhPraise').textContent, right: !!document.querySelector('#rchoices .right') }));
   const noPraise = await p.evaluate(t => !WordPlay.CONTENT.praise.some(x => t.indexOf(x) >= 0), reveal.text);
   const okStuck = !reveal.locked && reveal.right && noPraise;
@@ -81,7 +83,6 @@ const fs = require('fs');
   await p.evaluate(() => { const W = window.WordPlay; W.go('grown'); });
   await p.waitForTimeout(200);
   if (!(await p.locator('#screen-grown').isVisible())) errs.push('grown-ups screen not visible');
-  await p.click('#swRemember');
   await p.evaluate(() => { WordPlay.track('m', true); WordPlay.track('m', true); WordPlay.track('a', false); });
   const [dl] = await Promise.all([p.waitForEvent('download'), p.click('#exportBtn')]);
   const file = path.join(require('os').tmpdir(), 'sio-backup-test.json');
@@ -89,7 +90,7 @@ const fs = require('fs');
   const saved = JSON.parse(fs.readFileSync(file, 'utf8'));
   const goodSave = saved.kind === 'sound-it-out-progress' && saved.skills.m.r === 2 && saved.skills.a.m === 1;
   console.log((goodSave ? 'ok   ' : 'FAIL ') + 'backup file contents'); if (!goodSave) errs.push('backup contents wrong');
-  await p.click('#resetBtn'); await p.click('#resetBtn');
+  await p.click('#resetChildBtn'); await p.click('#resetChildBtn');
   const wiped = await p.evaluate(() => WordPlay.skillSummary().solid.length + WordPlay.skillSummary().weak.length);
   await p.setInputFiles('#importFile', file);
   await p.waitForTimeout(300);
@@ -128,6 +129,69 @@ const fs = require('fs');
   const missing = need.filter(k => !fs.existsSync(path.resolve(__dirname, '..', 'sounds', k + '.mp3')) && !(process.env.TARGET || '').includes('single-file'));
   console.log(missing.length ? 'MISSING clips: ' + missing.join(', ') : 'all ' + need.length + ' word and unit clips present');
   if (missing.length) errs.push('missing clips: ' + missing.length);
+
+  // Children: the picker, separate progress, migration of old saved data, per-child Play order and names.
+  const fresh = async init => {
+    const ctx = await b.newContext({ viewport: { width: 390, height: 844 } });
+    const q = await ctx.newPage();
+    q.on('pageerror', e => errs.push('profiles: ' + e.message));
+    if (init) await q.addInitScript(init);
+    await q.goto(url);
+    return q;
+  };
+  const q = await fresh();
+  const pickerShown = await q.locator('#screen-who').isVisible() && (await q.locator('.who-btn').count()) === 2 && !(await q.locator('#screen-home').isVisible());
+  await q.evaluate(() => WordPlay.go('sound'));
+  const stillPicker = await q.locator('#screen-who').isVisible();      // cannot skip the picker by navigating
+  await q.click('.who-btn >> nth=1');
+  await q.waitForTimeout(100);
+  const home2 = await q.locator('#screen-home').isVisible() && /Child 2/.test(await q.textContent('#whoBtn'));
+  await q.evaluate(() => { WordPlay.roundStart = 0; WordPlay.track('zz', true); WordPlay.track('zz', true); WordPlay.track('zz', true); });
+  const key2 = await q.evaluate(() => localStorage.getItem('wordplay.skills.v1.p2') || '');
+  const key1 = await q.evaluate(() => localStorage.getItem('wordplay.skills.v1') || '');
+  await q.evaluate(() => { WordPlay.mark('soundedOut', 'sun'); });
+  await q.waitForTimeout(1700);
+  await q.click('#playBtn');
+  const reader = await q.evaluate(() => WordPlay.current());
+  await q.evaluate(() => WordPlay.go('home'));
+  await q.click('#whoBtn');
+  await q.click('.who-btn >> nth=0');
+  const sepSkills = await q.evaluate(() => WordPlay.skillSummary().solid.indexOf('zz') < 0);
+  await q.waitForTimeout(1700);
+  await q.click('#playBtn');
+  const starter = await q.evaluate(() => WordPlay.current());
+  const okKids = pickerShown && stillPicker && home2 && key2.includes('zz') && !key1.includes('zz') && sepSkills && reader === 'read' && starter === 'sound';
+  console.log((okKids ? 'ok   ' : 'FAIL ') + 'two children keep separate progress and Play order');
+  if (!okKids) errs.push('kids: ' + JSON.stringify({ pickerShown, stillPicker, home2, key2: key2.slice(0, 30), key1: key1.slice(0, 30), sepSkills, reader, starter }));
+  // Names and pictures are editable and saved.
+  await q.evaluate(() => WordPlay.go('grown'));
+  await q.fill('#kidName-p1', 'Sam'); await q.fill('#kidEmoji-p1', '\u{1F680}'); await q.press('#kidEmoji-p1', 'Tab');
+  await q.waitForTimeout(100);
+  const savedKids = await q.evaluate(() => JSON.parse(localStorage.getItem('wordplay.profiles.v1')));
+  const okNames = savedKids[0].name === 'Sam' && savedKids[0].emoji === '\u{1F680}' && /Sam/.test(await q.textContent('#whoBtn'));
+  console.log((okNames ? 'ok   ' : 'FAIL ') + 'names and pictures are saved'); if (!okNames) errs.push('names: ' + JSON.stringify(savedKids));
+  // Reset this child leaves the other child alone.
+  await q.evaluate(() => { WordPlay.go('home'); });
+  await q.click('#whoBtn'); await q.click('.who-btn >> nth=1');
+  await q.evaluate(() => WordPlay.go('grown'));
+  await q.click('#resetChildBtn'); await q.click('#resetChildBtn');
+  const after2 = await q.evaluate(() => localStorage.getItem('wordplay.skills.v1.p2'));
+  const wiped2 = !after2 || !after2.includes('zz');
+  console.log((wiped2 ? 'ok   ' : 'FAIL ') + 'reset this child erases only that child'); if (!wiped2) errs.push('reset child failed');
+  await q.context().close();
+  // Anything saved before there were children belongs to the first child, level included.
+  const old = await fresh(() => {
+    if (!localStorage.getItem('wordplay.settings.v1')) {
+      localStorage.setItem('wordplay.settings.v1', JSON.stringify({ remember: true, level: '3', sessionLen: 6 }));
+      localStorage.setItem('wordplay.skills.v1', JSON.stringify({ m: { r: 4, m: 0, s: 4 }, qq: { r: 3, m: 0, s: 3 } }));
+      localStorage.setItem('wordplay.progress.v1', JSON.stringify({ soundedOut: ['sun'], sightGot: [], sightPractice: [] }));
+    }
+  });
+  await old.click('.who-btn >> nth=0');
+  const migrated = await old.evaluate(() => ({ lvl: WordPlay.settings.level, solid: WordPlay.skillSummary().solid.join(',') }));
+  const okOld = migrated.lvl === '3' && /qq/.test(migrated.solid);
+  console.log((okOld ? 'ok   ' : 'FAIL ') + 'saved data from before children moves to the first child'); if (!okOld) errs.push('migration: ' + JSON.stringify(migrated));
+  await old.context().close();
   await b.close();
   if (errs.length) { console.error('ERRORS:', errs); process.exit(1); }
   console.log('all screens opened without page errors');

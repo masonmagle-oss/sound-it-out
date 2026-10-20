@@ -16,12 +16,16 @@
 
   <main>
     <!-- HOME -->
+    <section id="screen-who" aria-label="Who is playing?" hidden>
+      <div id="whoBtns" class="who-grid"></div>
+    </section>
     <section id="screen-home" aria-label="Choose something to play">
       <button id="playBtn" class="play-btn" type="button" aria-label="Play. The app picks the next game for you.">
         <span class="big" aria-hidden="true">▶</span>
         <span class="play-label">Play</span>
       </button>
       <div class="row"><button id="moreGamesBtn" class="btn ghost" type="button" aria-expanded="false" aria-controls="menu">More games</button></div>
+      <div class="row"><button id="whoBtn" class="btn ghost" type="button">Who&rsquo;s playing?</button></div>
       <div id="menu" class="menu" hidden>
         <button class="menu-card" type="button" data-go="sound" aria-label="Sound it out. Touch each sound and watch the word come together.">
           <span class="big" aria-hidden="true">👆</span>
@@ -271,6 +275,12 @@
     <!-- GROWN-UPS -->
     <section id="screen-grown" aria-label="For grown-ups" hidden>
       <div class="panel">
+        <h2>Children</h2>
+        <p class="small">Each child has their own progress, level and session length. Nothing is uploaded and there are no accounts. Pick a name and a picture (type or paste any emoji, or tap one).</p>
+        <div id="kidsBox"></div>
+        <p class="small">The level, session length, saved words, backup and reset below are for: <strong id="grownWho"></strong></p>
+      </div>
+      <div class="panel">
         <h2>Sound it out: level</h2>
         <p class="small">Pick which words show up. Each level includes the ones before it.</p>
         <div id="levelBtns" class="row" role="group" aria-label="Level" style="flex-wrap:wrap;gap:10px"></div>
@@ -279,15 +289,15 @@
         <h2>What this app stores</h2>
         <p>Nothing is uploaded, ever. There are no accounts, no analytics, no ads and no outside files. It works offline once loaded.</p>
         <button id="swRemember" class="switch" type="button" role="switch" aria-checked="false">
-          <span>Remember practiced words on this device</span>
+          <span>Remember practiced words on this device (each child separately)</span>
           <span class="state" aria-hidden="true">Off</span>
           <span class="track" aria-hidden="true"></span>
         </button>
         <p class="small">When this is on, a simple list of words is kept in this browser only. Turning it off erases that list.</p>
         <div id="progressList" aria-live="polite"></div>
-        <div class="row"><button id="resetBtn" class="btn ghost" type="button">Reset</button></div>
+        <div class="row"><button id="resetChildBtn" class="btn ghost" type="button">Reset this child</button><button id="resetBtn" class="btn ghost" type="button">Reset everything</button></div>
         <p id="resetMsg" class="small" role="status" aria-live="polite"></p>
-        <p class="small">Reset erases everything this app saved in this browser, including the switches on this page.</p>
+        <p class="small">&ldquo;Reset this child&rdquo; erases only that child&rsquo;s progress. &ldquo;Reset everything&rdquo; erases both children, their names and the switches on this page.</p>
       </div>
       <div class="panel">
         <h2>Play time</h2>

@@ -53,3 +53,7 @@ Unverified: trimmed clips (never heard by Claude), newest two games with the act
 - Family only, or might it be shared (changes licensing and polish needs)?
 - Progress only on his device, or movable between devices?
 - Sticker-book world first, or more stories first?
+
+## Done recently
+- Two children ("Who's playing?"), separate progress/backup/level/session length, Play order per child (2026-10-20).
+- Stricter Next, softer miss handling, 15/30/45-round sessions (2026-10-20).

@@ -250,6 +250,20 @@
   #screen-home .row{margin-top:1rem}
   .menu[hidden]{display:none}
 
+  /* Who is playing */
+  .who-grid{display:grid; gap:1.25rem; margin-top:1rem}
+  .who-btn{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.5rem; min-height:12rem;
+    border-radius:2rem; border:4px solid var(--ink); background:var(--accent); color:#fff; font:inherit; cursor:pointer}
+  .who-btn .big{font-size:5rem; line-height:1}
+  .who-name{font-size:2rem; font-weight:800; overflow-wrap:anywhere}
+  .who-btn:active{transform:scale(.98)}
+  .who-btn:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
+  .kidrow{border-top:2px solid #cfe0f3; padding:.75rem 0; display:grid; gap:.6rem}
+  .kidrow input{min-height:56px; font:inherit; font-size:1.1rem; padding:0 .8rem; border:3px solid #cfe0f3; border-radius:1rem; width:100%; box-sizing:border-box}
+  .kidrow .kidemoji{font-size:1.6rem; max-width:7rem}
+  .kidpicks{display:flex; flex-wrap:wrap; gap:.4rem}
+  .kidpicks .pick{min-width:56px; min-height:56px; font-size:1.7rem; border-radius:1rem; border:3px solid #cfe0f3; background:#fff; cursor:pointer}
+
   /* Pacing: Next waits until the round has been tried */
   .pace-locked{opacity:.45}
   .resting .dchoice, .resting .rchoice{pointer-events:none; opacity:.7}

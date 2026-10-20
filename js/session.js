@@ -59,6 +59,7 @@
       box.appendChild(b);
     });
   }
+  W.on('profileChanged', () => { count = 0; limit = null; clearTimeout(timer); $('doneOverlay').hidden = true; });   // a new child starts a fresh session
   const prev = W.hooks.enter.grown;
   W.hooks.enter.grown = () => { if (prev) prev(); renderLengths(); };
   W.session = { count: () => count, size };
