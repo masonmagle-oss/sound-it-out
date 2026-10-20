@@ -5,6 +5,9 @@ Measured with `node tools/audit-curriculum.js` against a reference I wrote from 
 ## Scope
 Phonics decoding is mostly finished by the end of grade 2. Grade 3 is morphology (prefixes, suffixes, roots), vocabulary and comprehension. So Pre-K to grade 3 is the right span; going higher would be a different app.
 
+## Done since the audit
+- 23 words that the stories and sentences used but the word list lacked (sat, mat, fun, max, sits, mom, hill, pond, bench, wind, grass, swims, blew, bye, took, note, time, rise, splash, brother, school, friend, morning) were added to `CONTENT.words` as sight-type entries. Their clips already existed, so no new recording was needed. Every story and sentence word is now in the list (`node tools/audit-curriculum.js`). Caveat: the simple ones (sat, mat, hill, pond...) are really decodable and should become sound words with pictures at the right level when we rebalance L1-L5; "listed" does not yet mean "taught by sounds he has learned".
+
 ## What is in
 - 411 decodable words in 7 levels, 219 sight words, 26 letters, 70 sentences, 12 stories (4 lines each), 12 games, 842 clips.
 - Sight words: Dolch pre-primer and primer 100%; grades 1-3 about 99% (missing "giving", "don't").
