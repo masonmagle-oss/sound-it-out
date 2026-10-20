@@ -19,6 +19,8 @@ const add = (k, key, text) => { if (!have.has(key) && !jobs.some(j => j.key === 
 C.stories.forEach(s => s.lines.forEach(l => add('lines', 'sentence-' + dash(l), l)));
 C.stories.forEach(s => (s.q || []).forEach(x => add('questions', 'question-' + dash(x.ask), x.ask)));
 [['animal', 'Which one is an animal?'], ['food', 'Which one is food?'], ['clothes', 'Which one do we wear?'], ['vehicle', 'Which one takes us places?'], ['body', 'Which one is part of the body?'], ['home', 'Which one is in a home?'], ['nature', 'Which one is outside in nature?'], ['opposite', 'What is the opposite?']].forEach(([k, t]) => add('prompts', 'vocab-' + k, t));
+// isolated sounds: IPA between slashes, said twice (the second one is the clean one, as in WORKFLOWS); ful less ly ness are held until an endings activity exists
+Object.entries({ dle: '/dəl/', tle: '/təl/', le: '/əl/' }).forEach(([k, ipa]) => add('sounds', k, ipa + '. ' + ipa + '.'));
 require('./new-words-data.js').forEach(([, , emoji, word]) => { if (emoji && /^[a-z]+$/.test(word)) add('words', 'word-' + word, word + '.'); });   // endings and contractions need their own treatment
 const todo = jobs.slice(0, limit);
 const chars = todo.reduce((a, j) => a + j.text.length, 0), cost = chars * takes;

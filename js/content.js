@@ -404,6 +404,13 @@ window.WORDPLAY_CONTENT = {
     { word: 'swimming', units: ['s', 'w', 'i', 'mm:m', 'ing'], emoji: '🏊', sight: false, level: 7, anim: 'pop' },
     { word: 'digging', units: ['d', 'i', 'gg:g', 'ing'], emoji: '⛏️', sight: false, level: 7, anim: 'pop' },
 
+    { word: 'candle', units: ['c', 'a', 'n', 'dle:dle'], emoji: '🕯️', sight: false, level: 7, anim: 'pop' },
+    { word: 'turtle', units: ['t', 'ur:er', 'tle:tle'], emoji: '🐢', sight: false, level: 7, anim: 'pop' },
+    { word: 'puzzle', units: ['p', 'u', 'zz:z', 'le:le'], emoji: '🧩', sight: false, level: 7, anim: 'pop' },
+    { word: 'bottle', units: ['b', 'o', 'tt:t', 'le:le'], emoji: '🍼', sight: false, level: 7, anim: 'pop' },
+    { word: 'bubble', units: ['b', 'u', 'bb:b', 'le:le'], emoji: '🫧', sight: false, level: 7, anim: 'pop' },
+    { word: 'clapping', units: ['c', 'l', 'a', 'pp:p', 'ing'], emoji: '👏', sight: false, level: 7, anim: 'pop' },
+
     // ---- sight words (Dolch lists; level = stage 1-5) ----
     { word: 'a', units: ['a'], emoji: null, sight: true, level: 1 },
     // ---- words used in stories and sentences that are not taught as sounds yet (added so the reading material only uses listed words) ----
