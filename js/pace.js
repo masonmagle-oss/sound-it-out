@@ -14,7 +14,7 @@
   const NEXT = {
     nextBtn: ['sound', 'praise'], rNext: ['read', 'rpraise'], lNext: ['letters', null],
     rhNext: ['rhyme', 'rhPraise'], dNext: ['detective', 'dPraise'], spNext: ['spell', 'spMsg'],
-    syNext: ['silly', 'syPraise'], tNext: ['trace', 'tPraise']
+    syNext: ['silly', 'syPraise'], tNext: ['trace', 'tPraise'], mNext: ['match', 'mPraise']
   };
   const state = {};   // id -> { locked, stuck, idle }
   let msgTimer = null;
@@ -63,6 +63,7 @@
       const st = state[id];
       if (st && st.locked) { e.stopImmediatePropagation(); e.preventDefault(); hint(); return; }
       setLocked(id, true);                       // the click goes through; the next round starts locked
+      if (W.mix && W.mix.active()) { e.stopImmediatePropagation(); e.preventDefault(); W.mix.advance(); }   // mixed session: next round comes from the mix
     }, true);
     if (praiseId) {
       const el = $(praiseId);
@@ -76,7 +77,7 @@
   });
 
   // A wrong tap makes the answer buttons rest for a moment, so tapping every choice at random takes real time.
-  ['dChoices', 'rchoices', 'syChoices'].forEach(cid => {
+  ['dChoices', 'rchoices', 'syChoices', 'mChoices'].forEach(cid => {
     const box = $(cid);
     new MutationObserver(list => {
       for (const m of list) {

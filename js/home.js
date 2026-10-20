@@ -24,6 +24,7 @@
   $('playBtn').addEventListener('click', () => {
     if (Date.now() - lastPlay < 1500) return;      // a second quick tap does nothing
     lastPlay = Date.now();
+    if (W.mix) { W.mix.start(); return; }          // a mixed session built around one sound at a time
     const next = ORDER[i % ORDER.length]; i++; W.go(next);
   });
   $('moreGamesBtn').addEventListener('click', () => setMore($('menu').hidden));

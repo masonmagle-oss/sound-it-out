@@ -127,12 +127,23 @@
     stopSeq();
     const fams = families();
     if (fams.length < 2) return;
-    let fam = W.pick(fams), tries = 0;
-    while (tries++ < 6 && lastWord && fam.some(w => w.word === lastWord)) fam = W.pick(fams);
+    const mset = W.mixSet(), mf = mset ? fams.filter(f => f.some(w => mset.has(w.word))) : fams, use = mf.length >= 2 ? mf : fams;
+    let fam = W.pick(use), tries = 0;
+    while (tries++ < 6 && lastWord && fam.some(w => w.word === lastWord)) fam = W.pick(use);
     const pair = W.shuffle(fam).slice(0, 2);
+    if (mset) pair.sort((x, y) => mset.has(y.word) - mset.has(x.word));       // a focus word is the one he sees
     curTarget = pair[0]; lastWord = curTarget.word;
     const answer = pair[1]; curAnswer = answer;
-    const others = W.shuffle(fams.filter(f => f !== fam)).slice(0, 2).map(f => W.pick(f));
+    // wrong pictures start with the same sound as the shown word (so "cat" does not tempt him to pick "cap" by its first letter)
+    const UK = window.WordPlayUnit.key, fk = w => UK(w.units[0]);
+    const others = [], usedFam = new Set([fam]), usedPic = { [curTarget.emoji]: true, [answer.emoji]: true };
+    W.shuffle([].concat.apply([], fams.filter(f => f !== fam).map(f => f.map(w => ({ w, f }))))).forEach(x => {
+      if (others.length < 2 && fk(x.w) === fk(curTarget) && !usedFam.has(x.f) && !usedPic[x.w.emoji]) { usedFam.add(x.f); usedPic[x.w.emoji] = true; others.push(x.w); }
+    });
+    if (others.length < 2) {                   // not enough words share the sound: fall back to any other families
+      others.length = 0;
+      W.shuffle(fams.filter(f => f !== fam)).slice(0, 2).forEach(f => others.push(W.pick(f)));
+    }
     const opts = W.shuffle([answer].concat(others));
     $('rtEmo').textContent = curTarget.emoji;
     $('rtWord').textContent = curTarget.word;

@@ -22,7 +22,7 @@
   function dPool() {
     const lim = Math.min(W.stageLimit(), 6);
     const p = CONTENT.words.filter(w => !w.sight && w.emoji && (w.level || 1) <= lim && sounding(w).length >= 2 && !plain(w));
-    return p.length >= 6 ? p : CONTENT.words.filter(w => !w.sight && w.emoji && sounding(w).length >= 2 && (w.level || 1) <= 3 && !plain(w));
+    return W.mixNarrow(p.length >= 6 ? p : CONTENT.words.filter(w => !w.sight && w.emoji && sounding(w).length >= 2 && (w.level || 1) <= 3 && !plain(w)), w => w.word, 3);
   }
   const target = w => { const s = sounding(w); return mode === 'end' ? s[s.length - 1] : s[0]; };
   function dRound() {
@@ -102,7 +102,7 @@
     const lim = Math.min(W.stageLimit(), 6);
     const ok = w => !w.sight && w.emoji && w.units.length >= 2 && w.units.length <= 5 && w.units.every(u => { const k = U.key(u); return k !== '_' && k.indexOf('word-') !== 0; });
     const p = CONTENT.words.filter(w => ok(w) && (w.level || 1) <= lim);
-    return p.length >= 6 ? p : CONTENT.words.filter(w => ok(w) && (w.level || 1) <= 3);
+    return W.mixNarrow(p.length >= 6 ? p : CONTENT.words.filter(w => ok(w) && (w.level || 1) <= 3), w => w.word, 3);
   }
   function spRender() {
     spSlots.innerHTML = '';
@@ -221,8 +221,9 @@
     stopSeq(); syDone = false; syPraise.textContent = ''; syChoices.innerHTML = '';
     const groups = syGroups();
     if (!groups.length) { $('syPrompt').textContent = 'Not enough words yet.'; return; }
-    let grp = W.pick(groups), t = 0, w = W.pickAdaptive(grp, x => [U.key(x.units[0])]);
-    while (t++ < 8 && w.word === syLast) { grp = W.pick(groups); w = W.pick(grp); }
+    const mset = W.mixSet(), mg = mset ? groups.filter(g => g.some(x => mset.has(x.word))) : groups, gs = mg.length ? mg : groups;
+    let grp = W.pick(gs), t = 0, w = W.pickAdaptive(W.mixNarrow(grp, x => x.word, 1), x => [U.key(x.units[0])]);
+    while (t++ < 8 && w.word === syLast) { grp = W.pick(gs); w = W.pick(W.mixNarrow(grp, x => x.word, 1)); }
     syLast = w.word; syTarget = w; syTried = false;
     const others = W.shuffle(grp.filter(x => U.key(x.units[0]) !== U.key(w.units[0])));
     const seenOn = {}; const pickOthers = [];

@@ -13,7 +13,12 @@
   function sentencesForStage() {
     const lim = W.stageLimit();
     const list = sentences.filter(sn => sentenceStage(sn) <= lim);
-    return list.length ? list : sentences;
+    const all = list.length ? list : sentences, set = W.mixSet();
+    if (set) {                                 // mixed session: sentences that use a focus word
+      const f = all.filter(sn => sn.text.toLowerCase().replace(/[^a-z ]/g, '').split(' ').some(w => set.has(w)));
+      if (f.length >= 2) return f;
+    }
+    return all;
   }
 
   function load(sn) {
@@ -63,6 +68,6 @@
   }
   $('rAgain').addEventListener('click', () => { if (W.stopSound) W.stopSound(); if (cur) load(cur); });
   $('rNext').addEventListener('click', () => { if (W.stopSound) W.stopSound(); next(); });
-  hooks.enter.read = next;
+  hooks.enter.read = () => { if (W.mixSet()) order = []; next(); };
   hooks.leave.read = () => { token++; if (W.stopSound) W.stopSound(); };
 })();

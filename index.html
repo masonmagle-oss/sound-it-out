@@ -47,6 +47,10 @@
           <span class="big" aria-hidden="true">🎵</span>
           <span><strong>Rhyme time</strong><span class="sub">Find the picture that sounds the same at the end.</span></span>
         </button>
+        <button class="menu-card" type="button" data-go="match" aria-label="Which picture. Read the word and find its picture.">
+          <span class="big" aria-hidden="true">🖼️</span>
+          <span><strong>Which picture?</strong><span class="sub">Read the word. Find its picture.</span></span>
+        </button>
         <button class="menu-card" type="button" data-go="detective" aria-label="Sound detective. Listen for the first sound, the last sound, or count the sounds.">
           <span class="big" aria-hidden="true">🕵️</span>
           <span><strong>Sound detective</strong><span class="sub">First sound, last sound, or count the sounds.</span></span>
@@ -163,6 +167,19 @@
       </div>
     </section>
 
+
+    <!-- WHICH PICTURE -->
+    <section id="screen-match" aria-label="Which picture is this word?" hidden>
+      <p class="hint">Read the word. Which picture is it?</p>
+      <button id="mWord" class="rtarget" type="button" aria-label="Hear the sounds in this word, one by one">
+        <span id="mWordText" class="rtword"></span>
+      </button>
+      <div id="mChoices" class="rchoices" role="group" aria-label="Pictures to choose from"></div>
+      <p id="mPraise" class="praise" role="status" aria-live="polite"></p>
+      <div class="row">
+        <button id="mNext" class="btn" type="button" aria-label="Next word">Next one &rarr;</button>
+      </div>
+    </section>
 
     <!-- SOUND DETECTIVE -->
     <section id="screen-detective" aria-label="Sound detective" hidden>
@@ -281,7 +298,12 @@
         <p class="small">The level, session length, saved words, backup and reset below are for: <strong id="grownWho"></strong></p>
       </div>
       <div class="panel">
-        <h2>Sound it out: level</h2>
+        <h2>Play: mixed session</h2>
+        <p class="small">Play serves a mix of games built around one sound at a time, and brings back sounds that are wobbly. A level opens only when most of the sounds in the level before are secure. Pick the level this child starts at. The level below is the highest the mix may reach.</p>
+        <div id="startBtns" class="row" role="group" aria-label="Mix starts at level" style="flex-wrap:wrap;gap:10px"></div>
+      </div>
+      <div class="panel">
+        <h2>Sound it out: level (highest)</h2>
         <p class="small">Pick which words show up. Each level includes the ones before it.</p>
         <div id="levelBtns" class="row" role="group" aria-label="Level" style="flex-wrap:wrap;gap:10px"></div>
       </div>
@@ -394,6 +416,8 @@
 <script src="js/letters-rhyme.js"></script>
 
 <script src="js/games.js"></script>
+<script src="js/match.js"></script>
+<script src="js/mix.js"></script>
 <script src="js/session.js"></script>
 <script src="js/home.js"></script>
 <script src="js/pace.js"></script>

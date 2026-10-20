@@ -64,16 +64,16 @@
   if (store.read(CHILD_KEY, null) == null && devSettings && (devSettings.level || devSettings.sessionRounds)) store.write(CHILD_KEY, { level: devSettings.level, sessionRounds: devSettings.sessionRounds });
   let settings = Object.assign({ remember: true }, devSettings);
   delete settings.level; delete settings.sessionRounds;
-  settings.level = 'all'; settings.sessionRounds = 30;
+  settings.level = 'all'; settings.sessionRounds = 30; settings.mixStart = 1;
   settings.remember = settings.remember !== false;       // saving is ON by default now that there are two children
   settings.speech = settings.speech === true;          // speech is OFF until a grown-up turns it on
   settings.sound = settings.sound !== false;           // playing your recordings is ON (silent anyway if no files)
   let progress = normProgress(null);                  // filled in when a child is chosen
 
   function saveSettings() {
-    const device = Object.assign({}, settings); delete device.level; delete device.sessionRounds;
+    const device = Object.assign({}, settings); delete device.level; delete device.sessionRounds; delete device.mixStart;
     store.write(SETTINGS_KEY, device);
-    if (activeId) store.write(pk(CHILD_KEY), { level: settings.level, sessionRounds: settings.sessionRounds });
+    if (activeId) store.write(pk(CHILD_KEY), { level: settings.level, sessionRounds: settings.sessionRounds, mixStart: settings.mixStart });
   }
   function saveKids() { store.write(PROFILES_KEY, kids); }
   function mark(list, word) {
@@ -131,13 +131,14 @@
     const c = store.read(pk(CHILD_KEY), {}) || {};
     settings.level = LEVEL_IDS.indexOf(String(c.level)) >= 0 ? String(c.level) : 'all';
     settings.sessionRounds = [15, 30, 45].indexOf(Number(c.sessionRounds)) >= 0 ? Number(c.sessionRounds) : 30;
+    settings.mixStart = Number(c.mixStart) >= 1 && Number(c.mixStart) <= 7 ? Number(c.mixStart) : (id === 'p1' ? 1 : 3);   // the second child starts a little higher until a grown-up changes it
     order = []; oi = -1;
     emit('profileChanged', kids.find(k => k.id === id));
   }
   const activeKid = () => kids.find(k => k.id === activeId) || null;
 
   /* ---------------- navigation ---------------- */
-  const TITLES = { who: 'Who\u2019s playing?', home: 'Word play', sound: 'Sound it out', sight: 'Sight words', read: 'Read a sentence', say: 'Say the word', letters: 'Letters', rhyme: 'Rhyme time', detective: 'Sound detective', spell: 'Spell it', silly: 'Silly words', trace: 'Trace letters', stories: 'Little stories', grown: 'For grown-ups' };
+  const TITLES = { match: 'Which picture?', who: 'Who\u2019s playing?', home: 'Word play', sound: 'Sound it out', sight: 'Sight words', read: 'Read a sentence', say: 'Say the word', letters: 'Letters', rhyme: 'Rhyme time', detective: 'Sound detective', spell: 'Spell it', silly: 'Silly words', trace: 'Trace letters', stories: 'Little stories', grown: 'For grown-ups' };
   const hooks = { enter: {}, leave: {} };
   let current = 'home';
 
@@ -175,7 +176,7 @@
     const args = Array.prototype.slice.call(arguments, 1);
     (listeners[name] || []).forEach(fn => { try { fn.apply(null, args); } catch (e) {} });
   }
-  window.WordPlay = { activeKid: () => activeKid(), kids: () => kids, track, pickAdaptive, wordKeys, skillSummary, stageLimit, go, render, current: () => current, hooks, on, emit, CONTENT, store, get settings() { return settings; }, saveSettings, sleep, reduced, pick, shuffle, mark, $ };
+  window.WordPlay = { skillOf: k => skills[k] || null, mixNarrow: l => l, mixSet: () => null, activeKid: () => activeKid(), kids: () => kids, track, pickAdaptive, wordKeys, skillSummary, stageLimit, go, render, current: () => current, hooks, on, emit, CONTENT, store, get settings() { return settings; }, saveSettings, sleep, reduced, pick, shuffle, mark, $ };
 
   /* =====================================================================
      ACTIVITY 1: Sound it out
@@ -204,6 +205,14 @@
   }
 
   function nextWord() {
+    const mset = window.WordPlay.mixSet();
+    if (mset) {                                // mixed session: a word from the focus set
+      const all = levelWords(), f = all.filter(w => mset.has(w.word)), use = f.length >= 3 ? f : all;
+      let w = pick(use), n = 0;
+      while (n++ < 8 && cur && w === cur && use.length > 1) w = pick(use);
+      loadWord(w);
+      return;
+    }
     if (!order.length || oi >= order.length - 1) {
       order = shuffle(levelWords());
       if (cur && order.length > 1 && order[0] === cur) { const t = order[0]; order[0] = order[1]; order[1] = t; }
@@ -465,7 +474,7 @@
         picks.appendChild(pb);
       });
       const ord = document.createElement('div'); ord.className = 'row'; ord.setAttribute('role', 'group'); ord.setAttribute('aria-label', 'Play button order for ' + k.name);
-      [['start', 'Play: letters and sounds first'], ['reader', 'Play: reading and stories first']].forEach(([v, label]) => {
+      [['start', 'Mix: sounds and letters first'], ['reader', 'Mix: reading first']].forEach(([v, label]) => {
         const ob = document.createElement('button'); ob.type = 'button'; ob.className = 'btn' + (k.order === v ? '' : ' ghost'); ob.textContent = label;
         ob.setAttribute('aria-pressed', k.order === v ? 'true' : 'false');
         ob.addEventListener('click', () => { k.order = v; saveKids(); emit('profileChanged', activeKid()); renderKids(); });
@@ -477,8 +486,21 @@
   }
   hooks.enter.who = renderWho;
   $('whoBtn').addEventListener('click', () => render('who'));
+  function renderStart() {
+    const box = $('startBtns');
+    box.innerHTML = '';
+    LEVELS.slice(1).forEach(([val, label]) => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'btn' + (String(settings.mixStart) === val ? '' : ' ghost');
+      b.textContent = label;
+      b.setAttribute('aria-pressed', String(settings.mixStart) === val ? 'true' : 'false');
+      b.addEventListener('click', () => { settings.mixStart = Number(val); saveSettings(); renderStart(); });
+      box.appendChild(b);
+    });
+  }
   function renderGrown() {
     renderKids();
+    renderStart();
     renderLevels();
     setSwitch($('swRemember'), settings.remember);
     renderProgress();
@@ -510,7 +532,7 @@
   armed2('resetChildBtn', 'Reset this child', 'Tap again to erase this child', () => {
     const k = activeKid();
     store.clear(pk(PROGRESS_KEY)); store.clear(pk(SKILLS_KEY)); store.clear(pk(CHILD_KEY));
-    progress = normProgress(null); skills = {}; settings.level = 'all'; settings.sessionRounds = 30; order = [];
+    progress = normProgress(null); skills = {}; settings.level = 'all'; settings.sessionRounds = 30; settings.mixStart = activeId === 'p1' ? 1 : 3; order = [];
     renderGrown();
     $('resetMsg').textContent = 'Erased ' + (k ? k.name : 'this child') + '\u2019s progress. The other child is untouched.';
   });
@@ -518,7 +540,7 @@
     kids.forEach(k => { store.clear(pk(PROGRESS_KEY, k.id)); store.clear(pk(SKILLS_KEY, k.id)); store.clear(pk(CHILD_KEY, k.id)); });
     store.clear(SETTINGS_KEY); store.clear(PROFILES_KEY);
     kids = normKids(null); activeId = null; progress = normProgress(null); skills = {};
-    settings = { remember: true, speech: false, sound: true, level: 'all', sessionRounds: 30 };
+    settings = { remember: true, speech: false, sound: true, level: 'all', sessionRounds: 30, mixStart: 1 };
     if (window.WordPlay.onReset) window.WordPlay.onReset();
     render('who');
   });

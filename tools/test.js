@@ -12,7 +12,7 @@ const fs = require('fs');
   const errs = [];
   p.on('pageerror', e => errs.push(e.message));
   const url = 'file://' + path.resolve(__dirname, '..', process.env.TARGET || 'index.html');
-  const screens = ['sound','sight','read','say','letters','rhyme','detective','spell','silly','trace','stories','grown'];
+  const screens = ['sound','sight','read','say','letters','rhyme','match','detective','spell','silly','trace','stories','grown'];
   for (const s of screens) {
     await p.goto(url);
     await p.click('#moreGamesBtn');
@@ -76,8 +76,9 @@ const fs = require('fs');
   await p.waitForTimeout(1600);
   await p.click('#playBtn');
   const second = await p.evaluate(() => WordPlay.current());
-  const okPlay = menuHidden && first === 'sound' && quick === 'home' && second === 'rhyme';
-  console.log((okPlay ? 'ok   ' : 'FAIL ') + 'play button picks the next game'); if (!okPlay) errs.push('play: ' + [menuHidden, first, quick, second]);
+  const mixOn = await p.evaluate(() => WordPlay.mix.active());
+  const okPlay = menuHidden && first === 'sound' && quick === 'home' && second === 'sound' && mixOn;
+  console.log((okPlay ? 'ok   ' : 'FAIL ') + 'play button starts a mixed session'); if (!okPlay) errs.push('play: ' + [menuHidden, first, quick, second]);
   // Backup: save a file, wipe, load it back, and reject junk.
   await p.goto(url);
   await p.evaluate(() => { const W = window.WordPlay; W.go('grown'); });
@@ -130,6 +131,68 @@ const fs = require('fs');
   console.log(missing.length ? 'MISSING clips: ' + missing.join(', ') : 'all ' + need.length + ' word and unit clips present');
   if (missing.length) errs.push('missing clips: ' + missing.length);
 
+
+  // Mixed session: different games in turn, one focus sound, harder words only after the sounds are secure.
+  await p.goto(url);
+  await p.waitForTimeout(200);
+  await p.click('#playBtn');
+  const mixRun = await p.evaluate(async () => {
+    const W = WordPlay, seen = [], lv = [];
+    for (let i = 0; i < 24; i++) { seen.push(W.current()); const set = W.mixSet(); lv.push(set ? Math.max.apply(null, W.CONTENT.words.filter(w => !w.sight && set.has(w.word)).map(w => w.level || 1)) : 99); W.mix.advance(); await new Promise(r => setTimeout(r, 30)); }
+    return { seen, lv, active: W.mix.active() };
+  });
+  const noRepeat = mixRun.seen.every((g, i) => i === 0 || g !== mixRun.seen[i - 1]);
+  const variety = new Set(mixRun.seen).size >= 5 && !mixRun.seen.some(g => g === 'letters' || g === 'trace' || g === 'home');
+  const gated = mixRun.lv.every(l => l <= 1);
+  const okMix = mixRun.active && noRepeat && variety && gated;
+  console.log((okMix ? 'ok   ' : 'FAIL ') + 'mixed session rotates games and stays on the first level'); if (!okMix) errs.push('mix: ' + JSON.stringify(mixRun));
+  // The Next button in a game moves the mix on to the next game (after the round is finished or shown).
+  await p.goto(url);
+  await p.evaluate(() => { window.__PACE_STUCK_MS = 600; });
+  await p.waitForTimeout(1700);
+  await p.click('#playBtn');
+  await p.waitForFunction(() => !WordPlay.pace.isLocked('nextBtn'), null, { timeout: 12000 }).catch(() => {});
+  await p.click('#nextBtn');
+  const afterNext = await p.evaluate(() => [WordPlay.current(), WordPlay.mix.active()]);
+  const okNext = afterNext[0] === 'detective' && afterNext[1];
+  console.log((okNext ? 'ok   ' : 'FAIL ') + 'next in a game moves the mix to the next game'); if (!okNext) errs.push('mix next: ' + afterNext);
+  await p.evaluate(() => { window.__PACE_STUCK_MS = 0; WordPlay.go('home'); });
+  const unlock = await p.evaluate(() => {
+    const W = WordPlay, before = W.mix.levelNow();
+    W.roundStart = 0;
+    W.mix.newKeys()[1].forEach(k => { W.track(k, true); W.track(k, true); W.track(k, true); });
+    return [before, W.mix.levelNow()];
+  });
+  const okUnlock = unlock[0] === 1 && unlock[1] === 2;
+  console.log((okUnlock ? 'ok   ' : 'FAIL ') + 'next level opens when the sounds are secure'); if (!okUnlock) errs.push('unlock: ' + unlock);
+  await p.evaluate(() => WordPlay.go('home'));
+  const leftMix = await p.evaluate(() => { WordPlay.go('rhyme'); return WordPlay.mix.active(); });
+  console.log((!leftMix ? 'ok   ' : 'FAIL ') + 'opening a game from More games ends the mix'); if (leftMix) errs.push('mix still active');
+  // Wrong choices share the first sound, so he cannot pick by the first letter.
+  const firstSound = await p.evaluate(async () => {
+    const W = WordPlay, U = WordPlayUnit, words = W.CONTENT.words, fk = w => U.key(w.units[0]);
+    const byWord = {}; words.forEach(w => { if (!w.sight) byWord[w.word] = w; });
+    const sameFirst = (emoji, target) => words.some(x => !x.sight && x.emoji === emoji && fk(x) === fk(target));
+    let matchOk = 0, rhymeOk = 0, N = 25;
+    W.go('match'); await new Promise(r => setTimeout(r, 50));
+    for (let i = 0; i < N; i++) {
+      W.hooks.enter.match();
+      const target = byWord[document.getElementById('mWordText').textContent];
+      const emos = [...document.querySelectorAll('#mChoices .rce')].map(e => e.textContent);
+      if (target && emos.length === 3 && new Set(emos).size === 3 && emos.every(e => sameFirst(e, target)) && emos.includes(target.emoji)) matchOk++;
+    }
+    W.go('rhyme'); await new Promise(r => setTimeout(r, 50));
+    for (let i = 0; i < N; i++) {
+      W.hooks.enter.rhyme();
+      const target = byWord[document.getElementById('rtWord').textContent];
+      const names = [...document.querySelectorAll('#rchoices .rchoice')].map(b => byWord[b.getAttribute('aria-label')]);
+      const same = names.filter(w => w && fk(w) === fk(target)).length;
+      if (target && same >= 2) rhymeOk++;
+    }
+    return { matchOk, rhymeOk, N };
+  });
+  const okFirst = firstSound.matchOk === firstSound.N && firstSound.rhymeOk >= firstSound.N * 0.8;
+  console.log((okFirst ? 'ok   ' : 'FAIL ') + 'wrong pictures share the first sound'); if (!okFirst) errs.push('first sound: ' + JSON.stringify(firstSound));
   // Children: the picker, separate progress, migration of old saved data, per-child Play order and names.
   const fresh = async init => {
     const ctx = await b.newContext({ viewport: { width: 390, height: 844 } });
