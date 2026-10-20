@@ -32,14 +32,16 @@
   .row .btn{flex:1 1 9rem}
 
   /* ---------- home ---------- */
-  .menu{display:grid; gap:14px; margin-top:1rem}
-  .menu-card{display:flex; align-items:center; gap:1rem; width:100%; min-height:7rem; padding:1rem 1.25rem;
+  .menu{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:1rem}
+  .menu-card{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.4rem; width:100%; min-height:9rem; padding:.8rem .5rem;
        background:var(--card); color:var(--ink); border:4px solid var(--ink); border-radius:1.5rem;
-       font:inherit; text-align:left; cursor:pointer; touch-action:manipulation}
+       font:inherit; text-align:center; cursor:pointer; touch-action:manipulation}
   .menu-card:active{transform:scale(.99)}
-  .menu-card .big{font-size:2.6rem; line-height:1; flex:none}
-  .menu-card strong{font-size:1.35rem}
-  .menu-card .sub{display:block; margin-top:.2rem; font-size:1rem; color:var(--ink-soft)}
+  .menu-card .big{font-size:3.4rem; line-height:1; flex:none}
+  .menu-card strong{font-size:1.2rem; overflow-wrap:anywhere}
+  .menu-card .sub{display:none}              /* the picture and a short name are enough; the long line stays in the aria-label */
+  .next-pic{font-size:1.4rem; margin-left:.2rem}
+  .play-next{font-size:2rem; margin-left:.4rem}
   .foot{margin-top:1.5rem; text-align:center}
 
   /* ---------- shared text ---------- */

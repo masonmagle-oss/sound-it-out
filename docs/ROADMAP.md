@@ -58,3 +58,4 @@ Unverified: trimmed clips (never heard by Claude), newest two games with the act
 - Two children ("Who's playing?"), separate progress/backup/level/session length, Play order per child (2026-10-20).
 - Stricter Next, softer miss handling, 15/30/45-round sessions (2026-10-20).
 - Mixed adaptive session behind Play, new game Which picture?, wrong choices that share the first sound, per-child mix start level (2026-10-20).
+- Picture grid for More games (picture + short name), the first game's picture on Play, and the next game's picture on Next inside the mix (2026-10-20).

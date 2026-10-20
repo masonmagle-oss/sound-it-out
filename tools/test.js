@@ -132,6 +132,18 @@ const fs = require('fs');
   if (missing.length) errs.push('missing clips: ' + missing.length);
 
 
+  // More games is a grid of pictures with short names; Play shows the game it opens first.
+  await p.goto(url);
+  await p.waitForTimeout(200);
+  const playPic = await p.evaluate(() => document.getElementById('playNext').textContent.trim());
+  await p.click('#moreGamesBtn');
+  const grid = await p.evaluate(() => {
+    const cs = [...document.querySelectorAll('.menu-card')].filter(c => c.offsetParent !== null);
+    return { n: cs.length, cols: new Set(cs.map(c => Math.round(c.getBoundingClientRect().left))).size, minH: Math.min.apply(null, cs.map(c => c.getBoundingClientRect().height)),
+      subHidden: [...document.querySelectorAll('.menu-card .sub')].every(x => getComputedStyle(x).display === 'none'), overflow: document.documentElement.scrollWidth > innerWidth };
+  });
+  const okGrid = playPic === '\u{1F446}' && grid.cols === 2 && grid.minH >= 56 && grid.subHidden && grid.n >= 10 && !grid.overflow;
+  console.log((okGrid ? 'ok   ' : 'FAIL ') + 'more games is a picture grid and Play shows its first game'); if (!okGrid) errs.push('grid: ' + playPic + ' ' + JSON.stringify(grid));
   // Mixed session: different games in turn, one focus sound, harder words only after the sounds are secure.
   await p.goto(url);
   await p.waitForTimeout(200);
@@ -151,11 +163,12 @@ const fs = require('fs');
   await p.evaluate(() => { window.__PACE_STUCK_MS = 600; });
   await p.waitForTimeout(1700);
   await p.click('#playBtn');
+  const promised = await p.evaluate(() => { const g = WordPlay.mix.upNext(), c = document.querySelector('.menu-card[data-go="' + g + '"] .big'); return [g, c ? c.textContent : '', document.querySelector('#nextBtn .next-pic').textContent.trim()]; });
   await p.waitForFunction(() => !WordPlay.pace.isLocked('nextBtn'), null, { timeout: 12000 }).catch(() => {});
   await p.click('#nextBtn');
   const afterNext = await p.evaluate(() => [WordPlay.current(), WordPlay.mix.active()]);
-  const okNext = afterNext[0] === 'detective' && afterNext[1];
-  console.log((okNext ? 'ok   ' : 'FAIL ') + 'next in a game moves the mix to the next game'); if (!okNext) errs.push('mix next: ' + afterNext);
+  const okNext = afterNext[0] === 'detective' && afterNext[1] && promised[0] === 'detective' && promised[1] && promised[2] === promised[1];
+  console.log((okNext ? 'ok   ' : 'FAIL ') + 'next in a game moves the mix to the next game'); if (!okNext) errs.push('mix next: ' + afterNext + ' ' + promised);
   await p.evaluate(() => { window.__PACE_STUCK_MS = 0; WordPlay.go('home'); });
   const unlock = await p.evaluate(() => {
     const W = WordPlay, before = W.mix.levelNow();

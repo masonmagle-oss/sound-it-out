@@ -45,6 +45,30 @@
 
   let st = null;
   const active = () => !!(st && st.active);
+  const $ = id => document.getElementById(id);
+
+  // pictures: the same emoji as the game's tile in "More games"
+  const card = g => document.querySelector('.menu-card[data-go="' + g + '"]');
+  const pic = g => { const el = card(g) && card(g).querySelector('.big'); return el ? el.textContent : ''; };
+  const gname = g => { const el = card(g) && card(g).querySelector('strong'); return el ? el.textContent : g; };
+  const seqOf = () => SEQ[(W.activeKid() || {}).order] || SEQ.start;
+  // Play opens the same first game for each child; Next shows which game comes after this one
+  function showPlay() {
+    const g = seqOf()[0], p = $('playNext');
+    if (!p) return;
+    p.textContent = ' ' + pic(g);
+    $('playBtn').setAttribute('aria-label', 'Play. It starts with ' + gname(g) + '.');
+  }
+  const NEXT_IDS = ['nextBtn', 'rNext', 'rhNext', 'dNext', 'spNext', 'syNext', 'mNext'];
+  function showNext() {
+    NEXT_IDS.forEach(id => {
+      const b = $(id);
+      if (!b) return;
+      let s = b.querySelector('.next-pic');
+      if (!s) { s = document.createElement('span'); s.className = 'next-pic'; s.setAttribute('aria-hidden', 'true'); b.appendChild(s); }
+      s.textContent = active() && st.nextGame ? ' ' + pic(st.nextGame) : '';
+    });
+  }
 
   function chooseFocus() {
     const F = focusLevel();
@@ -80,22 +104,35 @@
     }
     st.key = key;
   }
+  const usable = (g, from) => g !== from && !(g === 'match' && W.matchReady && !W.matchReady());
   function pickGame() {
-    const seq = SEQ[(W.activeKid() || {}).order] || SEQ.start;
+    const seq = seqOf();
     for (let n = 0; n < seq.length * 2; n++) {
       const g = seq[st.i++ % seq.length];
-      if (g === st.last) continue;
-      if (g === 'match' && W.matchReady && !W.matchReady()) continue;
-      return g;
+      if (usable(g, st.last)) return g;
     }
     return seq[0];
   }
+  function peekGame(from) {                    // the game that comes after "from", without using it up
+    const seq = seqOf();
+    let i = st.i;
+    for (let n = 0; n < seq.length * 2; n++) {
+      const g = seq[i++ % seq.length];
+      if (usable(g, from)) return { g, i };
+    }
+    return { g: seq[0], i };
+  }
   function route(first) {
     planRound();
-    const g = pickGame();
+    let g;
+    if (!first && st.nextGame && usable(st.nextGame, st.last)) { g = st.nextGame; st.i = st.nextI; }   // the game Next promised
+    else g = pickGame();
+    const pk = peekGame(g);
+    st.nextGame = pk.g; st.nextI = pk.i;
     st.last = g; st.expect = g;
     if (first) W.go(g);
     else { W.render(g); try { history.replaceState({ s: g }, '', '#' + g); } catch (e) {} }
+    showNext();
   }
   function start() {
     st = { active: true, i: 0, rounds: 0, fr: 0, focus: null, level: 1, last: null, expect: null, set: null, key: null, review: false };
@@ -113,11 +150,13 @@
   GAMES.concat(['home', 'who', 'grown', 'sight', 'letters', 'trace', 'stories', 'say']).forEach(name => {
     const prev = W.hooks.enter[name];
     W.hooks.enter[name] = () => {
-      if (st && st.active) { if (st.expect === name) st.expect = null; else st.active = false; }
+      if (st && st.active) { if (st.expect === name) st.expect = null; else { st.active = false; showNext(); } }
       if (prev) prev();
+      if (name === 'home') showPlay();
     };
   });
-  W.on('profileChanged', () => { st = null; });
+  W.on('profileChanged', () => { st = null; showNext(); showPlay(); });
+  showPlay();
 
   W.mixSet = () => (active() ? st.set : null);
   W.mixNarrow = (list, wordOf, min) => {
@@ -126,5 +165,5 @@
     const f = list.filter(x => set.has(wordOf(x)));
     return f.length >= (min || 1) ? f : list;
   };
-  W.mix = { start, advance, active, focus: () => (st ? { key: st.key, level: st.level, review: st.review, rounds: st.rounds } : null), levelNow: focusLevel, newKeys: () => newKeys };
+  W.mix = { start, advance, active, upNext: () => (active() ? st.nextGame : null), focus: () => (st ? { key: st.key, level: st.level, review: st.review, rounds: st.rounds } : null), levelNow: focusLevel, newKeys: () => newKeys };
 })();
