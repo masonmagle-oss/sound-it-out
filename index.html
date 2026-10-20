@@ -73,6 +73,14 @@
           <span class="big" aria-hidden="true">📚</span>
           <span><strong>Little stories</strong><span class="sub">Short stories to read with the sounds you know.</span></span>
         </button>
+        <button class="menu-card" type="button" data-go="vocab" aria-label="Word meanings. Which one is an animal? What is the opposite?">
+          <span class="big" aria-hidden="true">💬</span>
+          <span><strong>Word meanings</strong><span class="sub">Which one is an animal? What is the opposite?</span></span>
+        </button>
+        <button class="menu-card" type="button" data-go="write" aria-label="Write it. Hear a word and tap the letters to write it.">
+          <span class="big" aria-hidden="true">✍️</span>
+          <span><strong>Write it</strong><span class="sub">Hear a word. Tap the letters to write it.</span></span>
+        </button>
         <!-- Shown only when a grown-up turned speech on AND this browser supports it -->
         <button id="sayCard" class="menu-card" type="button" data-go="say" hidden aria-label="Say the word. Read words out loud and watch them light up.">
           <span class="big" aria-hidden="true">🎤</span>
@@ -279,6 +287,48 @@
       </div>
     </section>
 
+    <!-- WORD MEANINGS -->
+    <section id="screen-vocab" aria-label="Word meanings" hidden>
+      <div class="row" role="group" aria-label="Choose a game">
+        <button class="btn ghost" type="button" data-vmode="cat" aria-pressed="true">Which one?</button>
+        <button class="btn ghost" type="button" data-vmode="opp" aria-pressed="false">Opposites</button>
+      </div>
+      <p id="vPrompt" class="hint"></p>
+      <button id="vWord" class="btn ghost bigword" type="button" hidden></button>
+      <div id="vChoices" class="dchoices" role="group" aria-label="Choices"></div>
+      <p id="vPraise" class="praise" role="status" aria-live="polite"></p>
+      <div class="row"><button id="vNext" class="btn" type="button" aria-label="Next one">Next one &rarr;</button></div>
+    </section>
+
+    <!-- WRITE IT -->
+    <section id="screen-write" aria-label="Write it" hidden>
+      <p class="hint">Listen to the word. Tap the letters to write it.</p>
+      <button id="wPic" class="rtarget" type="button" aria-label="Hear the word again"><span id="wEmo" class="rtemo" aria-hidden="true"></span></button>
+      <div id="wSlots" class="wslots" aria-label="The word so far"></div>
+      <div id="wTray" class="dchoices" role="group" aria-label="Letters"></div>
+      <p id="wMsg" class="praise" role="status" aria-live="polite"></p>
+      <div class="row"><button id="wNext" class="btn" type="button" aria-label="Next word">Next word &rarr;</button></div>
+    </section>
+
+    <!-- FIND HIS LEVEL (opened from the grown-ups page) -->
+    <section id="screen-place" aria-label="Find his level" hidden>
+      <div id="plPlay">
+        <p class="hint">Read the word. Touch its picture.</p>
+        <p id="plWord" class="bigword" aria-live="polite"></p>
+        <div id="plChoices" class="dchoices" role="group" aria-label="Pictures"></div>
+      </div>
+      <div id="plDone" hidden>
+        <p class="hint">All done. Great reading!</p>
+        <div class="panel">
+          <h2>For the grown-up</h2>
+          <p id="plResult"></p>
+          <div class="row"><button id="plApply" class="btn" type="button"></button><button id="plAgain" class="btn ghost" type="button">Try again</button></div>
+          <p id="plApplied" class="small" role="status" aria-live="polite"></p>
+          <p class="small">A short check, not a test: three words per level, with no sound. It sets where Play starts for the child who is playing now.</p>
+        </div>
+      </div>
+    </section>
+
     <!-- SAY THE WORD (optional speech) -->
     <section id="screen-say" aria-label="Say the word" hidden>
       <p class="hint">Press Listen, then read the words out loud.</p>
@@ -306,6 +356,11 @@
         <p class="small">Each child has their own progress, level and session length. Nothing is uploaded and there are no accounts. Pick a name and a picture (type or paste any emoji, or tap one).</p>
         <div id="kidsBox"></div>
         <p class="small">The level, session length, saved words, backup and reset below are for: <strong id="grownWho"></strong></p>
+      </div>
+      <div class="panel">
+        <h2>Find his level</h2>
+        <p class="small">A two-minute reading check for the child who is playing now. It suggests where Play should start.</p>
+        <div class="row"><button class="btn" type="button" data-go="place">Start the check</button></div>
       </div>
       <div class="panel">
         <h2>Play: mixed session</h2>
@@ -439,6 +494,9 @@
 <script src="js/mix.js"></script>
 <script src="js/session.js"></script>
 <script src="js/home.js"></script>
+<script src="js/vocab.js"></script>
+<script src="js/write.js"></script>
+<script src="js/place.js"></script>
 <script src="js/pace.js"></script>
 <script src="js/help.js"></script>
 <script src="js/offline.js"></script>

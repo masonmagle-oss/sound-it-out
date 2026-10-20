@@ -11,6 +11,8 @@ Phonics decoding is mostly finished by the end of grade 2. Grade 3 is morphology
 - Level rebalance, part 1 (no recordings needed): 20 silent-e words (gate, game, five, home...) moved from L5 to L3 and 40 words with ar, or, er/ir/ur, ou/ow, oi/oy moved from L5 to L4, to match those levels' titles. Words per level are now L1 55, L2 36, L3 37, L4 50, L5 124, L6 63, L7 46 (was 55, 36, 17, 10, 184, 63, 46). The new sounds each level introduces are unchanged (checked), so the mix unlocks in the same order and saved levels keep their meaning.
 - Not done, needs your decision: splitting the remaining 124 L5 words (vowel teams, y endings, soft c/g, silent letters) into 2-3 levels would mean renumbering levels 6-7 and migrating saved child levels; and truly new L3/L4 words, ie/ey/oe/ough words, syllable and suffix words all need new recordings. Only 19 unused word clips exist (apple ball bow brush butter egg fire gold iguana lady lion man octopus pack pop sand set shine umbrella).
 
+- Added 17 decodable stories across levels 1 to 7 and a picture question for all 29 stories, a Word meanings game (categories, opposites), Write it (dictation) and a Find his level check. Remaining recordings: [CLIPS-TO-RECORD.md](CLIPS-TO-RECORD.md) and [NEW-WORDS-TO-RECORD.md](NEW-WORDS-TO-RECORD.md); see [MASON-CHECKLIST.md](MASON-CHECKLIST.md).
+
 ## What is in
 - 411 decodable words in 7 levels, 219 sight words, 26 letters, 70 sentences, 12 stories (4 lines each), 12 games, 842 clips.
 - Sight words: Dolch pre-primer and primer 100%; grades 1-3 about 99% (missing "giving", "don't").

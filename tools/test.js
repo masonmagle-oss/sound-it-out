@@ -44,6 +44,37 @@ const fs = require('fs');
   for (let i = 0; i < await pics.count(); i++) { await pics.nth(i).click({ force: true }); if (await pics.nth(i).evaluate(e => e.classList.contains('right'))) solvedOk = true; }
   const storyOk = books >= 25 && sorted && solvedOk && (await p.textContent('#sQPraise')).length > 0;
   console.log((storyOk ? 'ok   ' : 'FAIL ') + 'stories are listed by level and each has a question (' + books + ' stories)'); if (!storyOk) errs.push('stories: ' + books + ' ' + sorted + ' ' + solvedOk);
+  // Word meanings, Write it, Find his level
+  await p.goto(url);
+  await p.click('#moreGamesBtn'); await p.click('[data-go="vocab"]'); await p.waitForTimeout(300);
+  const vLabels = await p.locator('#vChoices .dchoice').allTextContents();
+  for (let i = 0; i < vLabels.length; i++) await p.locator('#vChoices .dchoice').nth(i).click({ force: true });
+  const vPr = await p.textContent('#vPraise');
+  await p.click('[data-vmode="opp"]'); await p.waitForTimeout(300);
+  const oppOk = (await p.locator('#vWord').isVisible()) && (await p.locator('#vChoices .dchoice').count()) === 3;
+  const vocabOk = vLabels.length === 3 && new Set(vLabels).size === 3 && vPr.length > 0 && oppOk;
+  console.log((vocabOk ? 'ok   ' : 'FAIL ') + 'word meanings: three different pictures, opposites with three words'); if (!vocabOk) errs.push('vocab: ' + vLabels.join(',') + ' / ' + vPr + ' / ' + oppOk);
+  await p.goto(url);
+  await p.click('#moreGamesBtn'); await p.click('[data-go="write"]'); await p.waitForTimeout(300);
+  const wlen = await p.locator('#wSlots .wslot').count();
+  for (let k = 0; k < 3; k++) { const tiles = p.locator('#wTray .dchoice'); for (let i = 0; i < await tiles.count(); i++) await tiles.nth(i).click({ force: true }); }
+  const wFilled = (await p.locator('#wSlots .wslot').allTextContents()).join('');
+  const writeOk = wlen >= 2 && wFilled.length === wlen && (await p.textContent('#wMsg')).indexOf(wFilled) === 0;
+  console.log((writeOk ? 'ok   ' : 'FAIL ') + 'write it: wrong letters do not stick, the word completes'); if (!writeOk) errs.push('write: ' + wlen + ' ' + wFilled);
+  await p.goto(url);
+  await p.click('#moreGamesBtn'); await p.click('#grownBtn'); await p.click('[data-go="place"]'); await p.waitForTimeout(300);
+  for (let g = 0; g < 40 && !(await p.locator('#plDone').isVisible()); g++) {
+    const wd = await p.textContent('#plWord');
+    const em = await p.evaluate(x => WordPlay.CONTENT.words.find(w => w.word === x && !w.sight).emoji, wd);
+    await p.locator('#plChoices .dchoice', { hasText: em }).first().click();
+  }
+  const top = await p.textContent('#plResult');
+  await p.click('#plApply');
+  const applied = await p.evaluate(() => WordPlay.settings.mixStart);
+  await p.click('#plAgain');
+  for (let g = 0; g < 3 && !(await p.locator('#plDone').isVisible()); g++) await p.locator('#plChoices .dchoice').first().click({ force: true });   // sometimes a lucky guess: only check it ends
+  const placeOk = /level 7/.test(top) && applied === 7;
+  console.log((placeOk ? 'ok   ' : 'FAIL ') + 'find his level: reading every word reaches level 7 and sets where Play starts'); if (!placeOk) errs.push('place: ' + top + ' ' + applied);
   // Pacing: Next is locked until the round is FINISHED. A wrong answer does not unlock it, a locked tap does nothing,
   // and it re-locks after use. A stuck round reveals its answer (no praise) and then unlocks.
   await p.goto(url);

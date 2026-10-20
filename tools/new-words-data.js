@@ -1,0 +1,11 @@
+// Proposed new words: [group (first row of a group only), level, emoji, word, units]. Shared by new-words.js and add-recorded-words.js.
+module.exports = [
+ ['ie / ey / oe spellings (G1-2)', 5, '🥧', 'pie', ['p', 'ie:i_long']], [, 5, '👔', 'tie', ['t', 'ie:i_long']], [, 5, '🔑', 'key', ['k', 'ey:e_long']], [, 5, '🐒', 'monkey', ['m', 'o', 'n', 'k', 'ey:e_long']], [, 5, '🦃', 'turkey', ['t', 'ur:er', 'k', 'ey:e_long']],
+ ['Floss rule ff / ss / zz (K-G1)', 2, '👗', 'dress', ['d', 'r', 'e', 'ss:s']], [, 2, '🥛', 'glass', ['g', 'l', 'a', 'ss:s']], [, 2, '💋', 'kiss', ['k', 'i', 'ss:s']], [, 2, '🐝', 'buzz', ['b', 'u', 'zz:z']], [, 2, '🎷', 'jazz', ['j', 'a', 'zz:z']], [, 2, '💨', 'puff', ['p', 'u', 'ff:f']], [, 2, '👃', 'sniff', ['s', 'n', 'i', 'ff:f']],
+ ['-nk and more final blends (K)', 2, '🦨', 'skunk', ['s', 'k', 'u', 'n', 'k']], [, 2, '😉', 'wink', ['w', 'i', 'n', 'k']], [, 2, '💭', 'think', ['th', 'i', 'n', 'k']], [, 2, '🧸', 'tent', ['t', 'e', 'n', 't']],
+ ['Long-vowel silent-e, more practice (K-G1)', 3, '🌹', 'rose', ['r', 'o:o_long', 's', 'e:_']], [, 3, '🏞️', 'lake', ['l', 'a:a_long', 'k', 'e:_']], [, 3, '🎲', 'dice', ['d', 'i:i_long', 'c:s', 'e:_']], [, 3, '🐴', 'mane', ['m', 'a:a_long', 'n', 'e:_']],
+ ['Two-syllable -le words (G2)', 7, '🕯️', 'candle', ['c', 'a', 'n', 'dle:dle']], [, 7, '🐢', 'turtle', ['t', 'ur:er', 'tle:tle']], [, 7, '🧩', 'puzzle', ['p', 'u', 'zz:z', 'le:le']], [, 7, '🍼', 'bottle', ['b', 'o', 'tt:t', 'le:le']], [, 7, '🫧', 'bubble', ['b', 'u', 'bb:b', 'le:le']],
+ ['Doubling before -ing / -ed (G2)', 7, '🏃', 'running', ['r', 'u', 'nn:n', 'ing']], [, 7, '🏊', 'swimming', ['s', 'w', 'i', 'mm:m', 'ing']], [, 7, '👏', 'clapping', ['c', 'l', 'a', 'pp:p', 'ing']], [, 7, '⛏️', 'digging', ['d', 'i', 'gg:g', 'ing']],
+ ['Word endings -ful / -less / -ly / -ness (G2)  (no picture; new activity or Read a sentence)', 7, null, 'helpful', ['help:word-help', 'ful:ful']], [, 7, null, 'careful', ['care:word-care', 'ful:ful']], [, 7, null, 'hopeless', ['hope:word-hope', 'less:less']], [, 7, null, 'sadly', ['sad:word-sad', 'ly:ly']], [, 7, null, 'kindness', ['kind:word-kind', 'ness:ness']],
+ ['Contractions (G1-2)  (no picture)', 7, null, "don't", ["don't"]], [, 7, null, "can't", ["can't"]], [, 7, null, "I'm", ["I'm"]], [, 7, null, "it's", ["it's"]], [, 7, null, "isn't", ["isn't"]],
+];

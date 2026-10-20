@@ -278,3 +278,8 @@
     padding:.9rem 1.4rem; border-radius:2rem; font-weight:800; font-size:1.15rem}
   .pace-msg[hidden]{display:none}
   .help-btn{margin:.5rem 0 0; width:100%}
+
+  .bigword{font-size:2.6rem; font-weight:700; text-align:center; margin:.6rem auto; letter-spacing:.04em}
+  .wslots{display:flex; justify-content:center; gap:10px; margin:.8rem 0}
+  .wslot{min-width:3.2rem; min-height:3.6rem; border-bottom:5px solid var(--ink); text-align:center; font-size:2.4rem; font-weight:700}
+  .dchoice .sub{display:block; font-size:1rem}
