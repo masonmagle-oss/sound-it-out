@@ -31,6 +31,19 @@ const fs = require('fs');
   for (let i = 0; i < partLabels.length; i++) await p.locator('#dChoices .dchoice').nth(i).click({ force: true });
   const partsOk = partLabels.length >= 2 && partLabels.every(t => /^[123]$/.test(t)) && /part/.test(await p.textContent('#dPraise'));
   console.log((partsOk ? 'ok   ' : 'FAIL ') + 'clap the parts offers 1-3 beats and praises as parts'); if (!partsOk) errs.push('parts mode: ' + partLabels.join(',') + ' / ' + await p.textContent('#dPraise'));
+  // Stories: listed by level, every story has a question, a wrong picture is not a failure, the right one is praised
+  await p.goto(url);
+  await p.click('#moreGamesBtn'); await p.click('[data-go="stories"]');
+  const books = await p.locator('#sBooks .menu-card').count();
+  const levels = (await p.locator('#sBooks .sub').allTextContents()).map(t => Number(t.replace('Level ', '')));
+  const sorted = levels.every((v, i) => i === 0 || levels[i - 1] <= v);
+  await p.locator('#sBooks .menu-card').first().click();
+  await p.click('#sQ');
+  const pics = p.locator('#sPics .dchoice');
+  let solvedOk = false;
+  for (let i = 0; i < await pics.count(); i++) { await pics.nth(i).click({ force: true }); if (await pics.nth(i).evaluate(e => e.classList.contains('right'))) solvedOk = true; }
+  const storyOk = books >= 25 && sorted && solvedOk && (await p.textContent('#sQPraise')).length > 0;
+  console.log((storyOk ? 'ok   ' : 'FAIL ') + 'stories are listed by level and each has a question (' + books + ' stories)'); if (!storyOk) errs.push('stories: ' + books + ' ' + sorted + ' ' + solvedOk);
   // Pacing: Next is locked until the round is FINISHED. A wrong answer does not unlock it, a locked tap does nothing,
   // and it re-locks after use. A stuck round reveals its answer (no praise) and then unlocks.
   await p.goto(url);
@@ -312,6 +325,7 @@ const fs = require('fs');
   if (!process.env.TARGET) {   // the phone build has no service worker
     const run = f => require('child_process').execFileSync('node', [path.join(__dirname, f)].concat(f === 'make-precache.js' ? ['--check'] : []), { stdio: 'inherit' });
     run('make-precache.js');   // fails if precache.json is stale
+    run('check-stories.js');   // fails if a story uses a word above its level
     run('test-offline.js');
   }
 })();

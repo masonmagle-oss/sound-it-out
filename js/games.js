@@ -320,19 +320,29 @@
   /* ================= LITTLE STORIES ================= */
   const stories = CONTENT.stories || [];
   let cur = null, stoken = 0;
-  stories.forEach((s, i) => {
-    const b = document.createElement('button');
-    b.type = 'button'; b.className = 'menu-card';
-    b.setAttribute('aria-label', 'Story: ' + s.title);
-    b.innerHTML = '<span class="big" aria-hidden="true"></span><span><strong></strong></span>';
-    b.querySelector('.big').textContent = s.emoji;
-    b.querySelector('strong').textContent = s.title;
-    b.addEventListener('click', () => openStory(i));
-    $('sBooks').appendChild(b);
-  });
+  // a story's level: the highest level among its words (stories-more.js sets it on the new ones)
+  const wordLv = {}; CONTENT.words.forEach(w => { const k = String(w.word).toLowerCase(); wordLv[k] = Math.min(wordLv[k] || 99, w.level || 1); });
+  const storyLevel = s => s.level || Math.max.apply(null, [1].concat(s.lines.join(' ').toLowerCase().replace(/[^a-z' ]/g, '').split(/s+/).filter(Boolean).map(t => wordLv[t] || 1)));
+  W.storyLevel = storyLevel;
+  function renderBooks() {
+    const box = $('sBooks'); box.innerHTML = '';
+    const lim = W.stageLimit(), all = stories.map((s, i) => ({ s, i, l: storyLevel(s) }));
+    const list = all.filter(x => x.l <= lim);
+    (list.length ? list : all).sort((x, y) => x.l - y.l || x.i - y.i).forEach(x => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'menu-card';
+      b.setAttribute('aria-label', 'Story: ' + x.s.title + ', level ' + x.l);
+      b.innerHTML = '<span class="big" aria-hidden="true"></span><span><strong></strong><span class="sub"></span></span>';
+      b.querySelector('.big').textContent = x.s.emoji;
+      b.querySelector('strong').textContent = x.s.title;
+      b.querySelector('.sub').textContent = 'Level ' + x.l;
+      b.addEventListener('click', () => openStory(x.i));
+      box.appendChild(b);
+    });
+  }
   function openStory(i) {
     stoken++; stopSeq(); cur = stories[i];
-    $('sList').hidden = true; $('sRead').hidden = false;
+    $('sList').hidden = true; $('sRead').hidden = false; $('sQuiz').hidden = true; $('sQ').hidden = !(cur.q && cur.q.length);
     $('sTitle').textContent = cur.emoji + ' ' + cur.title;
     const box = $('sLines'); box.innerHTML = '';
     cur.lines.forEach((t, n) => {
@@ -364,7 +374,32 @@
     }
     if (my === stoken) litLine(-1);
   });
+  /* ---- a question after the story: pictures to pick from, no wrong-answer penalty ---- */
+  const askKey = t => W.sentenceKeyOf(t).replace('sentence-', 'question-');
+  $('sQ').addEventListener('click', () => {
+    if (!cur || !cur.q || !cur.q.length) return;
+    stoken++;
+    const x = cur.q[0], box = $('sPics');
+    $('sQuiz').hidden = false; $('sAskText').textContent = x.ask; $('sQPraise').textContent = ''; box.innerHTML = '';
+    let solved = false;
+    W.shuffle(x.pics.map((p, i) => ({ p, i }))).forEach(o => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'dchoice';
+      b.setAttribute('aria-label', o.p[1]);
+      b.innerHTML = '<span class="rtemo" aria-hidden="true"></span><span class="sub"></span>';
+      b.querySelector('.rtemo').textContent = o.p[0]; b.querySelector('.sub').textContent = o.p[1];
+      b.addEventListener('click', () => {
+        if (solved) return;
+        if (o.i === x.ok) { solved = true; b.classList.add('right'); $('sQPraise').textContent = W.pick(CONTENT.praise); }
+        else { b.classList.add('heard-it'); $('sQPraise').textContent = 'Read the story again. Look for the answer.'; }
+        playSeq([W.wordKeyOf(o.p[1])]);
+      });
+      box.appendChild(b);
+    });
+    playSeq([askKey(x.ask)]);
+    $('sQuiz').scrollIntoView({ block: 'nearest' });
+  });
   $('sAll').addEventListener('click', () => { stoken++; stopSeq(); litLine(-1); $('sRead').hidden = true; $('sList').hidden = false; window.scrollTo(0, 0); });
-  hooks.enter.stories = () => { $('sRead').hidden = true; $('sList').hidden = false; };
+  hooks.enter.stories = () => { renderBooks(); $('sRead').hidden = true; $('sList').hidden = false; };
   hooks.leave.stories = () => { stoken++; stopSeq(); };
 })();

@@ -268,7 +268,13 @@
         <div id="sLines"></div>
         <div class="row">
           <button id="sPlay" class="btn" type="button" aria-label="Read the whole story to me">&#9654; Read it to me</button>
+          <button id="sQ" class="btn" type="button" aria-label="Answer a question about the story">&#10067; A question</button>
           <button id="sAll" class="btn ghost" type="button" aria-label="Back to all stories">All stories</button>
+        </div>
+        <div id="sQuiz" hidden>
+          <p id="sAskText" class="hint" role="status"></p>
+          <div id="sPics" class="dchoices" role="group" aria-label="Pictures to choose from"></div>
+          <p id="sQPraise" class="praise" role="status" aria-live="polite"></p>
         </div>
       </div>
     </section>
@@ -404,6 +410,7 @@
 </div>
 
 <script src="js/content.js"></script>
+<script src="js/stories-more.js"></script>
 <script src="js/app.js"></script>
 
 <!-- =====================================================================
