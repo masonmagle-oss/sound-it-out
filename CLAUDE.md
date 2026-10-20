@@ -8,7 +8,7 @@ Read `docs/ROADMAP.md` for where we are going and `docs/WORKFLOWS.md` for how to
 
 ## Hard rules (never break)
 - No frameworks, no build step, no backend, no accounts, no analytics, no external scripts, fonts or images.
-- Everything works offline once loaded. System fonts only.
+- Everything works offline once loaded (`sw.js` saves the whole app on the device; see "Offline" below). System fonts only.
 - Praise is for effort only. No timers, no scores, no streaks, no fail states, no loss framing.
   (Short pacing waits, like Next unlocking after a round is tried, are fine. Never show a countdown to the child.)
 - Never fake phonics with text-to-speech. Sounds are the recorded files in `sounds/`.
@@ -68,6 +68,8 @@ sometimes answers silly on purpose), so treat a sound as wobbly only after repea
 ## Testing and shipping
 - Test: `node tools/test.js` (Playwright, 390x844; also checks every word/unit clip exists). `TARGET=dist/sound-it-out-single-file.html node tools/test.js` tests the phone build. Navigate by clicking `[data-go="..."]`; hash routes do not load on file://.
 - Audio fetches fail on file://; those console errors are expected. Use `npx http-server` for real audio.
+- **Before every commit that touches `index.html`, `css/`, `js/`, `sounds/`, `icons/` or `manifest.webmanifest`: run `node tools/make-precache.js` and commit the `precache.json` it writes.** `node tools/test.js` fails if it is stale.
+- Offline: `sw.js` reads `precache.json` (every file + a short hash) on each visit, downloads only changed files, and switches to the new copy once complete (a failed download keeps the old one). It answers audio byte-range requests (Safari needs them) and reports missing clips as 404. `js/offline.js` registers it and fills the "Works without internet" panel on the grown-ups page. `tools/test-offline.js` (run by test.js) checks reload with the network off, ranges and delta updates. Not yet verified on a real iPhone.
 - Before pushing: run the tests, open the changed screen at phone size, check there are no page errors.
 - Commit to `main` and push; Pages updates in about a minute.
 - Single-file copy for phones: `python3 tools/build-single-file.py` -> `dist/sound-it-out-single-file.html`

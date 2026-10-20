@@ -301,4 +301,9 @@ const fs = require('fs');
   await b.close();
   if (errs.length) { console.error('ERRORS:', errs); process.exit(1); }
   console.log('all screens opened without page errors');
+  if (!process.env.TARGET) {   // the phone build has no service worker
+    const run = f => require('child_process').execFileSync('node', [path.join(__dirname, f)].concat(f === 'make-precache.js' ? ['--check'] : []), { stdio: 'inherit' });
+    run('make-precache.js');   // fails if precache.json is stale
+    run('test-offline.js');
+  }
 })();

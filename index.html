@@ -6,6 +6,8 @@
 <meta name="theme-color" content="#f3f7fb">
 <title>Word play</title>
 <link rel="stylesheet" href="css/style.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
 </head>
 <body>
 <div id="app">
@@ -328,6 +330,12 @@
         <div id="sessionBtns" class="row" role="group" aria-label="Session length" style="flex-wrap:wrap;gap:10px"></div>
       </div>
       <div class="panel">
+        <h2>Works without internet</h2>
+        <p id="offlineMsg" class="small" role="status" aria-live="polite"></p>
+        <div class="row"><button id="offlineBtn" class="btn ghost" type="button">Check for updates</button></div>
+        <p class="small">The first visit saves the whole app on this device (about 25 MB). After that it opens and plays with no connection, and a visit with internet fetches only what changed.</p>
+      </div>
+      <div class="panel">
         <h2>Add to Home Screen</h2>
         <p class="small">On iPhone, open this page in Safari, tap the Share button, then “Add to Home Screen”. It opens like an app, works offline, and Safari is less likely to clear its saved progress. Save a backup below either way.</p>
       </div>
@@ -425,5 +433,6 @@
 <script src="js/home.js"></script>
 <script src="js/pace.js"></script>
 <script src="js/help.js"></script>
+<script src="js/offline.js"></script>
 </body>
 </html>

@@ -30,4 +30,4 @@ Voice: "Emma - Bright Kids Educator", id `oClOrzqamOXmtcB8iqTj`, model `eleven_v
 Send it to the owner to test on a phone; the live site is the source of truth.
 
 ## Deploy
-Push to `main`. GitHub Pages serves `/` in about a minute.
+Run `node tools/make-precache.js` and commit `precache.json` with the change (phones update offline copies from it). Push to `main`. GitHub Pages serves `/` in about a minute.
