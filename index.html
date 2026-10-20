@@ -235,15 +235,16 @@
 
     <!-- TRACE LETTERS -->
     <section id="screen-trace" aria-label="Trace letters" hidden>
-      <p class="hint">Trace the letter with your finger.</p>
+      <p id="tIn" class="hint" aria-live="polite">Start at the green dot. Follow the arrow.</p>
+      <div class="tpair" aria-hidden="true"><span id="tUp" class="tl on">A</span><span id="tLow" class="tl">a</span></div>
       <div id="tWrap" class="twrap">
         <canvas id="tGuide" aria-hidden="true"></canvas>
-        <canvas id="tInk" role="img" aria-label="Drawing space. Trace the letter with your finger."></canvas>
+        <canvas id="tInk" role="img" aria-label="Writing space. Start at the green dot and follow the arrow with your finger."></canvas>
       </div>
       <p id="tPraise" class="praise" role="status" aria-live="polite"></p>
       <div class="row">
-        <button id="tClear" class="btn ghost" type="button" aria-label="Clear and try again">&#8635; Again</button>
-        <button id="tCase" class="btn ghost" type="button" aria-label="Switch between big and little letter">Aa</button>
+        <button id="tWatch" class="btn ghost" type="button" aria-label="Watch how to write it">&#128065; Watch</button>
+        <button id="tClear" class="btn ghost" type="button" aria-label="Start this letter again">&#8635; Again</button>
         <button id="tHear" class="btn ghost" type="button" aria-label="Hear the letter">&#128266; Hear</button>
       </div>
       <div class="row">
@@ -416,6 +417,8 @@
 <script src="js/letters-rhyme.js"></script>
 
 <script src="js/games.js"></script>
+<script src="js/strokes.js"></script>
+<script src="js/trace.js"></script>
 <script src="js/match.js"></script>
 <script src="js/mix.js"></script>
 <script src="js/session.js"></script>

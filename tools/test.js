@@ -144,6 +144,36 @@ const fs = require('fs');
   });
   const okGrid = playPic === '\u{1F446}' && grid.cols === 2 && grid.minH >= 56 && grid.subHidden && grid.n >= 10 && !grid.overflow;
   console.log((okGrid ? 'ok   ' : 'FAIL ') + 'more games is a picture grid and Play shows its first game'); if (!okGrid) errs.push('grid: ' + playPic + ' ' + JSON.stringify(grid));
+  // Trace letters: strokes must be followed in order and direction; being a little off the line is fine.
+  await p.goto(url);
+  await p.waitForTimeout(200);
+  await p.evaluate(() => WordPlay.go('trace'));
+  await p.waitForTimeout(300);
+  const box = await p.locator('#tInk').boundingBox();
+  const toPx = pt => [box.x + pt[0] * box.width / 100, box.y + pt[1] * box.height / 100];
+  const drag = async (pts, wob) => {
+    const pp = pts.map(pt => [pt[0] + (wob || 0), pt[1] + (wob || 0)]);
+    const a = toPx(pp[0]); await p.mouse.move(a[0], a[1]); await p.mouse.down();
+    for (let i = 1; i < pp.length; i += 2) { const q = toPx(pp[i]); await p.mouse.move(q[0], q[1]); }
+    const z = toPx(pp[pp.length - 1]); await p.mouse.move(z[0], z[1]); await p.mouse.up();
+  };
+  const st0 = await p.evaluate(() => ({ letter: WordPlay.trace.letter(), strokes: WordPlay.trace.strokes().map(x => x.P) }));
+  // off the dot, wrong direction (from the end of the stroke) and far from the line: nothing moves
+  await drag([[80, 20], [85, 25], [90, 30]]);
+  await drag(st0.strokes[0].slice().reverse());
+  const stuck = await p.evaluate(() => WordPlay.trace.state());
+  // the right way, a bit wobbly, in order: capital A (3 strokes), then little a (2 strokes)
+  const strokesA = st0.strokes;
+  for (const sk of strokesA) await drag(sk, 3);
+  await p.waitForTimeout(1200);
+  const mid = await p.evaluate(() => WordPlay.trace.state());
+  const st1 = await p.evaluate(() => WordPlay.trace.strokes().map(x => x.P));
+  for (const sk of st1) await drag(sk, -3);
+  await p.waitForTimeout(300);
+  const fin = await p.evaluate(() => ({ s: WordPlay.trace.state(), praise: document.getElementById('tPraise').textContent }));
+  const okTrace = st0.letter === 'a' && stuck.si === 0 && stuck.idx === 0 && mid.lower === true && st1.length === 2 && fin.s.finished && fin.s.lower && /wrote Aa/.test(fin.praise) && WordPlay_praised(fin.praise);
+  function WordPlay_praised(t) { return /(kept going|gave it a try|sounding it out|stuck with it|Nice trying)/.test(t); }
+  console.log((okTrace ? 'ok   ' : 'FAIL ') + 'tracing follows stroke order and direction, big then little'); if (!okTrace) errs.push('trace: ' + JSON.stringify({ stuck, mid, fin }));
   // Mixed session: different games in turn, one focus sound, harder words only after the sounds are secure.
   await p.goto(url);
   await p.waitForTimeout(200);
@@ -154,7 +184,7 @@ const fs = require('fs');
     return { seen, lv, active: W.mix.active() };
   });
   const noRepeat = mixRun.seen.every((g, i) => i === 0 || g !== mixRun.seen[i - 1]);
-  const variety = new Set(mixRun.seen).size >= 5 && !mixRun.seen.some(g => g === 'letters' || g === 'trace' || g === 'home');
+  const variety = new Set(mixRun.seen).size >= 5 && !mixRun.seen.some(g => g === 'letters' || g === 'home');
   const gated = mixRun.lv.every(l => l <= 1);
   const okMix = mixRun.active && noRepeat && variety && gated;
   console.log((okMix ? 'ok   ' : 'FAIL ') + 'mixed session rotates games and stays on the first level'); if (!okMix) errs.push('mix: ' + JSON.stringify(mixRun));

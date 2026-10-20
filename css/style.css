@@ -141,6 +141,10 @@
   .twrap{position:relative; margin:.5rem auto; width:100%; max-width:360px; aspect-ratio:1/1; background:#fff; border:4px solid var(--ink); border-radius:1.25rem; overflow:hidden}
   .twrap canvas{position:absolute; inset:0; width:100%; height:100%}
   #tInk{touch-action:none; -webkit-user-select:none; user-select:none}
+  .tpair{display:flex; justify-content:center; gap:1.5rem; margin:.2rem 0}
+  .tl{font-size:2.6rem; font-weight:800; line-height:1; padding:.1rem .9rem; border-radius:1rem; border:3px solid #cfe0f3; color:var(--ink-soft)}
+  .tl.on{border-color:var(--ink); color:var(--ink); background:#fff}
+  .tl.done{border-color:#1f9d55; color:#1f9d55}
   .stitle{text-align:center; font-size:1.5rem; margin:.5rem 0}
   .sline{display:flex; align-items:center; flex-wrap:wrap; gap:6px; padding:8px; margin:8px 0; border:3px solid transparent; border-radius:1rem}
   .sline.lit{background:var(--lit); border-color:var(--lit-edge)}

@@ -306,63 +306,6 @@
   hooks.enter.silly = syRound;
   hooks.leave.silly = stopSeq;
 
-  /* ================= TRACE LETTERS ================= */
-  const letters = CONTENT.letters || [];
-  const guide = $('tGuide'), ink = $('tInk');
-  const gctx = guide.getContext('2d'), ictx = ink.getContext('2d');
-  let ti = 0, upper = true, drawing = false, lastPt = null, drew = false, S = 300;
-  const accent = (getComputedStyle(document.documentElement).getPropertyValue('--accent') || '#2a62c0').trim();
-  function tSize() {
-    const wrap = $('tWrap');
-    S = Math.max(200, wrap.clientWidth - 8);
-    const dpr = window.devicePixelRatio || 1;
-    [guide, ink].forEach(c => { c.width = Math.round(S * dpr); c.height = Math.round(S * dpr); });
-    gctx.setTransform(dpr, 0, 0, dpr, 0, 0); ictx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    drawGuide();
-  }
-  function drawGuide() {
-    gctx.clearRect(0, 0, S, S);
-    const L = letters[ti]; if (!L) return;
-    const ch = upper ? L.l.toUpperCase() : L.l;
-    gctx.strokeStyle = '#8791b8'; gctx.lineWidth = 2; gctx.setLineDash([6, 6]);
-    [0.30, 0.55, 0.78].forEach(f => { gctx.beginPath(); gctx.moveTo(10, S * f); gctx.lineTo(S - 10, S * f); gctx.stroke(); });
-    gctx.setLineDash([]);
-    gctx.font = '800 ' + Math.round(S * 0.8) + 'px system-ui, -apple-system, "Segoe UI", sans-serif';
-    gctx.textAlign = 'center'; gctx.textBaseline = 'alphabetic';
-    gctx.fillStyle = '#dfe4f6'; gctx.strokeStyle = '#7c87b6'; gctx.lineWidth = 3;
-    gctx.fillText(ch, S / 2, S * 0.78); gctx.strokeText(ch, S / 2, S * 0.78);
-  }
-  function tClear() { ictx.clearRect(0, 0, S, S); drew = false; $('tPraise').textContent = ''; }
-  function tShow(i, say) {
-    ti = (i + letters.length) % letters.length;
-    tClear(); drawGuide();
-    if (say) playSeq(['letter-' + letters[ti].l, letters[ti].l]);
-  }
-  const pt = e => { const r = ink.getBoundingClientRect(); return { x: (e.clientX - r.left) * (S / r.width), y: (e.clientY - r.top) * (S / r.height) }; };
-  ink.addEventListener('pointerdown', e => {
-    e.preventDefault(); drawing = true; drew = true; lastPt = pt(e);
-    try { ink.setPointerCapture(e.pointerId); } catch (x) {}
-    ictx.fillStyle = accent; ictx.beginPath(); ictx.arc(lastPt.x, lastPt.y, 9, 0, 6.283); ictx.fill();
-  });
-  ink.addEventListener('pointermove', e => {
-    if (!drawing) return; e.preventDefault();
-    const p = pt(e);
-    ictx.strokeStyle = accent; ictx.lineWidth = 18; ictx.lineCap = 'round'; ictx.lineJoin = 'round';
-    ictx.beginPath(); ictx.moveTo(lastPt.x, lastPt.y); ictx.lineTo(p.x, p.y); ictx.stroke();
-    lastPt = p;
-  });
-  const endDraw = () => { if (drawing && drew) $('tPraise').textContent = 'You traced it! ' + W.pick(CONTENT.praise); drawing = false; };
-  ink.addEventListener('pointerup', endDraw);
-  ink.addEventListener('pointercancel', () => { drawing = false; });
-  $('tClear').addEventListener('click', tClear);
-  $('tCase').addEventListener('click', () => { upper = !upper; $('tCase').textContent = upper ? 'Aa' : 'aA'; tClear(); drawGuide(); });
-  $('tHear').addEventListener('click', () => playSeq(['letter-' + letters[ti].l, letters[ti].l, 'word-' + letters[ti].word]));
-  $('tNext').addEventListener('click', () => tShow(ti + 1, true));
-  $('tPrev').addEventListener('click', () => tShow(ti - 1, true));
-  hooks.enter.trace = () => { tSize(); tShow(ti, false); };
-  hooks.leave.trace = () => { drawing = false; stopSeq(); };
-  window.addEventListener('resize', () => { if ($('screen-trace') && !$('screen-trace').hidden) { tSize(); } });
-
   /* ================= LITTLE STORIES ================= */
   const stories = CONTENT.stories || [];
   let cur = null, stoken = 0;

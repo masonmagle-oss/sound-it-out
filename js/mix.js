@@ -11,10 +11,10 @@
   if (!W) return;
   const FOCUS_ROUNDS = 8, REVIEW_EVERY = 4, MAXL = 7, SECURE_SHARE = 0.7;
   const SEQ = {
-    start: ['sound', 'detective', 'spell', 'silly', 'rhyme', 'match', 'read'],
+    start: ['sound', 'detective', 'spell', 'trace', 'silly', 'rhyme', 'match', 'read'],
     reader: ['read', 'spell', 'match', 'read', 'silly', 'rhyme', 'detective', 'sound']
   };
-  const GAMES = ['sound', 'detective', 'spell', 'silly', 'rhyme', 'match', 'read'];
+  const GAMES = ['sound', 'detective', 'spell', 'trace', 'silly', 'rhyme', 'match', 'read'];
   const keysOf = w => W.wordKeys(w).filter(k => k !== '_' && k.indexOf('word-') !== 0);
   const lvl = w => w.level || 1;
   const words = W.CONTENT.words.filter(w => !w.sight);
@@ -59,7 +59,7 @@
     p.textContent = ' ' + pic(g);
     $('playBtn').setAttribute('aria-label', 'Play. It starts with ' + gname(g) + '.');
   }
-  const NEXT_IDS = ['nextBtn', 'rNext', 'rhNext', 'dNext', 'spNext', 'syNext', 'mNext'];
+  const NEXT_IDS = ['nextBtn', 'rNext', 'rhNext', 'dNext', 'spNext', 'syNext', 'mNext', 'tNext'];
   function showNext() {
     NEXT_IDS.forEach(id => {
       const b = $(id);
@@ -147,7 +147,7 @@
   }
 
   // leaving the mix: opening any other screen, or a game from "More games", ends it
-  GAMES.concat(['home', 'who', 'grown', 'sight', 'letters', 'trace', 'stories', 'say']).forEach(name => {
+  GAMES.concat(['home', 'who', 'grown', 'sight', 'letters', 'stories', 'say']).forEach(name => {
     const prev = W.hooks.enter[name];
     W.hooks.enter[name] = () => {
       if (st && st.active) { if (st.expect === name) st.expect = null; else { st.active = false; showNext(); } }

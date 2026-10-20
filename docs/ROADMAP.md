@@ -36,7 +36,7 @@ Unverified: trimmed clips (never heard by Claude), newest two games with the act
 - Real-book bridge as prompts only ("find these words in a library book"). Do not reproduce copyrighted books.
 
 ## Phase 4 — Polish
-- Syllable games, stroke-order tracing.
+- Syllable games.
 - Licensing check (ElevenLabs terms for the plan used; credit list; ASL set is public domain).
 - Home Screen install polish.
 
@@ -59,3 +59,4 @@ Unverified: trimmed clips (never heard by Claude), newest two games with the act
 - Stricter Next, softer miss handling, 15/30/45-round sessions (2026-10-20).
 - Mixed adaptive session behind Play, new game Which picture?, wrong choices that share the first sound, per-child mix start level (2026-10-20).
 - Picture grid for More games (picture + short name), the first game's picture on Play, and the next game's picture on Next inside the mix (2026-10-20).
+- Stroke-order letter tracing, big then little letter, in the Start mix (2026-10-20).
