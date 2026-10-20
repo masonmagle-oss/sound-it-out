@@ -23,6 +23,14 @@ const fs = require('fs');
     console.log((visible ? 'ok   ' : 'FAIL ') + s);
     if (!visible) errs.push('screen not visible: ' + s);
   }
+  // Clap the parts: numeric choices for 1-3 beats, and the right one is praised as "parts"
+  await p.goto(url);
+  await p.click('#moreGamesBtn'); await p.click('[data-go="detective"]'); await p.click('[data-dmode="parts"]');
+  await p.waitForTimeout(300);
+  const partLabels = await p.locator('#dChoices .dchoice').allTextContents();
+  for (let i = 0; i < partLabels.length; i++) await p.locator('#dChoices .dchoice').nth(i).click({ force: true });
+  const partsOk = partLabels.length >= 2 && partLabels.every(t => /^[123]$/.test(t)) && /part/.test(await p.textContent('#dPraise'));
+  console.log((partsOk ? 'ok   ' : 'FAIL ') + 'clap the parts offers 1-3 beats and praises as parts'); if (!partsOk) errs.push('parts mode: ' + partLabels.join(',') + ' / ' + await p.textContent('#dPraise'));
   // Pacing: Next is locked until the round is FINISHED. A wrong answer does not unlock it, a locked tap does nothing,
   // and it re-locks after use. A stuck round reveals its answer (no praise) and then unlocks.
   await p.goto(url);

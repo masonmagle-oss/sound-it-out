@@ -24,22 +24,33 @@
     const p = CONTENT.words.filter(w => !w.sight && w.emoji && (w.level || 1) <= lim && sounding(w).length >= 2 && !plain(w));
     return W.mixNarrow(p.length >= 6 ? p : CONTENT.words.filter(w => !w.sight && w.emoji && sounding(w).length >= 2 && (w.level || 1) <= 3 && !plain(w)), w => w.word, 3);
   }
+  // "parts" mode: clap the beats. A compound word is its parts (sun + set); every other word here is one beat.
+  const isNum = () => mode === 'count' || mode === 'parts';
+  const isCompound = w => w.units.length > 1 && w.units.every(u => U.key(u).indexOf('word-') === 0);
+  const partKeys = w => isCompound(w) ? w.units.map(U.key) : ['word-' + w.word];
+  const unitKeys = w => mode === 'parts' ? partKeys(w) : sounding(w).map(U.key);
+  const noun = () => mode === 'parts' ? 'parts' : 'sounds';
+  function partsPool() {
+    const all = CONTENT.words.filter(w => !w.sight && w.emoji);
+    const one = all.filter(w => (w.level || 1) <= 2 && !isCompound(w)), two = all.filter(isCompound);
+    return W.shuffle(one).slice(0, 12).concat(W.shuffle(two).slice(0, 12));   // half one beat, half two
+  }
   const target = w => { const s = sounding(w); return mode === 'end' ? s[s.length - 1] : s[0]; };
   function dRound() {
     stopSeq(); dSolved = false; dPraise.textContent = '';
-    const pool = dPool();
-    const dk = x => mode === 'count' ? ['count'] : [U.key(target(x))];
+    const pool = mode === 'parts' ? partsPool() : dPool();
+    const dk = x => isNum() ? [mode] : [U.key(target(x))];
     let w = W.pickAdaptive(pool, dk), t = 0;
     while (t++ < 8 && w.word === dLast) w = W.pickAdaptive(pool, dk);
     dWord = w; dLast = w.word; dTried = false;
     $('dEmo').textContent = w.emoji;
-    $('dPrompt').textContent = mode === 'begin' ? 'What sound does it start with?' : mode === 'end' ? 'What sound does it end with?' : 'How many sounds do you hear?';
+    $('dPrompt').textContent = mode === 'begin' ? 'What sound does it start with?' : mode === 'end' ? 'What sound does it end with?' : mode === 'parts' ? 'Clap the word. How many parts?' : 'How many sounds do you hear?';
     dChoices.innerHTML = '';
     let opts = [];
-    if (mode === 'count') {
-      const n = sounding(w).length;
+    if (isNum()) {
+      const n = mode === 'parts' ? partKeys(w).length : sounding(w).length, lo = mode === 'parts' ? 1 : 2, hi = mode === 'parts' ? 3 : 6;
       const vals = [n];
-      [n - 1, n + 1, n + 2, n - 2].forEach(v => { if (v >= 2 && v <= 6 && vals.length < 3 && vals.indexOf(v) < 0) vals.push(v); });
+      [n - 1, n + 1, n + 2, n - 2].forEach(v => { if (v >= lo && v <= hi && vals.length < 3 && vals.indexOf(v) < 0) vals.push(v); });
       opts = W.shuffle(vals).map(v => ({ label: String(v), correct: v === n, key: null }));
     } else {
       const tu = target(w), tk = U.key(tu);
@@ -53,7 +64,7 @@
     opts.forEach(o => {
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'dchoice'; b.textContent = o.label;
-      b.setAttribute('aria-label', mode === 'count' ? o.label + ' sounds' : 'the sound ' + o.label);
+      b.setAttribute('aria-label', isNum() ? o.label + ' ' + noun() : 'the sound ' + o.label);
       b.addEventListener('click', () => dChoose(b, o));
       if (o.correct) dRight = { b, o };
       dChoices.appendChild(b);
@@ -63,27 +74,27 @@
   let dTried = false;
   function dChoose(b, o) {
     if (dSolved) return;
-    if (!dTried && mode !== 'count') { dTried = true; W.track(U.key(target(dWord)), !!o.correct); }
-    const w = dWord, units = sounding(w).map(U.key);
+    if (!dTried && !isNum()) { dTried = true; W.track(U.key(target(dWord)), !!o.correct); }
+    const w = dWord, units = unitKeys(w);
     if (o.correct) {
       dSolved = true; b.classList.add('right');
-      dPraise.textContent = mode === 'count'
-        ? w.word + ' has ' + o.label + ' sounds! ' + W.pick(CONTENT.praise)
+      dPraise.textContent = isNum()
+        ? w.word + ' has ' + o.label + ' ' + noun() + '! ' + W.pick(CONTENT.praise)
         : w.word + ' ' + (mode === 'begin' ? 'starts' : 'ends') + ' with ' + o.label + '. ' + W.pick(CONTENT.praise);
-      playSeq(mode === 'count' ? units.concat('word-' + w.word) : [o.key, 'word-' + w.word]);
+      playSeq(isNum() ? (mode === 'parts' ? units : units.concat('word-' + w.word)) : [o.key, 'word-' + w.word]);
     } else {
       b.classList.add('heard-it');
-      dPraise.textContent = mode === 'count' ? "Let's count the sounds together." : 'Listen to the word again. Try another one.';
-      playSeq(mode === 'count' ? units : [o.key, 'word-' + w.word]);
+      dPraise.textContent = isNum() ? "Let's count the " + noun() + ' together.' : 'Listen to the word again. Try another one.';
+      playSeq(isNum() ? units : [o.key, 'word-' + w.word]);
     }
   }
   W.reveal.detective = () => {
     if (dSolved || !dRight) return;
     dSolved = true; dRight.b.classList.add('right');
-    const w = dWord, o = dRight.o, units = sounding(w).map(U.key);
-    dPraise.textContent = mode === 'count' ? 'Let us count together: ' + w.word + ' has ' + o.label + ' sounds.'
+    const w = dWord, o = dRight.o, units = unitKeys(w);
+    dPraise.textContent = isNum() ? 'Let us count together: ' + w.word + ' has ' + o.label + ' ' + noun() + '.'
       : 'Listen: ' + w.word + ' ' + (mode === 'begin' ? 'starts' : 'ends') + ' with ' + o.label + '.';
-    playSeq(mode === 'count' ? units.concat('word-' + w.word) : [o.key, 'word-' + w.word]);
+    playSeq(isNum() ? (mode === 'parts' ? units : units.concat('word-' + w.word)) : [o.key, 'word-' + w.word]);
   };
   $('dPic').addEventListener('click', () => { if (dWord) playSeq(['word-' + dWord.word]); });
   $('dNext').addEventListener('click', dRound);
