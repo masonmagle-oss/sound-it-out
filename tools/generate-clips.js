@@ -28,7 +28,7 @@ Object.entries({ ful: '/fəl/', less: '/ləs/', ly: 'lee', ness: '/nəs/', est: 
 Object.entries({ dle: '/dəl/', tle: '/təl/', le: '/əl/' }).forEach(([k, ipa]) => add('sounds', k, ipa + '. ' + ipa + '.'));
 require('./new-words-data.js').forEach(([, , emoji, word, , how]) => { if ((emoji || how) && /^[a-z]+$/.test(word)) add('words', 'word-' + word, word + '.'); });   // endings and contractions need their own treatment
 // --redo "key=text,key2=text2": make new takes for clips that already exist (a word said wrong); the audition page shows them
-const redo = String(arg('redo', '')).split(',').filter(Boolean).map(x => { const i = x.indexOf('='); return { kind: 'redo', key: x.slice(0, i), text: x.slice(i + 1) }; });
+const redo = String(arg('redo', '')).split(',').filter(Boolean).map(x => { const i = x.indexOf('='); const text = x.slice(i + 1); return { kind: 'redo', key: x.slice(0, i), text, doubled: /. .*.$/.test(text) && !/ [a-z]{2,} /i.test(text) }; });
 if (redo.length) jobs.length = 0, jobs.push(...redo);
 const todo = jobs.slice(0, limit);
 const chars = todo.reduce((a, j) => a + j.text.length, 0), cost = chars * takes;

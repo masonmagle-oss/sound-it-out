@@ -4,6 +4,17 @@
 const fs = require('fs'), path = require('path');
 const root = path.resolve(__dirname, '..'), nc = path.join(root, '_new-clips');
 const manifest = JSON.parse(fs.readFileSync(path.join(nc, 'manifest.json'), 'utf8'));
+// --redo "ful=ful+ful-b,less=less+less-b": a page where each sound has takes from several prompts (the prompt is shown), for sounds that were rejected
+const ri = process.argv.indexOf('--redo');
+if (ri > 0) {
+  const e2 = x => String(x).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  const take = (k, g, t) => '<label><audio controls preload="none" src="' + t.file + '"></audio> <input type="radio" name="' + k + '" value="' + t.file + '"> said as: ' + e2(manifest[g].text) + '</label>';
+  const sec = x => { const [k, v] = x.split('='); return '<section><h3>' + e2(k) + '</h3>' + v.split('+').map(g => manifest[g].takes.map(t => take(k, g, t)).join('')).join('') + '</section>'; };
+  const head = '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pick the new sounds</title><style>body{font:16px system-ui;max-width:42rem;margin:1rem auto;padding:0 1rem}section{border:1px solid #ccd;border-radius:10px;padding:.5rem 1rem;margin:.7rem 0}label{display:block;margin:.3rem 0}pre{background:#eef;padding:1rem;white-space:pre-wrap}</style><h1>Pick the new sounds</h1><p>Each sound was tried several ways. Pick the take that says the sound as it is at the end of the word (leave blank if none is right).</p>';
+  const foot = `<button onclick="show()">Show my results</button><pre id="o"></pre><script>function show(){const r={};document.querySelectorAll('input[type=radio]:checked').forEach(i=>{r[i.name]=i.value});document.getElementById('o').textContent=JSON.stringify(r,null,1)}</script>`;
+  fs.writeFileSync(path.join(nc, 'verify-redo.html'), head + process.argv[ri + 1].split(',').map(sec).join('\n') + foot);
+  console.log('wrote _new-clips/verify-redo.html'); process.exit(0);
+}
 const sounds = 'ful less ly ness dle tle le est dis mis cher zhun'.split(' ');
 const words = 'theyre gnat deer daughter big fin mat pen pin pitch drew flew chew took hill stew knee chick'.split(' ').map(w => 'word-' + w);
 const keys = sounds.concat(words, ['sentence-the-cats-sat-on-the-chair']);
