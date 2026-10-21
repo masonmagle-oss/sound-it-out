@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Three theme directions</title>
+<!-- Preview only (loads Andika from Google Fonts to show the letter shapes; the app would bundle the font file). -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap">
+<style>
+  :root{--ink:#1d2433}
+  *{box-sizing:border-box}
+  body{margin:0; padding:26px 14px 50px; background:#e9e6df; font:16px/1.5 system-ui,sans-serif; color:#222}
+  h1{font:700 22px/1.2 system-ui; margin:0 0 4px; text-align:center}
+  .sub{max-width:46rem; margin:0 auto 22px; text-align:center; color:#555}
+  .row{display:flex; flex-wrap:wrap; gap:26px; justify-content:center; align-items:flex-start}
+  figure{margin:0; width:312px}
+  figcaption{margin-top:10px; font-size:14px; color:#444}
+  figcaption b{display:block; font-size:16px; color:#111}
+  .phone{width:312px; height:600px; border-radius:32px; border:9px solid #111; overflow:hidden; position:relative; font-family:'Andika','Comic Sans MS',system-ui,sans-serif; padding:14px}
+  .top{display:flex; align-items:center; gap:10px; margin-bottom:6px}
+  .top h2{margin:0; font-size:20px}
+  .back{padding:11px 14px; font:700 15px 'Andika',system-ui; border-radius:16px}
+  .praise{text-align:center; font-weight:700; font-size:19px; margin:12px 0}
+  .next{display:block; width:100%; padding:15px; font:700 18px 'Andika',system-ui; border-radius:16px}
+
+  /* A: felt + letter folk */
+  .felt{background:#2f6f83; color:#fbf6ea}
+  .felt .back{border:3px dashed #fbf6ea; background:none; color:#fbf6ea}
+  .felt .folk{display:flex; justify-content:center; margin:22px 0 8px}
+  .felt .folk svg{width:88px; height:106px; overflow:visible}
+  .felt .card{background:#fbf6ea; color:var(--ink); border:3px solid var(--ink); border-radius:20px; box-shadow:0 5px 0 var(--ink); height:190px; display:flex; flex-direction:column; align-items:center; justify-content:center}
+  .felt .card .e{font-size:78px; line-height:1}.felt .card .w{font:700 32px 'Andika'; letter-spacing:.06em}
+  .felt .next{background:#ffd23f; color:var(--ink); border:3px solid var(--ink); box-shadow:0 5px 0 var(--ink)}
+  .felt::after{content:""; position:absolute; inset:7px; border:2px dashed rgba(251,246,234,.5); border-radius:24px; pointer-events:none}
+
+  /* B: letterpress */
+  .press{background:#f3eee2; color:var(--ink)}
+  .press .back{border:3px solid var(--ink); background:#fff9ea; color:var(--ink)}
+  .press .blocks{display:flex; justify-content:center; gap:10px; margin:30px 0 14px}
+  .press .blk{width:82px; height:96px; background:#d9b07a; border:3px solid var(--ink); border-radius:8px; box-shadow:5px 7px 0 #8a6a3c; display:flex; align-items:center; justify-content:center; font:700 56px 'Andika'; color:#5a3d16; text-shadow:-1px -1px 0 rgba(255,255,255,.35), 1px 1px 0 rgba(0,0,0,.25)}
+  .press .blk.lit{transform:translateY(-8px); box-shadow:5px 15px 0 #8a6a3c; background:#e4be8a}
+  .press .page{background:#fffdf7; border:3px solid var(--ink); height:190px; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; box-shadow:0 5px 0 var(--ink)}
+  .press .page .e{font-size:70px; line-height:1}
+  .press .page .w{font:700 40px 'Andika'; letter-spacing:.08em; color:#2457d6; text-shadow:3px 2px 0 rgba(230,59,46,.75); mix-blend-mode:multiply}
+  .press .page .stamp{position:absolute; right:12px; top:10px; width:44px; height:44px; border-radius:50%; border:3px solid #e63b2e; color:#e63b2e; font:700 24px/38px 'Andika'; text-align:center; transform:rotate(-12deg)}
+  .press .next{background:#2457d6; color:#fff; border:3px solid var(--ink); box-shadow:0 5px 0 var(--ink)}
+
+  /* C: garden */
+  .garden{background:#cfeab8; color:var(--ink)}
+  .garden .back{border:3px solid var(--ink); background:#fff; color:var(--ink)}
+  .garden .packets{display:flex; justify-content:center; gap:10px; margin:24px 0 8px}
+  .garden .pk{width:84px; height:112px; background:#fff7d6; border:3px solid var(--ink); border-radius:10px 10px 22px 22px; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding-bottom:10px; font:700 44px 'Andika'; position:relative}
+  .garden .pk::before{content:""; position:absolute; top:10px; left:12px; right:12px; height:30px; background:#7fbf5a; border-radius:8px; border:3px solid var(--ink)}
+  .garden .pk.lit{transform:translateY(-8px); background:#ffe27a}
+  .garden .plot{height:196px; background:#bfe3a3; border:3px solid var(--ink); border-radius:20px; position:relative; overflow:hidden}
+  .garden .plot .soil{position:absolute; left:0; right:0; bottom:0; height:56px; background:#8a5a2b; border-top:3px solid var(--ink)}
+  .garden .plot svg{position:absolute; left:50%; bottom:40px; transform:translateX(-50%); width:150px; height:150px; overflow:visible}
+  .garden .plot .w{position:absolute; bottom:8px; left:0; right:0; text-align:center; font:700 28px 'Andika'; color:#fff7d6; letter-spacing:.08em}
+  .garden .next{background:#e63b2e; color:#fff; border:3px solid var(--ink); box-shadow:0 5px 0 var(--ink)}
+</style>
+</head>
+<body>
+<h1>Three theme directions</h1>
+<p class="sub">The same moment in each: Sound it out, the word <b>sun</b>, the <i>u</i> sound just played. None of them uses a mascot. Pick the one that feels most like your kids.</p>
+<div class="row">
+
+<figure>
+  <div class="phone felt">
+    <div class="top"><div class="back">&larr; Back</div><h2>Sound it out</h2></div>
+    <div class="folk">
+      <svg viewBox="0 0 104 124"><circle cx="52" cy="62" r="46" fill="#e63b2e" stroke="#1d2433" stroke-width="4"/><circle cx="36" cy="46" r="9" fill="#fff"/><circle cx="68" cy="46" r="9" fill="#fff"/><circle cx="38" cy="48" r="4" fill="#1d2433"/><circle cx="70" cy="48" r="4" fill="#1d2433"/><path d="M38 66q14 9 28 0" fill="none" stroke="#1d2433" stroke-width="4" stroke-linecap="round"/><text x="52" y="97" text-anchor="middle" font-family="Andika,sans-serif" font-weight="700" font-size="30" fill="#1d2433">s</text></svg>
+      <svg viewBox="0 0 104 124" style="transform:translateY(-8px)"><rect x="8" y="12" width="88" height="96" rx="6" fill="#2457d6" stroke="#1d2433" stroke-width="4"/><circle cx="34" cy="42" r="9" fill="#fff"/><circle cx="70" cy="42" r="9" fill="#fff"/><circle cx="36" cy="44" r="4" fill="#1d2433"/><circle cx="72" cy="44" r="4" fill="#1d2433"/><ellipse cx="52" cy="66" rx="11" ry="9" fill="#1d2433"/><text x="52" y="100" text-anchor="middle" font-family="Andika,sans-serif" font-weight="700" font-size="30" fill="#fbf6ea">u</text><path d="M-4 26l-10-8M-4 50h-12M-4 74l-10 8M108 26l10-8M108 50h12M108 74l10 8" stroke="#ffd23f" stroke-width="4" stroke-linecap="round"/></svg>
+      <svg viewBox="0 0 104 124"><circle cx="52" cy="62" r="46" fill="#e63b2e" stroke="#1d2433" stroke-width="4"/><circle cx="36" cy="46" r="9" fill="#fff"/><circle cx="68" cy="46" r="9" fill="#fff"/><circle cx="38" cy="48" r="4" fill="#1d2433"/><circle cx="70" cy="48" r="4" fill="#1d2433"/><path d="M38 66q14 9 28 0" fill="none" stroke="#1d2433" stroke-width="4" stroke-linecap="round"/><text x="52" y="97" text-anchor="middle" font-family="Andika,sans-serif" font-weight="700" font-size="30" fill="#1d2433">n</text></svg>
+    </div>
+    <div class="card"><div class="e">☀️</div><div class="w">sun</div></div>
+    <div class="praise">You kept going!</div>
+    <button class="next">Next word</button>
+  </div>
+  <figcaption><b>A. Felt and Letter Folk</b>Letters are little shapes with faces. They open their mouths when they say their sound. Soft, stitched, very young-child friendly.</figcaption>
+</figure>
+
+<figure>
+  <div class="phone press">
+    <div class="top"><div class="back">&larr; Back</div><h2>Sound it out</h2></div>
+    <div class="blocks"><div class="blk">s</div><div class="blk lit">u</div><div class="blk">n</div></div>
+    <div class="page"><div class="stamp">&#10003;</div><div class="e">☀️</div><div class="w">sun</div></div>
+    <div class="praise">You kept going!</div>
+    <button class="next">Press the word</button>
+  </div>
+  <figcaption><b>B. Letterpress</b>Letters are wooden type blocks. Blending presses the word onto paper in two inks, like a real print. Every finished word can go on a printed page he keeps. Calm and grown-up, less cute.</figcaption>
+</figure>
+
+<figure>
+  <div class="phone garden">
+    <div class="top"><div class="back">&larr; Back</div><h2>Sound it out</h2></div>
+    <div class="packets"><div class="pk">s</div><div class="pk lit">u</div><div class="pk">n</div></div>
+    <div class="plot">
+      <svg viewBox="0 0 150 150"><path d="M75 150V70" stroke="#1d2433" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M75 118Q40 110 34 80Q64 84 75 118Z" fill="#3fa34d" stroke="#1d2433" stroke-width="4" stroke-linejoin="round"/><path d="M75 100Q110 92 116 62Q86 66 75 100Z" fill="#3fa34d" stroke="#1d2433" stroke-width="4" stroke-linejoin="round"/><g stroke="#1d2433" stroke-width="4" stroke-linejoin="round"><circle cx="75" cy="44" r="32" fill="#ffd23f"/></g><g fill="#ffb300" stroke="#1d2433" stroke-width="3"><circle cx="75" cy="44" r="16"/></g></svg>
+      <div class="soil"></div><div class="w">sun</div>
+    </div>
+    <div class="praise">You kept going!</div>
+    <button class="next">Plant the next one</button>
+  </div>
+  <figcaption><b>C. Sound garden</b>Letters are seed packets. Blending a word grows a plant in a garden that only ever fills up and never wilts. Friendly and familiar, but it's the one most apps use.</figcaption>
+</figure>
+
+</div>
+</body>
+</html>
