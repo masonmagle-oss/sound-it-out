@@ -27,6 +27,9 @@ Object.entries({ ful: '/fəl/', less: '/ləs/', ly: 'lee', ness: '/nəs/' }).for
 // isolated sounds: IPA between slashes, said twice (the second one is the clean one, as in WORKFLOWS); ful less ly ness are held until an endings activity exists
 Object.entries({ dle: '/dəl/', tle: '/təl/', le: '/əl/' }).forEach(([k, ipa]) => add('sounds', k, ipa + '. ' + ipa + '.'));
 require('./new-words-data.js').forEach(([, , emoji, word]) => { if (emoji && /^[a-z]+$/.test(word)) add('words', 'word-' + word, word + '.'); });   // endings and contractions need their own treatment
+// --redo "key=text,key2=text2": make new takes for clips that already exist (a word said wrong); the audition page shows them
+const redo = String(arg('redo', '')).split(',').filter(Boolean).map(x => { const i = x.indexOf('='); return { kind: 'redo', key: x.slice(0, i), text: x.slice(i + 1) }; });
+if (redo.length) jobs.length = 0, jobs.push(...redo);
 const todo = jobs.slice(0, limit);
 const chars = todo.reduce((a, j) => a + j.text.length, 0), cost = chars * takes;
 console.log(`${todo.length} clips (${kind}), ${takes} take(s) each, about ${cost} credits`);
@@ -64,7 +67,7 @@ const seconds = f => Number(execFileSync('ffprobe', ['-v', 'error', '-show_entri
     }
   }
   const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
-  const rows = Object.entries(manifest).filter(([k]) => !have.has(k)).map(([k, m]) => {
+  const rows = Object.entries(manifest).filter(([k]) => !have.has(k) || redo.some(r => r.key === k)).map(([k, m]) => {
     const good = m.takes.filter(t => t.match), shown = good.length ? good : m.takes;
     return `<section><h3>${esc(m.text)} <small>${esc(k)}${good.length ? '' : ' &mdash; no take passed the transcript check'}</small></h3>` +
       shown.map(t => `<label><audio controls preload="none" src="${t.file}"></audio> <input type="radio" name="${k}" value="${t.file}"> Best <small>${t.secs}s, heard: ${esc(t.heard)}</small></label>`).join('<br>') +
