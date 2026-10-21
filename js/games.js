@@ -43,7 +43,7 @@
     let w = W.pickAdaptive(pool, dk), t = 0;
     while (t++ < 8 && w.word === dLast) w = W.pickAdaptive(pool, dk);
     dWord = w; dLast = w.word; dTried = false;
-    $('dEmo').textContent = w.emoji;
+    W.pic($('dEmo'), w.emoji);
     $('dPrompt').textContent = mode === 'begin' ? 'What sound does it start with?' : mode === 'end' ? 'What sound does it end with?' : mode === 'parts' ? 'Clap the word. How many parts?' : 'How many sounds do you hear?';
     dChoices.innerHTML = '';
     let opts = [];
@@ -139,7 +139,7 @@
       spWord = w; spLast = w.word;
     }
     const w = spWord;
-    $('spEmo').textContent = w.emoji;
+    W.pic($('spEmo'), w.emoji);
     spFill = w.units.map(() => null);
     const have = {}; w.units.forEach(u => { have[U.key(u)] = true; });
     const extra = [];
@@ -240,7 +240,7 @@
     const seenOn = {}; const pickOthers = [];
     others.forEach(x => { const k = U.key(x.units[0]); if (!seenOn[k] && pickOthers.length < 2) { seenOn[k] = true; pickOthers.push(x); } });
     sySilly = pickOthers;
-    const em = $('syEmo'); em.classList.remove('silly', 'popit'); em.textContent = w.emoji;
+    const em = $('syEmo'); em.classList.remove('silly', 'popit'); W.pic(em, w.emoji);
     if (smode === 'mix') {
       const silly = Math.random() < 0.5;
       syShown = silly ? pickOthers[0] : w;
@@ -275,7 +275,7 @@
     if (yes === isMatch) {
       syDone = true; b.classList.add('right');
       if (isMatch) { em.classList.remove('popit'); void em.offsetWidth; em.classList.add('popit'); syPraise.textContent = 'Yes, ' + syTarget.word + '! ' + W.pick(CONTENT.praise); }
-      else { em.textContent = syShown.emoji; em.classList.remove('silly'); void em.offsetWidth; em.classList.add('silly'); syPraise.textContent = 'Ha! It said ' + syShown.word + ', but that picture is a ' + syTarget.word + '. You spotted it! ' + W.pick(CONTENT.praise); }
+      else { W.pic(em, syShown.emoji); em.classList.remove('silly'); void em.offsetWidth; em.classList.add('silly'); syPraise.textContent = 'Ha! It said ' + syShown.word + ', but that picture is a ' + syTarget.word + '. You spotted it! ' + W.pick(CONTENT.praise); }
       playSeq(['word-' + (isMatch ? syTarget.word : syShown.word), 'word-' + syTarget.word]);
     } else {
       b.classList.add('heard-it');
@@ -289,7 +289,7 @@
     const em = $('syEmo');
     syWordRow(x, false);
     const right = x === syTarget;
-    em.textContent = x.emoji; em.classList.remove('silly', 'popit'); void em.offsetWidth; em.classList.add(right ? 'popit' : 'silly');
+    W.pic(em, x.emoji); em.classList.remove('silly', 'popit'); void em.offsetWidth; em.classList.add(right ? 'popit' : 'silly');
     if (right) {
       syDone = true; b.classList.add('right');
       syPraise.textContent = x.word + '! ' + W.pick(CONTENT.praise);
@@ -303,7 +303,7 @@
     if (syDone || !syTarget) return;
     syDone = true;
     syWordRow(syTarget, false);
-    const em = $('syEmo'); em.textContent = syTarget.emoji;
+    const em = $('syEmo'); W.pic(em, syTarget.emoji);
     syPraise.textContent = 'This is ' + syTarget.word + '.';
     playSeq(['word-' + syTarget.word]);
   };

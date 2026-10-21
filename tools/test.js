@@ -87,6 +87,14 @@ const fs = require('fs');
     wpOk = wpOk && n === 3 && /=/.test(await p.textContent('#pPraise'));
   }
   console.log((wpOk ? 'ok   ' : 'FAIL ') + 'word parts: endings and contractions'); if (!wpOk) errs.push('word parts');
+  // Drawn pictures: every 'svg:name' in the word list has a drawing, and it renders as an svg
+  await p.goto(url);
+  const svgOk = await p.evaluate(() => {
+    const toks = WordPlay.CONTENT.words.map(w => w.emoji).filter(e => typeof e === 'string' && e.indexOf('svg:') === 0);
+    const d = document.createElement('div'); document.body.appendChild(d);
+    return toks.length >= 10 && toks.every(t => { WordPlay.pic(d, t); return !!d.querySelector('svg.pic'); });
+  });
+  console.log((svgOk ? 'ok   ' : 'FAIL ') + 'drawn pictures all render'); if (!svgOk) errs.push('drawn pictures');
   // Pacing: Next is locked until the round is FINISHED. A wrong answer does not unlock it, a locked tap does nothing,
   // and it re-locks after use. A stuck round reveals its answer (no praise) and then unlocks.
   await p.goto(url);
@@ -285,7 +293,7 @@ const fs = require('fs');
     for (let i = 0; i < N; i++) {
       W.hooks.enter.match();
       const target = byWord[document.getElementById('mWordText').textContent];
-      const emos = [...document.querySelectorAll('#mChoices .rce')].map(e => e.textContent);
+      const emos = [...document.querySelectorAll('#mChoices .rce')].map(e => e.dataset.pic || e.textContent);
       if (target && emos.length === 3 && new Set(emos).size === 3 && emos.every(e => sameFirst(e, target)) && emos.includes(target.emoji)) matchOk++;
     }
     W.go('rhyme'); await new Promise(r => setTimeout(r, 50));

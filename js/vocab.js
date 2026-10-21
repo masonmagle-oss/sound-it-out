@@ -32,7 +32,7 @@
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'dchoice'; b.setAttribute('aria-label', word);
     b.innerHTML = (emoji ? '<span class="rtemo" aria-hidden="true"></span>' : '') + '<span class="sub"></span>';
-    if (emoji) b.querySelector('.rtemo').textContent = emoji;
+    if (emoji) W.pic(b.querySelector('.rtemo'), emoji);
     b.querySelector('.sub').textContent = label;
     b.addEventListener('click', () => {
       if (solved) return;

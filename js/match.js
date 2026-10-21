@@ -53,7 +53,7 @@
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'rchoice';
       b.setAttribute('aria-label', 'picture ' + (mChoices.children.length + 1));
-      const e = document.createElement('span'); e.className = 'rce'; e.textContent = x.emoji; e.setAttribute('aria-hidden', 'true');
+      const e = document.createElement('span'); e.className = 'rce'; W.pic(e, x.emoji); e.setAttribute('aria-hidden', 'true');
       b.appendChild(e);
       b.addEventListener('click', () => choose(b, x));
       if (x === w) mRight = b;

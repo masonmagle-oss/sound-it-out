@@ -283,3 +283,5 @@
   .wslots{display:flex; justify-content:center; gap:10px; margin:.8rem 0}
   .wslot{min-width:3.2rem; min-height:3.6rem; border-bottom:5px solid var(--ink); text-align:center; font-size:2.4rem; font-weight:700}
   .dchoice .sub{display:block; font-size:1rem}
+
+  svg.pic{width:1em; height:1em; vertical-align:-.12em; overflow:visible}

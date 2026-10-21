@@ -28,7 +28,7 @@
     W.shuffle([w].concat(others)).forEach(x => {
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'dchoice'; b.setAttribute('aria-label', 'a picture');
-      b.innerHTML = '<span class="rtemo" aria-hidden="true"></span>'; b.firstChild.textContent = x.emoji;
+      b.innerHTML = '<span class="rtemo" aria-hidden="true"></span>'; W.pic(b.firstChild, x.emoji);
       b.addEventListener('click', () => answer(x === w));
       box.appendChild(b);
     });

@@ -177,6 +177,8 @@
     (listeners[name] || []).forEach(fn => { try { fn.apply(null, args); } catch (e) {} });
   }
   window.WordPlay = { skillOf: k => skills[k] || null, mixNarrow: l => l, mixSet: () => null, activeKid: () => activeKid(), kids: () => kids, track, pickAdaptive, wordKeys, skillSummary, stageLimit, go, render, current: () => current, hooks, on, emit, CONTENT, store, get settings() { return settings; }, saveSettings, sleep, reduced, pick, shuffle, mark, $ };
+  // a picture: an emoji, or 'svg:name' for a drawn picture from pics.js
+  window.WordPlay.pic = (el, e) => { el.dataset.pic = e || ''; const d = typeof e === 'string' && e.indexOf('svg:') === 0 && window.WORDPLAY_PICS && window.WORDPLAY_PICS[e.slice(4)]; if (d) el.innerHTML = d; else el.textContent = e || ''; };
 
   /* =====================================================================
      ACTIVITY 1: Sound it out
@@ -268,7 +270,7 @@
 
   function showPicture(w) {
     if (w.ground) stageEl.setAttribute('data-ground', w.ground);
-    emoEl.textContent = w.emoji || '';
+    window.WordPlay.pic(emoEl, w.emoji);
     emoEl.className = 'emo anim-' + (w.anim || 'pop');
     void emoEl.offsetWidth;                // restart animation
     stageEl.classList.add('show');

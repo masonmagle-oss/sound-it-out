@@ -145,7 +145,7 @@
       W.shuffle(fams.filter(f => f !== fam)).slice(0, 2).forEach(f => others.push(W.pick(f)));
     }
     const opts = W.shuffle([answer].concat(others));
-    $('rtEmo').textContent = curTarget.emoji;
+    W.pic($('rtEmo'), curTarget.emoji);
     $('rtWord').textContent = curTarget.word;
     rpraise.textContent = '';
     choicesEl.innerHTML = '';
@@ -153,7 +153,7 @@
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'rchoice';
       b.setAttribute('aria-label', w.word);
-      const e = document.createElement('span'); e.className = 'rce'; e.textContent = w.emoji; e.setAttribute('aria-hidden', 'true');
+      const e = document.createElement('span'); e.className = 'rce'; W.pic(e, w.emoji); e.setAttribute('aria-hidden', 'true');
       const t = document.createElement('span'); t.className = 'rcw'; t.setAttribute('aria-hidden', 'true');
       b.appendChild(e); b.appendChild(t);
       b.addEventListener('click', () => choose(b, w, answer));

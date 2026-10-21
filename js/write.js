@@ -24,7 +24,7 @@
     word = W.pick(list); let t = 0;
     while (t++ < 8 && word.word === last && list.length > 1) word = W.pick(list);
     last = word.word;
-    $('wEmo').textContent = word.emoji;
+    W.pic($('wEmo'), word.emoji);
     slots.innerHTML = ''; tray.innerHTML = '';
     for (let i = 0; i < word.word.length; i++) { const s = document.createElement('span'); s.className = 'wslot'; s.setAttribute('aria-label', 'letter ' + (i + 1) + ' empty'); slots.appendChild(s); }
     const extra = W.shuffle('abcdefghijklmnopqrstuvwxyz'.split('').filter(c => word.word.indexOf(c) < 0)).slice(0, 3);
