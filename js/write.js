@@ -13,11 +13,11 @@
     if (W.stopSound) W.stopSound();
     for (const k of keys) { if (my !== seq) return; await W.playKey(k); }
   }
-  let word = null, at = 0, done = false, last = null;
+  let word = null, at = 0, done = false, last = null, misses = 0;
   const slots = $('wSlots'), tray = $('wTray'), msg = $('wMsg');
 
   function round() {
-    done = false; at = 0; msg.textContent = '';
+    done = false; at = 0; misses = 0; msg.textContent = '';
     const lim = Math.min(W.stageLimit(), 5);
     const pool = CONTENT.words.filter(w => plain(w) && (w.level || 1) <= lim);
     const list = W.mixNarrow ? W.mixNarrow(pool, w => w.word, 3) : pool;
@@ -40,9 +40,15 @@
     if (done) return;
     if (c === word.word[at]) {
       slots.children[at].textContent = c; slots.children[at].setAttribute('aria-label', 'letter ' + (at + 1) + ' ' + c);
-      b.classList.add('used'); b.disabled = true; at++;
+      b.classList.add('used'); b.classList.remove('hint'); b.disabled = true; at++; misses = 0;
       if (at === word.word.length) { done = true; msg.textContent = word.word + '! ' + W.pick(CONTENT.praise); play(['word-' + word.word]); }
-    } else { b.classList.add('heard-it'); setTimeout(() => b.classList.remove('heard-it'), 600); msg.textContent = 'Listen to the word. Try another letter.'; play(['word-' + word.word]); }
+    } else {
+      b.classList.add('heard-it'); setTimeout(() => b.classList.remove('heard-it'), 600); msg.textContent = 'Listen to the word. Try another letter.'; play(['word-' + word.word]);
+      misses++;                                   // never stuck: after two misses the right letter glows, after four it drops in by itself
+      const right = Array.prototype.find.call(tray.children, x => !x.disabled && x.textContent === word.word[at]);
+      if (right && misses >= 2) right.classList.add('hint');
+      if (right && misses >= 4) { msg.textContent = 'Here it is.'; put(right, word.word[at]); }
+    }
   }
   W.reveal = W.reveal || {};
   W.reveal.write = () => {

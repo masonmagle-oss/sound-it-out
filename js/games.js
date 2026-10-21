@@ -165,6 +165,8 @@
     if (slot < 0) return;
     spFill[slot] = { u: t.u, tile: i }; t.used = true;
     spRender();
+    // all sounds placed: check it by itself after a beat (taking a sound back out cancels it)
+    if (spFill.every(x => x)) setTimeout(() => { if (!spDone && spFill.every(x => x)) spShow(); }, 900);
   }
   function spTake(i) {
     if (spDone || !spFill[i]) return;
@@ -184,7 +186,7 @@
       if (!ok) { b.textContent = U.text(w.units[i]); b.setAttribute('aria-label', 'sound ' + (i + 1) + ' is really ' + U.text(w.units[i])); }
     });
     spMsg.textContent = all ? 'You spelled ' + w.word + '! ' + W.pick(CONTENT.praise)
-      : 'Good try! Here is how ' + w.word + ' is really spelled. The yellow ones changed. ' + W.pick(CONTENT.praise);
+      : 'Good try! This is how ' + w.word + ' is spelled. ' + W.pick(CONTENT.praise);
     $('spCheck').disabled = true;
     playSeq(w.units.map(U.key).concat('word-' + w.word));
   }
@@ -360,11 +362,12 @@
       });
       box.appendChild(row);
     });
-    window.scrollTo(0, 0);
+    $('sLines').hidden = false; window.scrollTo(0, 0);
   }
   function litLine(n) { Array.prototype.forEach.call($('sLines').children, (r, j) => r.classList.toggle('lit', j === n)); }
   $('sPlay').addEventListener('click', async () => {
     if (!cur) return;
+    $('sLines').hidden = false; $('sQuiz').hidden = true;
     const my = ++stoken;
     for (let n = 0; n < cur.lines.length; n++) {
       if (my !== stoken) return;
@@ -380,7 +383,7 @@
     if (!cur || !cur.q || !cur.q.length) return;
     stoken++;
     const x = cur.q[0], box = $('sPics');
-    $('sQuiz').hidden = false; $('sAskText').textContent = x.ask; $('sQPraise').textContent = ''; box.innerHTML = '';
+    $('sLines').hidden = true; $('sQuiz').hidden = false; $('sAskText').textContent = x.ask; $('sQPraise').textContent = ''; box.innerHTML = '';
     let solved = false;
     W.shuffle(x.pics.map((p, i) => ({ p, i }))).forEach(o => {
       const b = document.createElement('button');

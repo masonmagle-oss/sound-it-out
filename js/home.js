@@ -17,6 +17,8 @@
 
   function setMore(open) {
     $('menu').hidden = !open;
+    $('screen-home').classList.toggle('more', open);   // the open list takes the whole screen
+    $('whoBtn').closest('.row').hidden = open;
     $('moreGamesBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
     $('moreGamesBtn').textContent = open ? 'Fewer games' : 'More games';
   }

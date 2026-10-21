@@ -14,7 +14,7 @@
     if (!sec) return;
     const btn = document.createElement('button');
     btn.type = 'button'; btn.className = 'btn ghost help-btn'; btn.hidden = true;
-    btn.textContent = '🔊 How to play';
+    btn.textContent = '🔊';   // an icon in the header corner: saves a whole row on a short phone
     btn.setAttribute('aria-label', 'Hear how to play this game');
     btn.addEventListener('click', () => { if (W.stopSound) W.stopSound(); W.playKey(key); });
     sec.insertBefore(btn, sec.firstChild);

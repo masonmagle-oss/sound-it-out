@@ -229,10 +229,11 @@
     cur = w; finished = false; lit.clear();
     tilesEl.className = 'tiles';
     tilesEl.innerHTML = '';
+    tilesEl.style.setProperty('--chars', w.units.reduce((n, u) => n + Math.max(1, unitText(u).length), 0));
     w.units.forEach((u, i) => {
       const b = document.createElement('button');
       const ut = unitText(u);
-      b.type = 'button'; b.className = 'tile'; b.textContent = ut; b.dataset.i = i;
+      b.type = 'button'; b.className = 'tile'; b.textContent = ut; b.dataset.i = i; b.style.flex = Math.max(1, ut.length) + ' 1 0';   // wider sounds get more room: the word always fits one row
       b.setAttribute('aria-label', unitKey(u) === '_' ? 'silent ' + ut : 'sound ' + ut);
       b.setAttribute('aria-pressed', 'false');
       tilesEl.appendChild(b);

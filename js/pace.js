@@ -91,5 +91,8 @@
     }).observe(box, { attributes: true, attributeFilter: ['class'], attributeOldValue: true, subtree: true });
   });
 
+  // the buttons that finish or move on stay pinned to the bottom of the screen, so a short phone never hides them
+  ['spCheck'].concat(Object.keys(NEXT)).forEach(id => { const r = $(id) && $(id).closest('.row'); if (r) r.classList.add('dock'); });
+
   W.pace = { isLocked: id => !!(state[id] && state[id].locked), STUCK_MS };
 })();

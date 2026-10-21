@@ -332,3 +332,65 @@
   @keyframes pressIn{from{opacity:0; transform:scale(1.18); letter-spacing:.22em}to{opacity:1; transform:none; letter-spacing:.08em}}
   .done-card{border-color:var(--ink); box-shadow:0 7px 0 var(--ink)}
   .pace-msg{background:var(--ink)}
+  /* action buttons (Next, Check) pinned to the bottom of the visible screen */
+  .dock{position:sticky; bottom:0; z-index:6; margin:0; padding:.75rem 0 max(.5rem, env(safe-area-inset-bottom));
+        background:linear-gradient(to bottom, rgba(243,238,226,0), var(--bg) 22%)}
+  .dchoice.hint{background:var(--wood-lit); box-shadow:0 4px 0 var(--ink), 0 0 0 5px var(--lit)}
+
+  /* ---------- Fit the screen: no scrolling on a short phone (sizes follow the visible height) ---------- */
+  #app{position:relative}
+  .help-btn{position:absolute; top:max(12px, env(safe-area-inset-top)); right:max(16px, env(safe-area-inset-right)); width:56px; min-width:56px; margin:0; padding:0; font-size:1.4rem; z-index:7}
+  .top{min-height:3.5rem; padding-right:3.6rem}
+  .hint{margin:.25rem 0; font-size:1.05rem}
+  .note{margin:.25rem 0; font-size:.9rem}
+  .praise{min-height:1.5rem; margin:.4rem 0 0; font-size:1.2rem}
+  .tiles{flex-wrap:nowrap; min-height:0; padding:.25rem 0; margin:.4rem 0}
+  .tile{flex:1 1 0; min-width:0; margin:4px; padding:0 .1rem; min-height:clamp(4.2rem,16dvh,6.5rem);
+        font-size:min(4.5rem, calc(84vw / (var(--chars,3) + .6)), 14dvh)}
+  .tiles.blend .tile{margin:4px 0}
+  .stage{height:clamp(5.5rem,22dvh,9.5rem); margin-top:.35rem}
+  .pic{font-size:clamp(3rem,12dvh,5.5rem); bottom:clamp(1.2rem,4dvh,1.7rem)}
+  .dchoices{gap:10px; margin:.5rem 0}
+  .dchoice{min-height:clamp(4.2rem,10dvh,5.5rem)}
+  .rtarget{min-height:clamp(4.5rem,13dvh,7rem); margin:.35rem 0}
+  .rtemo{font-size:clamp(2.8rem,9dvh,4rem)}
+  .rchoices{margin:.5rem 0}
+  .rchoice{min-height:clamp(5rem,13dvh,7rem)}
+  .spslots{margin:.4rem 0; min-height:0; gap:6px}
+  .spslot{min-height:clamp(3.8rem,10dvh,5.2rem)}
+  .chips{margin:.5rem 0; min-height:0; gap:8px}
+  .chip{min-height:3.6rem; font-size:clamp(1.6rem,8vw,2.2rem)}
+  .twrap{max-width:min(360px, 36dvh); margin:.25rem auto}
+  .tpair{margin:0}
+  .flash{min-height:clamp(7rem,24dvh,12rem); margin:.5rem 0}
+  .sline{gap:4px; padding:2px 6px; margin:3px 0}
+  .snum{min-width:48px; min-height:48px}
+  .sword{min-width:44px; min-height:48px; padding:0 .3rem; font-size:clamp(1.4rem,6.5vw,2rem)}
+  .stitle{margin:.25rem 0; font-size:1.3rem}
+  .row{margin:.6rem 0}
+  /* the open game list: three small cards across, the Play button steps aside */
+  #screen-home.more .play-btn{display:none}
+  .menu{grid-template-columns:repeat(3,1fr); gap:8px; margin-top:.5rem}
+  .menu-card{min-height:5.2rem; padding:.35rem .2rem; gap:.15rem}
+  .menu-card .big{font-size:2.1rem}
+  .menu-card strong{font-size:.9rem; line-height:1.15}
+
+  #screen-spell .dchoice{min-height:clamp(3.6rem,9dvh,5rem)}
+  #screen-spell #spPic{min-height:clamp(4rem,11dvh,6rem)}
+  .wslots{margin:.4rem 0}
+  .wslot{min-height:3rem; font-size:2rem}
+  .bigword{margin:.3rem auto; font-size:2.2rem}
+  .twrap{max-width:min(360px, 33dvh)}
+  #screen-stories .row .btn{flex:1 1 0; min-width:0; padding:0 .3rem; font-size:.95rem}
+  .snum{min-width:44px; min-height:44px; font-size:1.05rem}
+  .sword{font-size:clamp(1.3rem,6vw,1.8rem)}
+  .menu-card{min-height:4.6rem}
+  .menu-card .big{font-size:1.9rem}
+
+  #screen-home.more .foot{display:none}
+  .dock .btn{flex:1 1 0; min-width:0; padding:0 .4rem; font-size:1rem}
+  #spTray .dchoice{min-width:4.4rem; padding:0 .5rem}
+  #wTray .dchoice{min-width:3.6rem; padding:0 .4rem; min-height:clamp(3.4rem,9dvh,4.5rem)}
+  #wTray{gap:8px}
+  #tPraise,#sQPraise,#cPraise,#pPraise,#vPraise,#wMsg,#spMsg,#dPraise{min-height:2.3rem}   /* room for two lines, so the praise never pushes the game around under a finger */
+  .twrap{max-width:min(360px, 31dvh)}

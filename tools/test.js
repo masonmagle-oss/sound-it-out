@@ -62,7 +62,7 @@ const fs = require('fs');
   const writeOk = wlen >= 2 && wFilled.length === wlen && (await p.textContent('#wMsg')).indexOf(wFilled) === 0;
   console.log((writeOk ? 'ok   ' : 'FAIL ') + 'write it: wrong letters do not stick, the word completes'); if (!writeOk) errs.push('write: ' + wlen + ' ' + wFilled);
   await p.goto(url);
-  await p.click('#moreGamesBtn'); await p.click('#grownBtn'); await p.click('[data-go="place"]'); await p.waitForTimeout(300);
+  await p.click('#grownBtn'); await p.click('[data-go="place"]'); await p.waitForTimeout(300);
   for (let g = 0; g < 40 && !(await p.locator('#plDone').isVisible()); g++) {
     const wd = await p.textContent('#plWord');
     const em = await p.evaluate(x => WordPlay.CONTENT.words.find(w => w.word === x && !w.sight).emoji, wd);
@@ -107,6 +107,28 @@ const fs = require('fs');
     capsOk = capsOk && n === 3 && /same letter/.test(await p.textContent('#cPraise')) && (m === 'lower' ? shown === shown.toUpperCase() : shown === shown.toLowerCase());
   }
   console.log((capsOk ? 'ok   ' : 'FAIL ') + 'big and little letters'); if (!capsOk) errs.push('caps');
+  // A phone with Safari's bars showing is only about 664px tall: Next and Check must still be reachable, and Spell it must check itself
+  {
+    const phone = await b.newContext({ ...require('playwright').devices['iPhone 13'], viewport: { width: 390, height: 664 } });
+    const q2 = await phone.newPage();
+    await q2.addInitScript(() => { window.__AUTO_KID = 'p1'; });
+    const reach = {};
+    for (const [g, ids] of Object.entries({ sound: ['nextBtn'], read: ['rNext'], rhyme: ['rhNext'], match: ['mNext'], detective: ['dNext'], spell: ['spCheck', 'spNext'], silly: ['syNext'], trace: ['tNext'], vocab: ['vNext'], write: ['wNext'], parts: ['pNext'], caps: ['cNext'] })) {
+      await q2.goto(url); await q2.tap('#moreGamesBtn'); await q2.tap('[data-go="' + g + '"]'); await q2.waitForTimeout(500);
+      const low = await q2.evaluate(ids => ids.filter(id => document.getElementById(id).getBoundingClientRect().bottom > innerHeight + 1), ids);
+      const over = await q2.evaluate(() => Math.max(0, document.documentElement.scrollHeight - innerHeight));   // no scrolling at all on a normal phone
+      if (low.length || over > 2) reach[g] = low.concat(['scrolls ' + over + 'px']);
+    }
+    const reachOk = Object.keys(reach).length === 0;
+    console.log((reachOk ? 'ok   ' : 'FAIL ') + 'every game fits a short phone with no scrolling and Next stays reachable'); if (!reachOk) errs.push('below the fold: ' + JSON.stringify(reach));
+    await q2.goto(url); await q2.tap('#moreGamesBtn'); await q2.tap('[data-go="spell"]'); await q2.waitForTimeout(500);
+    const nslots = await q2.locator('#spSlots .spslot').count();
+    for (let i = 0; i < 6 && (await q2.locator('#spSlots .spslot.full').count()) < nslots; i++) { await q2.locator('#spTray .dchoice').nth(i).tap(); await q2.waitForTimeout(100); }
+    await q2.waitForTimeout(1500);
+    const auto = (await q2.textContent('#spMsg')).length > 0;
+    console.log((auto ? 'ok   ' : 'FAIL ') + 'spell it checks itself once every sound is placed'); if (!auto) errs.push('spell it did not auto-check');
+    await phone.close();
+  }
   // Pacing: Next is locked until the round is FINISHED. A wrong answer does not unlock it, a locked tap does nothing,
   // and it re-locks after use. A stuck round reveals its answer (no praise) and then unlocks.
   await p.goto(url);
@@ -226,14 +248,14 @@ const fs = require('fs');
     return { n: cs.length, cols: new Set(cs.map(c => Math.round(c.getBoundingClientRect().left))).size, minH: Math.min.apply(null, cs.map(c => c.getBoundingClientRect().height)),
       subHidden: [...document.querySelectorAll('.menu-card .sub')].every(x => getComputedStyle(x).display === 'none'), overflow: document.documentElement.scrollWidth > innerWidth };
   });
-  const okGrid = playPic === '\u{1F446}' && grid.cols === 2 && grid.minH >= 56 && grid.subHidden && grid.n >= 10 && !grid.overflow;
+  const okGrid = playPic === '\u{1F446}' && grid.cols === 3 && grid.minH >= 56 && grid.subHidden && grid.n >= 10 && !grid.overflow;
   console.log((okGrid ? 'ok   ' : 'FAIL ') + 'more games is a picture grid and Play shows its first game'); if (!okGrid) errs.push('grid: ' + playPic + ' ' + JSON.stringify(grid));
   // Trace letters: strokes must be followed in order and direction; being a little off the line is fine.
   await p.goto(url);
   await p.waitForTimeout(200);
   await p.evaluate(() => WordPlay.go('trace'));
   await p.waitForTimeout(300);
-  const box = await p.locator('#tInk').boundingBox();
+  let box = await p.locator('#tInk').boundingBox();
   const toPx = pt => [box.x + pt[0] * box.width / 100, box.y + pt[1] * box.height / 100];
   const drag = async (pts, wob) => {
     const pp = pts.map(pt => [pt[0] + (wob || 0), pt[1] + (wob || 0)]);
@@ -252,6 +274,7 @@ const fs = require('fs');
   await p.waitForTimeout(1200);
   const mid = await p.evaluate(() => WordPlay.trace.state());
   const st1 = await p.evaluate(() => WordPlay.trace.strokes().map(x => x.P));
+  box = await p.locator('#tInk').boundingBox();
   for (const sk of st1) await drag(sk, -3);
   await p.waitForTimeout(300);
   const fin = await p.evaluate(() => ({ s: WordPlay.trace.state(), praise: document.getElementById('tPraise').textContent }));
