@@ -8,4 +8,4 @@ module.exports = [
  ['Doubling before -ing / -ed (G2)', 7, '🏃', 'running', ['r', 'u', 'nn:n', 'ing']], [, 7, '🏊', 'swimming', ['s', 'w', 'i', 'mm:m', 'ing']], [, 7, '👏', 'clapping', ['c', 'l', 'a', 'pp:p', 'ing']], [, 7, '⛏️', 'digging', ['d', 'i', 'gg:g', 'ing']],
  ['Word endings -ful / -less / -ly / -ness (G2)  (no picture; new activity or Read a sentence)', 7, null, 'helpful', ['help:word-help', 'ful:ful']], [, 7, null, 'careful', ['care:word-care', 'ful:ful']], [, 7, null, 'hopeless', ['hope:word-hope', 'less:less']], [, 7, null, 'sadly', ['sad:word-sad', 'ly:ly']], [, 7, null, 'kindness', ['kind:word-kind', 'ness:ness']],
  ['Contractions (G1-2)  (no picture)', 7, null, "don't", ["don't"]], [, 7, null, "can't", ["can't"]], [, 7, null, "I'm", ["I'm"]], [, 7, null, "it's", ["it's"]], [, 7, null, "isn't", ["isn't"]],
-];
+].concat(require('./new-words-more.js'));

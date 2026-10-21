@@ -23,7 +23,8 @@
       if (solved) return;
       if (!ok) { b.classList.add('heard-it'); praise.textContent = 'Listen. Try another one.'; play([clip]); return; }
       solved = true; b.classList.add('right');
-      if (mode === 'end') { wordEl.textContent = item.word; praise.textContent = item.base + ' + ' + item.end + ' = ' + item.word + '. ' + W.pick(CONTENT.praise); play([wk(item.base), item.end, wk(item.word)]); }
+      if (mode === 'pre') { wordEl.textContent = item.word; praise.textContent = item.pre + ' + ' + item.base + ' = ' + item.word + '. ' + W.pick(CONTENT.praise); play([item.pre, wk(item.base), wk(item.word)]); }
+      else if (mode === 'end') { wordEl.textContent = item.word; praise.textContent = item.base + ' + ' + item.end + ' = ' + item.word + '. ' + W.pick(CONTENT.praise); play([wk(item.base), item.end, wk(item.word)]); }
       else { wordEl.textContent = item.c; praise.textContent = item.a + ' ' + item.b + ' = ' + item.c + '. ' + W.pick(CONTENT.praise); play([wk(item.a), wk(item.b), wk(item.c)]); }
     });
     if (ok) rightBtn = b;
@@ -31,11 +32,17 @@
   }
   function round() {
     solved = false; rightBtn = null; praise.textContent = ''; box.innerHTML = '';
-    const list = mode === 'end' ? D.endings : D.contractions;
+    const list = mode === 'end' ? D.endings : mode === 'pre' ? D.prefixed : D.contractions;
     let t = 0; item = W.pick(list);
     while (t++ < 8 && list.length > 1 && item === last) item = W.pick(list);
     last = item;
-    if (mode === 'end') {
+    if (mode === 'pre') {
+      $('pPrompt').textContent = 'Listen. Which beginning makes the word?';
+      wordEl.textContent = '? + ' + item.base; wordEl.setAttribute('aria-label', 'what plus ' + item.base);
+      const others = W.shuffle(D.prefixes.filter(e => e !== item.pre)).slice(0, 2);
+      W.shuffle([item.pre].concat(others)).forEach(e => choice(e, e, e === item.pre));
+      play([wk(item.word)]);
+    } else if (mode === 'end') {
       $('pPrompt').textContent = 'Listen. Which ending makes the word?';
       wordEl.textContent = item.base + ' + ?'; wordEl.setAttribute('aria-label', item.base + ' plus what');
       const others = W.shuffle(D.ends.filter(e => e !== item.end)).slice(0, 2);
@@ -51,7 +58,7 @@
   }
   W.reveal = W.reveal || {};
   W.reveal.parts = () => { if (solved || !rightBtn) return; solved = true; rightBtn.classList.add('right'); praise.textContent = 'Look: this one.'; };
-  wordEl.addEventListener('click', () => { if (item) play(mode === 'end' ? [wk(item.word)] : [wk(item.a), wk(item.b)]); });
+  wordEl.addEventListener('click', () => { if (item) play(mode !== 'con' ? [wk(item.word)] : [wk(item.a), wk(item.b)]); });
   $('pNext').addEventListener('click', round);
   Array.prototype.forEach.call(document.querySelectorAll('[data-pmode]'), b => b.addEventListener('click', () => {
     mode = b.getAttribute('data-pmode'); last = null;

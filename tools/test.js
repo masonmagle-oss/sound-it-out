@@ -79,8 +79,8 @@ const fs = require('fs');
   await p.goto(url);
   await p.click('#moreGamesBtn'); await p.click('[data-go="parts"]'); await p.waitForTimeout(300);
   let wpOk = true;
-  for (const m of ['end', 'con']) {
-    if (m === 'con') { await p.click('[data-pmode="con"]'); await p.waitForTimeout(300); }
+  for (const m of ['end', 'pre', 'con']) {
+    if (m !== 'end') { await p.click('[data-pmode="' + m + '"]'); await p.waitForTimeout(300); }
     const pc = p.locator('#pChoices .dchoice');
     const n = await pc.count();
     for (let i = 0; i < n && !/=/.test(await p.textContent('#pPraise')); i++) { await pc.nth(i).click({ force: true }); await p.waitForTimeout(1300); }   // a wrong tap makes the choices rest briefly

@@ -8,8 +8,13 @@ const have = new Set(window.WORDPLAY_CONTENT.words.map(w => w.word));
 const clips = new Set(fs.readdirSync(path.join(root, 'sounds')).map(f => f.replace(/\.mp3$/, '')));
 const key = u => u.indexOf(':') < 0 ? u : u.slice(u.indexOf(':') + 1);
 const lines = [], skipped = [];
-for (const [, level, emoji, word, units] of P) {
-  if (have.has(word)) continue;
+for (const [, level, emoji, word, units, how] of P) {
+  if (have.has(word) || how === 'part') continue;   // 'part' words are only used by the Word parts game
+  if (how === 'sight') {
+    if (!clips.has('word-' + word)) skipped.push(word + ' (waiting for word-' + word + ')');
+    else lines.push(`    { word: '${word}', units: [${word.split('').map(c => "'" + c + "'").join(', ')}], emoji: null, sight: true, level: ${level} },`);
+    continue;
+  }
   const needs = ['word-' + word].concat(units.map(key).filter(k => k !== '_'));
   const miss = needs.filter(k => !clips.has(k));
   if (!emoji || miss.length) { skipped.push(word + (miss.length ? ' (waiting for ' + miss.join(', ') + ')' : ' (no picture: needs its own activity)')); continue; }
