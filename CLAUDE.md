@@ -8,7 +8,7 @@ Read `docs/ROADMAP.md` for where we are going and `docs/WORKFLOWS.md` for how to
 
 ## Hard rules (never break)
 - No frameworks, no build step, no backend, no accounts, no analytics, no external scripts, fonts or images.
-- Everything works offline once loaded (`sw.js` saves the whole app on the device; see "Offline" below). System fonts only.
+- Everything works offline once loaded (`sw.js` saves the whole app on the device; see "Offline" below). System fonts only, with one exception: the Andika letter font (SIL Open Font License, two small subsets in `fonts/`, licence in `fonts/OFL.txt`) for letters and words, because it draws the single-storey a and g that children learn to write. It came with the letterpress theme (chosen by Mason, 2026-10-20). Buttons and grown-up text stay in the phone's own font.
 - Praise is for effort only. No timers, no scores, no streaks, no fail states, no loss framing.
   (Short pacing waits, like Next unlocking after a round is tried, are fine. Never show a countdown to the child.)
 - Never fake phonics with text-to-speech. Sounds are the recorded files in `sounds/`.
@@ -44,6 +44,9 @@ Rule changes: these two lists were agreed with Mason on 2026-10-19. Change them 
 The grown-ups page should say plainly which rewards the app gives and when (a "reward audit" line).
 A wrong answer is not failure: show the right answer and move on. One miss is not proof of a gap (the child
 sometimes answers silly on purpose), so treat a sound as wobbly only after repeated misses (2 or more of its last 5 tries; a wrong tap within 1.2 s of the round starting is ignored).
+
+## Look and theme ("letterpress")
+Wooden type blocks on paper, ink outlines, a solid ledge under everything you press (it drops when pressed), a cobalt accent, and a stamp and a two-ink printed word when a word is blended. No mascot, no faces. Tokens are the CSS variables at the top of `css/style.css` (`--bg` paper, `--ink`, `--accent`, `--wood*`, `--stamp`, `--letters`); the theme layer is the last block of that file. Pictures: emoji, or drawn SVGs from `js/pics.js` (`svg:name`, class `dpic`). Preview pages for other directions are in `docs/design/` (felt and folk, sound garden were not chosen). Never signal right or wrong by colour alone: keep the shape, motion and sound cues.
 
 ## How the app is built
 - `index.html` holds the markup only. `css/style.css` is the styling. Scripts load in this order (plain `<script src>`,

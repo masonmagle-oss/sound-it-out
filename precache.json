@@ -1,10 +1,10 @@
 {
- "version": "3f61288ea9",
+ "version": "136626dc0e",
  "files": {
-  "index.html": "c3dfd26b22",
-  "manifest.webmanifest": "606961f5a1",
-  "css/style.css": "c246f8b8a9",
-  "js/app.js": "69581a3648",
+  "index.html": "8f11efd533",
+  "manifest.webmanifest": "6fd7812c0c",
+  "css/style.css": "a40b90beee",
+  "js/app.js": "b873f768dc",
   "js/audio.js": "2e68cb19cb",
   "js/caps.js": "9f38d40703",
   "js/content.js": "300ebd7465",
@@ -18,7 +18,7 @@
   "js/pace.js": "53ec1af3a0",
   "js/parts-data.js": "ec8b318149",
   "js/parts.js": "9c00596d30",
-  "js/pics.js": "3408ab516f",
+  "js/pics.js": "1f9b480391",
   "js/place.js": "36b122e83b",
   "js/read.js": "dd8e6b5f6a",
   "js/session.js": "2280093946",
@@ -1137,8 +1137,11 @@
   "sounds/y.mp3": "385d71861c",
   "sounds/z.mp3": "15c5b0aeac",
   "sounds/zhun.mp3": "037d902255",
-  "icons/icon-180.png": "fdf31790c2",
-  "icons/icon-192.png": "467b809d4b",
-  "icons/icon-512.png": "01107e7c09"
+  "icons/icon-180.png": "39dcdaa4d6",
+  "icons/icon-192.png": "3e912aab56",
+  "icons/icon-512.png": "3d0d7adf4e",
+  "fonts/OFL.txt": "7fae3f01d9",
+  "fonts/andika-400.woff2": "33b47c2f78",
+  "fonts/andika-700.woff2": "4b0d7b967b"
  }
 }

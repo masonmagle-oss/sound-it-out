@@ -5,7 +5,7 @@ const { chromium } = require('playwright');
 const http = require('http'), fs = require('fs'), os = require('os'), path = require('path'), { execFileSync } = require('child_process');
 const root = path.resolve(__dirname, '..');
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'wp-offline-'));
-for (const f of ['index.html', 'manifest.webmanifest', 'sw.js', 'precache.json', 'css', 'js', 'sounds', 'icons', 'tools/make-precache.js'])
+for (const f of ['index.html', 'manifest.webmanifest', 'sw.js', 'precache.json', 'css', 'js', 'sounds', 'icons', 'fonts', 'tools/make-precache.js'])
   fs.cpSync(path.join(root, f), path.join(tmp, f), { recursive: true });
 const types = { html: 'text/html', js: 'text/javascript', css: 'text/css', json: 'application/json', webmanifest: 'application/manifest+json', png: 'image/png', mp3: 'audio/mpeg' };
 const log = [];

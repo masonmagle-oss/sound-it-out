@@ -5,7 +5,9 @@ root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 html = open(os.path.join(root, 'index.html'), encoding='utf-8').read()
 def read(rel): return open(os.path.join(root, rel), encoding='utf-8').read().rstrip('\n')
 # Inline the split-out css and js so the phone copy is one self-contained file.
+def font(m): return 'url(data:font/woff2;base64,' + base64.b64encode(open(os.path.join(root, 'fonts', os.path.basename(m.group(1))), 'rb').read()).decode() + ')'
 html = re.sub(r'<link rel="stylesheet" href="([^"]+)">', lambda m: '<style>\n' + read(m.group(1)) + '\n</style>', html)
+html = re.sub(r"url\(\.\./fonts/([^)]+)\)", font, html)   # the letter font, embedded
 html = re.sub(r'<script src="([^"]+)"></script>', lambda m: '<script>\n' + read(m.group(1)) + '\n</script>', html)
 snd = os.path.join(root, 'sounds')
 data = {}

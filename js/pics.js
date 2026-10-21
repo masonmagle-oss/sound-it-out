@@ -3,7 +3,7 @@
 (function () {
   'use strict';
   const L = '#24304a';                       // outline colour: the app's ink
-  const s = inner => '<svg class="pic" viewBox="0 0 100 100" aria-hidden="true" focusable="false" stroke="' + L + '" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">' + inner + '</svg>';
+  const s = inner => '<svg class="dpic" viewBox="0 0 100 100" aria-hidden="true" focusable="false" stroke="' + L + '" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">' + inner + '</svg>';
   window.WORDPLAY_PICS = {
     chip: s('<path d="M10 56C8 30 38 14 62 19C86 25 94 50 81 69C68 88 34 91 19 77C13 71 10 64 10 56Z" fill="#f3c548"/><path d="M22 52Q36 40 50 52T78 50" fill="none"/><circle cx="34" cy="68" r="3" fill="#b8801b" stroke="none"/><circle cx="62" cy="34" r="3" fill="#b8801b" stroke="none"/><circle cx="68" cy="66" r="3" fill="#b8801b" stroke="none"/><circle cx="44" cy="30" r="2.5" fill="#b8801b" stroke="none"/>'),
     cot: s('<rect x="8" y="42" width="84" height="14" rx="6" fill="#7fb3e6"/><rect x="10" y="33" width="24" height="10" rx="5" fill="#fff"/><path d="M20 56L34 84M34 56L20 84M66 56L80 84M80 56L66 84" fill="none"/>'),

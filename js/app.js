@@ -270,6 +270,7 @@
 
   function showPicture(w) {
     if (w.ground) stageEl.setAttribute('data-ground', w.ground);
+    stageEl.setAttribute('data-word', w.word);   // css prints it on the page
     window.WordPlay.pic(emoEl, w.emoji);
     emoEl.className = 'emo anim-' + (w.anim || 'pop');
     void emoEl.offsetWidth;                // restart animation

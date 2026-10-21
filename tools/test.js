@@ -92,7 +92,7 @@ const fs = require('fs');
   const svgOk = await p.evaluate(() => {
     const toks = WordPlay.CONTENT.words.map(w => w.emoji).filter(e => typeof e === 'string' && e.indexOf('svg:') === 0);
     const d = document.createElement('div'); document.body.appendChild(d);
-    return toks.length >= 10 && toks.every(t => { WordPlay.pic(d, t); return !!d.querySelector('svg.pic'); });
+    return toks.length >= 10 && toks.every(t => { WordPlay.pic(d, t); return !!d.querySelector('svg.dpic'); });
   });
   console.log((svgOk ? 'ok   ' : 'FAIL ') + 'drawn pictures all render'); if (!svgOk) errs.push('drawn pictures');
   // Big and little letters: a big letter has three little choices and the right one is praised

@@ -1,6 +1,10 @@
+@font-face{font-family:'Andika'; src:url(../fonts/andika-400.woff2) format('woff2'); font-weight:400; font-style:normal; font-display:swap}
+@font-face{font-family:'Andika'; src:url(../fonts/andika-700.woff2) format('woff2'); font-weight:700; font-style:normal; font-display:swap}
   :root{
-    --bg:#f3f7fb; --ink:#1d2b46; --ink-soft:#44546f; --card:#ffffff;
-    --accent:#2a62c0; --lit:#ffd447; --lit-edge:#7a5a00; --good:#2e7d4f;
+    --bg:#f3eee2; --ink:#1d2433; --ink-soft:#4a5160; --card:#fffdf7; --line:#d8cfba;
+    --accent:#2457d6; --lit:#ffd23f; --lit-edge:#1d2433; --good:#1f7a4d;
+    --wood:#d9b07a; --wood-lit:#e8c796; --wood-edge:#8a6a3c; --stamp:#e63b2e;
+    --letters:"Andika","Chalkboard SE","Comic Sans MS",ui-rounded,system-ui,sans-serif;
   }
   *{box-sizing:border-box}
   [hidden]{display:none !important}
@@ -25,7 +29,7 @@
   .btn{min-height:max(56px,3.5rem); min-width:56px; padding:0 1.25rem; border-radius:1rem;
        border:3px solid var(--accent); background:var(--accent); color:#fff;
        font:inherit; font-weight:700; font-size:1.1rem; cursor:pointer; touch-action:manipulation}
-  .btn.ghost{background:#fff; color:var(--accent)}
+  .btn.ghost{background:var(--card); color:var(--accent)}
   .btn:focus-visible, .menu-card:focus-visible, .switch:focus-visible, .tile:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
   .btn:active{transform:scale(.98)}
   .row{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:1rem 0}
@@ -56,7 +60,7 @@
          touch-action:none; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none}
   .tile{margin:5px; min-width:5rem; min-height:6.5rem; padding:0 1rem;
         display:flex; align-items:center; justify-content:center;
-        border:4px solid var(--ink); border-radius:1.25rem; background:#fff; color:var(--ink);
+        border:4px solid var(--ink); border-radius:1.25rem; background:var(--card); color:var(--ink);
         font:inherit; font-size:clamp(3rem,17vw,4.5rem); font-weight:800; line-height:1;
         cursor:pointer; touch-action:none; -webkit-user-select:none; user-select:none;
         transition:margin .7s ease, background-color .25s ease, box-shadow .25s ease, border-radius .5s ease}
@@ -73,7 +77,7 @@
 
   /* ---------- Sound it out: picture stage ---------- */
   .stage{position:relative; height:9.5rem; margin-top:.5rem; overflow:hidden; border-radius:1.25rem;
-         border:3px solid #cfe0f3; background:linear-gradient(#dff1ff,#f3faff)}
+         border:3px solid var(--line); background:linear-gradient(#dff1ff,#f3faff)}
   .ground{position:absolute; left:0; right:0; bottom:0; height:2.2rem; background:#bfe3b0; z-index:2}
   .stage[data-ground="water"] .ground{background:#8cc7f0}
   .pic{position:absolute; left:0; right:0; bottom:1.7rem; text-align:center; font-size:5.5rem; line-height:1; z-index:1}
@@ -106,26 +110,26 @@
 
   /* ---------- Sight words ---------- */
   .flash{min-height:12rem; display:grid; place-items:center; margin:1rem 0; padding:1rem;
-         background:#fff; border:4px solid var(--ink); border-radius:1.5rem}
+         background:var(--card); border:4px solid var(--ink); border-radius:1.5rem}
   .sightword{font-size:clamp(4rem,24vw,7rem); font-weight:800; line-height:1; letter-spacing:.02em}
   .ch{display:inline-block; opacity:0; animation:letterIn .6s ease forwards; animation-delay:calc(var(--i) * .45s)}
   @keyframes letterIn{from{opacity:0; transform:translateY(.4em) scale(.8)}to{opacity:1; transform:none}}
-  .grownbar{margin-top:1.25rem; padding:.75rem 1rem 0; border-top:3px dashed #9db4d3}
+  .grownbar{margin-top:1.25rem; padding:.75rem 1rem 0; border-top:3px dashed var(--line)}
   .grownbar p{margin:0; text-align:center; font-size:1rem; color:var(--ink-soft)}
   .done{text-align:center; margin:1rem 0}
   .done p{font-size:1.5rem; font-weight:800}
 
   /* ---------- Grown-ups ---------- */
-  .panel{background:#fff; border:3px solid #cfe0f3; border-radius:1.25rem; padding:1rem 1.25rem; margin:1rem 0}
+  .panel{background:var(--card); border:3px solid var(--line); border-radius:1.25rem; padding:1rem 1.25rem; margin:1rem 0}
   .panel h2{margin:.1rem 0 .5rem; font-size:1.2rem}
   .panel p{margin:.4rem 0; line-height:1.45}
   .panel ul{margin:.4rem 0; padding-left:1.2rem; line-height:1.5}
   .switch{display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%; min-height:3.5rem;
-          padding:.5rem 1rem; background:#fff; color:var(--ink); border:3px solid var(--ink); border-radius:1rem;
+          padding:.5rem 1rem; background:var(--card); color:var(--ink); border:3px solid var(--ink); border-radius:1rem;
           font:inherit; font-size:1.05rem; font-weight:700; text-align:left; cursor:pointer; touch-action:manipulation; margin:.5rem 0}
   .switch .state{margin-left:auto; font-size:.95rem}
   .switch .track{flex:none; width:3.5rem; height:2rem; border-radius:1rem; background:#8a97ad; position:relative; transition:background .2s}
-  .switch .track::after{content:""; position:absolute; top:.2rem; left:.2rem; width:1.6rem; height:1.6rem; border-radius:50%; background:#fff; transition:transform .2s}
+  .switch .track::after{content:""; position:absolute; top:.2rem; left:.2rem; width:1.6rem; height:1.6rem; border-radius:50%; background:var(--card); transition:transform .2s}
   .switch.on .track{background:var(--good)}
   .switch.on .track::after{transform:translateX(1.5rem)}
   .small{font-size:1rem; color:var(--ink-soft)}
@@ -133,33 +137,33 @@
 
   /* ---------- Sound detective / Trace / Stories ---------- */
   .dchoices{display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin:1rem 0}
-  .dchoice{min-width:5.5rem; min-height:5.5rem; padding:0 1.1rem; background:#fff; color:var(--ink); border:4px solid var(--ink); border-radius:1.25rem;
+  .dchoice{min-width:5.5rem; min-height:5.5rem; padding:0 1.1rem; background:var(--card); color:var(--ink); border:4px solid var(--ink); border-radius:1.25rem;
            font:inherit; font-size:clamp(2.4rem,13vw,3.4rem); font-weight:800; cursor:pointer; touch-action:manipulation}
   .dchoice.right{background:#d8f1e2; border-color:var(--good)}
-  .dchoice.heard-it{background:#fff3c4}
+  .dchoice.heard-it{background:var(--card)3c4}
   .dchoice:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
-  .twrap{position:relative; margin:.5rem auto; width:100%; max-width:360px; aspect-ratio:1/1; background:#fff; border:4px solid var(--ink); border-radius:1.25rem; overflow:hidden}
+  .twrap{position:relative; margin:.5rem auto; width:100%; max-width:360px; aspect-ratio:1/1; background:var(--card); border:4px solid var(--ink); border-radius:1.25rem; overflow:hidden}
   .twrap canvas{position:absolute; inset:0; width:100%; height:100%}
   #tInk{touch-action:none; -webkit-user-select:none; user-select:none}
   .tpair{display:flex; justify-content:center; gap:1.5rem; margin:.2rem 0}
-  .tl{font-size:2.6rem; font-weight:800; line-height:1; padding:.1rem .9rem; border-radius:1rem; border:3px solid #cfe0f3; color:var(--ink-soft)}
-  .tl.on{border-color:var(--ink); color:var(--ink); background:#fff}
+  .tl{font-size:2.6rem; font-weight:800; line-height:1; padding:.1rem .9rem; border-radius:1rem; border:3px solid var(--line); color:var(--ink-soft)}
+  .tl.on{border-color:var(--ink); color:var(--ink); background:var(--card)}
   .tl.done{border-color:#1f9d55; color:#1f9d55}
   .stitle{text-align:center; font-size:1.5rem; margin:.5rem 0}
   .sline{display:flex; align-items:center; flex-wrap:wrap; gap:6px; padding:8px; margin:8px 0; border:3px solid transparent; border-radius:1rem}
   .sline.lit{background:var(--lit); border-color:var(--lit-edge)}
-  .snum{min-width:56px; min-height:56px; border-radius:50%; border:3px solid var(--accent); background:#fff; color:var(--accent); font:inherit; font-weight:800; font-size:1.2rem; cursor:pointer; touch-action:manipulation}
+  .snum{min-width:56px; min-height:56px; border-radius:50%; border:3px solid var(--accent); background:var(--card); color:var(--accent); font:inherit; font-weight:800; font-size:1.2rem; cursor:pointer; touch-action:manipulation}
   .sword{min-height:56px; min-width:56px; padding:0 .6rem; border:0; background:transparent; color:var(--ink); font:inherit; font-size:clamp(1.7rem,8vw,2.3rem); font-weight:700; border-radius:.75rem; cursor:pointer; touch-action:manipulation}
   .sword:active{background:rgba(255,212,71,.5)}
   .sword:focus-visible,.snum:focus-visible{outline:4px solid var(--ink); outline-offset:2px}
 
   /* ---------- Spell it / Silly words ---------- */
   .spslots{display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin:.75rem 0; min-height:5.4rem}
-  .spslot{min-width:4.2rem; min-height:5.2rem; padding:0 .6rem; border:4px dashed var(--ink-soft); border-radius:1.1rem; background:#fff; color:var(--ink);
+  .spslot{min-width:4.2rem; min-height:5.2rem; padding:0 .6rem; border:4px dashed var(--ink-soft); border-radius:1.1rem; background:var(--card); color:var(--ink);
           font:inherit; font-size:clamp(2.2rem,11vw,3rem); font-weight:800; cursor:pointer; touch-action:manipulation}
   .spslot.full{border-style:solid; border-color:var(--ink)}
   .spslot.match{background:#d8f1e2; border-color:var(--good)}
-  .spslot.near{background:#fff3c4; border-color:var(--lit-edge)}
+  .spslot.near{background:var(--card)3c4; border-color:var(--lit-edge)}
   .spslot:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
   .dchoice.used{opacity:.35}
   .chip.blank{border-style:dashed; color:var(--ink-soft)}
@@ -173,7 +177,7 @@
   /* ---------- Say the word (speech, optional) ---------- */
   .chips{display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:1rem 0; min-height:5rem}
   .chip{display:flex; align-items:center; justify-content:center; min-width:4rem; min-height:4.25rem; padding:0 1rem;
-        background:#fff; border:4px solid var(--ink); border-radius:1.1rem;
+        background:var(--card); border:4px solid var(--ink); border-radius:1.1rem;
         font-size:clamp(1.9rem,9vw,2.6rem); font-weight:800; line-height:1;
         transition:background-color .25s ease, box-shadow .25s ease}
   .chip.lit{background:var(--lit); border-color:var(--lit-edge);
@@ -183,7 +187,7 @@
   .heard{min-height:1.6rem; margin:.25rem 0; text-align:center; font-size:1.05rem; color:var(--ink-soft); overflow-wrap:anywhere}
   .status{min-height:3.2rem; margin:.5rem 0; text-align:center; font-size:1.15rem; font-weight:700; line-height:1.35}
   .btn.on{background:var(--good); border-color:var(--good); color:#fff}
-  .dot{display:inline-block; width:.8rem; height:.8rem; margin-right:.5rem; border-radius:50%; background:#fff; animation:pulse 1.2s ease-in-out infinite}
+  .dot{display:inline-block; width:.8rem; height:.8rem; margin-right:.5rem; border-radius:50%; background:var(--card); animation:pulse 1.2s ease-in-out infinite}
   @keyframes pulse{0%,100%{transform:scale(.7); opacity:.6}50%{transform:scale(1.2); opacity:1}}
 
   .soundlist{display:flex; flex-wrap:wrap; gap:8px; margin:.5rem 0}
@@ -196,7 +200,7 @@
   .lgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(3.6rem,1fr)); gap:8px; margin:.75rem 0}
   .lgrid .chip{min-width:0; min-height:3.6rem; padding:0; font-size:1.7rem}
   .lcard{display:flex; flex-direction:column; align-items:center; gap:.25rem; margin:.5rem 0; padding:.75rem 1rem;
-         background:#fff; border:4px solid var(--ink); border-radius:1.5rem}
+         background:var(--card); border:4px solid var(--ink); border-radius:1.5rem}
   .lrow{display:flex; gap:1.25rem; justify-content:center; align-items:flex-end; flex-wrap:wrap; margin-top:.25rem}
   .lfig{margin:0; display:flex; flex-direction:column; align-items:center; gap:.2rem}
   .lfig figcaption{font-size:1.15rem; font-weight:700}
@@ -207,14 +211,14 @@
   .lpic{font-size:4.5rem; line-height:1}
   .lword{font-size:1.9rem; font-weight:800}
   .rtarget{display:flex; align-items:center; justify-content:center; gap:1rem; width:100%; min-height:7rem; margin:.5rem 0;
-           background:#fff; border:4px solid var(--ink); border-radius:1.5rem; color:var(--ink); font-family:inherit; cursor:pointer;
+           background:var(--card); border:4px solid var(--ink); border-radius:1.5rem; color:var(--ink); font-family:inherit; cursor:pointer;
            -webkit-tap-highlight-color:transparent}
   .rtemo{font-size:4rem; line-height:1}
   .rtword{font-size:2.4rem; font-weight:800}
   #mWordText{font-size:3rem; overflow-wrap:anywhere; padding:.4rem}
   .rchoices{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:1rem 0}
   .rchoice{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.25rem; min-height:7rem; padding:.5rem;
-           background:#fff; border:4px solid var(--ink); border-radius:1.25rem; color:var(--ink); font-family:inherit; cursor:pointer;
+           background:var(--card); border:4px solid var(--ink); border-radius:1.25rem; color:var(--ink); font-family:inherit; cursor:pointer;
            -webkit-tap-highlight-color:transparent; transition:background-color .25s ease, box-shadow .25s ease}
   .rchoice .rce{font-size:3rem; line-height:1}
   .rchoice .rcw{font-size:1.3rem; font-weight:800; min-height:1.5rem}
@@ -239,7 +243,7 @@
   .done-overlay{position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center;
     background:rgba(29,43,70,.55); padding:1.25rem}
   .done-overlay[hidden]{display:none}
-  .done-card{background:#fff; border:4px solid var(--accent); border-radius:1.5rem; padding:1.5rem 1.25rem;
+  .done-card{background:var(--card); border:4px solid var(--accent); border-radius:1.5rem; padding:1.5rem 1.25rem;
     max-width:24rem; width:100%; text-align:center}
   .done-card .big{font-size:4rem; line-height:1}
   .done-card h2{margin:.5rem 0; font-size:1.7rem}
@@ -265,11 +269,11 @@
   .who-name{font-size:2rem; font-weight:800; overflow-wrap:anywhere}
   .who-btn:active{transform:scale(.98)}
   .who-btn:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
-  .kidrow{border-top:2px solid #cfe0f3; padding:.75rem 0; display:grid; gap:.6rem}
-  .kidrow input{min-height:56px; font:inherit; font-size:1.1rem; padding:0 .8rem; border:3px solid #cfe0f3; border-radius:1rem; width:100%; box-sizing:border-box}
+  .kidrow{border-top:2px solid var(--line); padding:.75rem 0; display:grid; gap:.6rem}
+  .kidrow input{min-height:56px; font:inherit; font-size:1.1rem; padding:0 .8rem; border:3px solid var(--line); border-radius:1rem; width:100%; box-sizing:border-box}
   .kidrow .kidemoji{font-size:1.6rem; max-width:7rem}
   .kidpicks{display:flex; flex-wrap:wrap; gap:.4rem}
-  .kidpicks .pick{min-width:56px; min-height:56px; font-size:1.7rem; border-radius:1rem; border:3px solid #cfe0f3; background:#fff; cursor:pointer}
+  .kidpicks .pick{min-width:56px; min-height:56px; font-size:1.7rem; border-radius:1rem; border:3px solid var(--line); background:var(--card); cursor:pointer}
 
   /* Pacing: Next waits until the round has been tried */
   .pace-locked{opacity:.45}
@@ -284,5 +288,47 @@
   .wslot{min-width:3.2rem; min-height:3.6rem; border-bottom:5px solid var(--ink); text-align:center; font-size:2.4rem; font-weight:700}
   .dchoice .sub{display:block; font-size:1rem}
 
-  svg.pic{width:1em; height:1em; vertical-align:-.12em; overflow:visible}
+  svg.dpic{width:1em; height:1em; vertical-align:-.12em; overflow:visible}
   .dchoice.bigletter{font-size:3rem; font-weight:700}
+
+  /* ---------- Letterpress theme ---------- */
+  body{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .3  0 0 0 0 .25  0 0 0 0 .15  0 0 0 .05 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+  .tile,.sightword,.chip,.sword,.wslot,.bigword,.dchoice,.spslot,.lbig,.lword,.rtword,#mWordText,.rcw,.tl,.snum{font-family:var(--letters)}
+  .tile,.sightword,.chip,.sword,.dchoice,.spslot,.lbig,.lword,.rtword,.wslot{font-weight:700}
+  /* a solid ledge under everything you can press; pressing drops it */
+  .btn{border-color:var(--ink); box-shadow:0 5px 0 var(--ink)}
+  .btn:active{transform:translateY(4px); box-shadow:0 1px 0 var(--ink)}
+  .btn.on{border-color:var(--ink)}
+  .menu-card{border-width:3px; border-radius:1.1rem; box-shadow:0 5px 0 var(--ink)}
+  .menu-card:active{transform:translateY(4px); box-shadow:0 1px 0 var(--ink)}
+  .play-btn,.who-btn{border-radius:1.2rem; box-shadow:0 7px 0 var(--ink)}
+  .play-btn:active,.who-btn:active{transform:translateY(5px); box-shadow:0 2px 0 var(--ink)}
+  .dchoice,.rchoice,.rtarget,.chip,.spslot,.flash,.lcard,.twrap{border-width:3px; border-radius:.9rem}
+  .dchoice,.rchoice,.rtarget,.chip{box-shadow:0 4px 0 var(--ink)}
+  .dchoice:active,.rchoice:active{transform:translateY(3px); box-shadow:0 1px 0 var(--ink)}
+  .flash,.lcard{box-shadow:0 5px 0 var(--ink)}
+  /* Sound it out: wooden type blocks that lift when they speak */
+  .tile{border:3px solid var(--ink); border-radius:.6rem; background:var(--wood); color:var(--ink);
+        box-shadow:5px 7px 0 var(--wood-edge); text-shadow:-1px -1px 0 rgba(255,255,255,.4), 1px 1px 0 rgba(0,0,0,.18)}
+  .tile.lit{background:var(--wood-lit); border-color:var(--ink); transform:translateY(-8px);
+            box-shadow:5px 15px 0 var(--wood-edge), 0 0 0 5px var(--lit)}
+  .tile.wiggle{animation:none}
+  .tiles.blend .tile{border-radius:0; box-shadow:0 7px 0 var(--wood-edge)}
+  .tiles.blend .tile + .tile{margin-left:-3px}
+  .tiles.blend .tile:first-child{border-top-left-radius:.6rem; border-bottom-left-radius:.6rem}
+  .tiles.blend .tile:last-child{border-top-right-radius:.6rem; border-bottom-right-radius:.6rem}
+  .tiles.blend .tile:only-child{border-radius:.6rem}
+  .chip.lit,.rchoice.right{background:var(--wood-lit); border-color:var(--ink); box-shadow:0 4px 0 var(--ink), 0 0 0 5px var(--lit)}
+  .sline.lit{background:var(--wood-lit); border-color:var(--ink)}
+  /* the picture stage is a printed page: the word is pressed onto it in two inks, with a stamp */
+  .stage{border:3px solid var(--ink); border-radius:.6rem; background:var(--card); box-shadow:0 5px 0 var(--ink)}
+  .ground{background:#e6dcc4; border-top:3px solid var(--ink)}
+  .stage[data-ground="water"] .ground{background:#9ec9e6}
+  .stage.show::after{content:attr(data-word); position:absolute; left:0; right:0; bottom:.25rem; z-index:3; text-align:center;
+        font:700 1.6rem var(--letters); letter-spacing:.08em; color:var(--accent); text-shadow:2px 1px 0 rgba(230,59,46,.7);
+        animation:pressIn .5s ease both}
+  .stage.show::before{content:"\2713"; position:absolute; top:.5rem; right:.6rem; z-index:3; width:2.2rem; height:2.2rem;
+        border:3px solid var(--stamp); border-radius:50%; color:var(--stamp); font:700 1.3rem/1.85rem var(--letters); text-align:center; transform:rotate(-12deg)}
+  @keyframes pressIn{from{opacity:0; transform:scale(1.18); letter-spacing:.22em}to{opacity:1; transform:none; letter-spacing:.08em}}
+  .done-card{border-color:var(--ink); box-shadow:0 7px 0 var(--ink)}
+  .pace-msg{background:var(--ink)}

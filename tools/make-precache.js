@@ -4,7 +4,7 @@
 const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const root = path.resolve(__dirname, '..');
 const files = ['index.html', 'manifest.webmanifest'];
-for (const d of ['css', 'js', 'sounds', 'icons']) for (const f of fs.readdirSync(path.join(root, d)).sort()) files.push(d + '/' + f);
+for (const d of ['css', 'js', 'sounds', 'icons', 'fonts']) for (const f of fs.readdirSync(path.join(root, d)).sort()) files.push(d + '/' + f);
 const text = /\.(html|css|js|webmanifest)$/;
 const hash = f => {
   let b = fs.readFileSync(path.join(root, f));
