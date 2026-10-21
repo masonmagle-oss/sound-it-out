@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Art sample: our own pictures</title>
+<style>
+  body{margin:0; padding:24px 14px 50px; background:#f3eee2; font:16px/1.5 system-ui,sans-serif; color:#1d2433}
+  h1{font:700 22px/1.2 system-ui; margin:0 0 4px; text-align:center}
+  p.sub{max-width:44rem; margin:0 auto 18px; text-align:center; color:#4a5160}
+  h2{font:700 17px system-ui; margin:22px auto 8px; max-width:46rem}
+  .grid{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; max-width:46rem; margin:0 auto}
+  .c{width:104px; text-align:center; background:#fffdf7; border:3px solid #1d2433; border-radius:12px; box-shadow:0 4px 0 #1d2433; padding:8px 4px 6px}
+  .c svg{width:76px; height:76px; display:block; margin:0 auto}
+  .c b{display:block; font-size:14px; margin-top:2px}
+  .vs{display:flex; gap:20px; justify-content:center; flex-wrap:wrap; align-items:center; max-width:46rem; margin:0 auto}
+  .vs figure{margin:0; text-align:center; font-size:14px}
+  .vs .big{font-size:76px; line-height:1}
+  .vs svg{width:76px; height:76px}
+</style>
+</head>
+<body>
+<h1>Our own pictures: a first sample</h1>
+<p class="sub">Every picture is drawn in one style: an ink outline, flat colour from a small palette, no gradients, no faces unless the thing has one. Compare with Apple's emoji at the bottom.</p>
+
+<h2>Words</h2>
+<div class="grid" id="words"></div>
+<h2>Menu icons</h2>
+<div class="grid" id="icons"></div>
+<h2>Same words, Apple emoji today</h2>
+<div class="vs"><figure><div class="big">☀️</div>sun</figure><figure><div class="big">🐱</div>cat</figure><figure><div class="big">🐶</div>dog</figure><figure><div class="big">🚌</div>bus</figure><figure><div class="big">🐷</div>pig</figure><figure><div class="big">🌳</div>tree</figure></div>
+
+<script>
+const S = (inner, label) => '<svg viewBox="0 0 100 100" stroke="#1d2433" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">' + inner + '</svg>';
+const dot = (x, y, r = 3.6) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#1d2433" stroke="none"/>`;
+const words = {
+  sun: S('<g stroke-width="4"><path d="M50 8v12M50 80v12M8 50h12M80 50h12M20 20l9 9M71 71l9 9M80 20l-9 9M29 71l-9 9" fill="none"/></g><circle cx="50" cy="50" r="23" fill="#ffd23f"/><path d="M40 43q4-5 10-5" fill="none" stroke="#fff" stroke-width="4"/>'),
+  cat: S('<path d="M22 44L26 14L46 30Z M78 44L74 14L54 30Z" fill="#f28c28"/><circle cx="50" cy="56" r="32" fill="#f28c28"/><path d="M30 24l-3 11l10-5Z M70 24l3 11l-10-5Z" fill="#ff8fb8" stroke="none"/>' + dot(38, 52) + dot(62, 52) + '<path d="M46 62h8l-4 5Z" fill="#ff8fb8"/><path d="M50 67v5M42 74q8 4 8-2q0 6 8 2" fill="none"/><path d="M14 58h14M14 66l13-3M86 58H72M86 66l-13-3" fill="none" stroke-width="2.5"/>'),
+  dog: S('<ellipse cx="22" cy="46" rx="12" ry="22" fill="#8a5a2b" transform="rotate(12 22 46)"/><ellipse cx="78" cy="46" rx="12" ry="22" fill="#8a5a2b" transform="rotate(-12 78 46)"/><circle cx="50" cy="52" r="30" fill="#d9a066"/><ellipse cx="50" cy="64" rx="15" ry="11" fill="#f3d9b0"/>' + dot(38, 46) + dot(62, 46) + '<ellipse cx="50" cy="58" rx="6" ry="4.5" fill="#1d2433"/><path d="M50 62v6M42 70q8 6 16 0" fill="none"/><path d="M45 74q5 10 10 0" fill="#ff8fb8"/>'),
+  hat: S('<ellipse cx="50" cy="72" rx="40" ry="11" fill="#2457d6"/><path d="M26 72V30Q26 18 50 18Q74 18 74 30V72" fill="#2457d6"/><rect x="26" y="52" width="48" height="12" fill="#e63b2e"/><path d="M34 28q3-5 10-5" fill="none" stroke="#fff" stroke-width="4"/>'),
+  bus: S('<rect x="8" y="26" width="84" height="48" rx="8" fill="#ffd23f"/><rect x="16" y="34" width="16" height="16" rx="3" fill="#7fb3e6"/><rect x="38" y="34" width="16" height="16" rx="3" fill="#7fb3e6"/><rect x="60" y="34" width="26" height="16" rx="3" fill="#7fb3e6"/><path d="M8 58h84" fill="none"/><circle cx="28" cy="76" r="9" fill="#aab4c4"/><circle cx="72" cy="76" r="9" fill="#aab4c4"/><circle cx="28" cy="76" r="3" fill="#1d2433"/><circle cx="72" cy="76" r="3" fill="#1d2433"/>'),
+  pig: S('<path d="M24 40L20 14L42 28Z M76 40L80 14L58 28Z" fill="#ff8fb8"/><circle cx="50" cy="54" r="34" fill="#ff8fb8"/><ellipse cx="50" cy="62" rx="16" ry="12" fill="#ff6fa4"/>' + dot(43, 62, 2.8) + dot(57, 62, 2.8) + dot(36, 44) + dot(64, 44)),
+  bed: S('<rect x="8" y="46" width="84" height="22" rx="4" fill="#d9b07a"/><rect x="8" y="26" width="10" height="56" rx="3" fill="#8a6a3c"/><rect x="82" y="38" width="10" height="44" rx="3" fill="#8a6a3c"/><rect x="20" y="34" width="26" height="14" rx="7" fill="#fffdf7"/><rect x="20" y="46" width="62" height="18" rx="4" fill="#2457d6"/><path d="M34 46v18M48 46v18M62 46v18" fill="none" stroke="#fffdf7" stroke-width="2.5"/>'),
+  cup: S('<path d="M20 30h50v34Q70 82 45 82Q20 82 20 64Z" fill="#2457d6"/><path d="M70 40h8Q92 42 90 56Q88 68 72 66" fill="none" stroke-width="5"/><path d="M34 14q-6 8 0 12M48 12q-6 8 0 12M62 14q-6 8 0 12" fill="none" stroke="#aab4c4" stroke-width="3"/><path d="M28 40v20" fill="none" stroke="#fff" stroke-width="4"/>'),
+  fish: S('<path d="M70 50L94 30V70Z" fill="#f28c28"/><ellipse cx="44" cy="50" rx="34" ry="24" fill="#f28c28"/><path d="M30 28q14-12 28 0" fill="#e07a10"/>' + dot(28, 46) + '<path d="M16 56q4 4 8 0M46 34q6 16 0 32" fill="none" stroke-width="2.5"/>'),
+  ship: S('<path d="M10 62h80l-10 20H22Z" fill="#8a5a2b"/><path d="M50 14V60" fill="none" stroke-width="4"/><path d="M52 18L82 56H52Z" fill="#fffdf7"/><path d="M48 24L24 56h24Z" fill="#fffdf7"/><path d="M50 14l14 5l-14 5Z" fill="#e63b2e"/><path d="M12 90q8-6 16 0t16 0 16 0 16 0 14 0" fill="none" stroke="#2457d6" stroke-width="3.5"/>'),
+  tree: S('<rect x="42" y="56" width="16" height="36" rx="3" fill="#8a5a2b"/><circle cx="50" cy="38" r="26" fill="#3fa34d"/><circle cx="30" cy="52" r="18" fill="#3fa34d"/><circle cx="70" cy="52" r="18" fill="#3fa34d"/><path d="M38 28q6-8 14-6" fill="none" stroke="#7fd08a" stroke-width="4"/>'),
+  boat: S('<path d="M10 64h80q-6 20-24 20H34Q16 84 10 64Z" fill="#e63b2e"/><path d="M50 14V62" fill="none" stroke-width="4"/><path d="M52 16Q84 34 82 58H52Z" fill="#fffdf7"/><path d="M8 90q9-6 18 0t18 0 18 0 18 0" fill="none" stroke="#2457d6" stroke-width="3.5"/>')
+};
+const icons = {
+  'Sound it out': S('<rect x="14" y="18" width="72" height="64" rx="8" fill="#d9b07a"/><path d="M14 74h72" fill="none" stroke="#8a6a3c" stroke-width="6"/><path d="M38 52a12 12 0 1 1 24 0v10M38 52a12 12 0 0 0 12 12q12 0 12-12" fill="none" stroke-width="4.5"/>'),
+  'Sight words': S('<path d="M8 50Q50 12 92 50Q50 88 8 50Z" fill="#fffdf7"/><circle cx="50" cy="50" r="17" fill="#2457d6"/><circle cx="50" cy="50" r="7" fill="#1d2433"/><circle cx="45" cy="44" r="3.5" fill="#fff" stroke="none"/>'),
+  'Read a sentence': S('<path d="M10 24Q30 16 50 26V84Q30 74 10 82Z" fill="#fffdf7"/><path d="M90 24Q70 16 50 26V84Q70 74 90 82Z" fill="#fffdf7"/><path d="M20 38q12-4 22 2M20 50q12-4 22 2M58 40q10-6 22-2M58 52q10-6 22-2" fill="none" stroke-width="3"/><path d="M50 26V84" fill="none"/>'),
+  'Play': S('<rect x="12" y="20" width="76" height="60" rx="10" fill="#2457d6"/><path d="M42 36L68 50L42 64Z" fill="#fffdf7"/><path d="M12 74h76" fill="none" stroke="#1d2433" stroke-width="5"/>')
+};
+const put = (id, set) => document.getElementById(id).innerHTML = Object.entries(set).map(([k, v]) => `<div class="c">${v}<b>${k}</b></div>`).join('');
+put('words', words); put('icons', icons);
+</script>
+</body>
+</html>
