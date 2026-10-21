@@ -57,7 +57,7 @@ const fs = require('fs');
   await p.goto(url);
   await p.click('#moreGamesBtn'); await p.click('[data-go="write"]'); await p.waitForTimeout(300);
   const wlen = await p.locator('#wSlots .wslot').count();
-  for (let k = 0; k < 3; k++) { const tiles = p.locator('#wTray .dchoice'); for (let i = 0; i < await tiles.count(); i++) await tiles.nth(i).click({ force: true }); }
+  for (let k = 0; k < wlen; k++) { const tiles = p.locator('#wTray .dchoice'); for (let i = 0; i < await tiles.count(); i++) await tiles.nth(i).click({ force: true }); }
   const wFilled = (await p.locator('#wSlots .wslot').allTextContents()).join('');
   const writeOk = wlen >= 2 && wFilled.length === wlen && (await p.textContent('#wMsg')).indexOf(wFilled) === 0;
   console.log((writeOk ? 'ok   ' : 'FAIL ') + 'write it: wrong letters do not stick, the word completes'); if (!writeOk) errs.push('write: ' + wlen + ' ' + wFilled);
@@ -75,6 +75,18 @@ const fs = require('fs');
   for (let g = 0; g < 3 && !(await p.locator('#plDone').isVisible()); g++) await p.locator('#plChoices .dchoice').first().click({ force: true });   // sometimes a lucky guess: only check it ends
   const placeOk = /level 7/.test(top) && applied === 7;
   console.log((placeOk ? 'ok   ' : 'FAIL ') + 'find his level: reading every word reaches level 7 and sets where Play starts'); if (!placeOk) errs.push('place: ' + top + ' ' + applied);
+  // Word parts: endings and contractions each offer 3 choices and finish with praise
+  await p.goto(url);
+  await p.click('#moreGamesBtn'); await p.click('[data-go="parts"]'); await p.waitForTimeout(300);
+  let wpOk = true;
+  for (const m of ['end', 'con']) {
+    if (m === 'con') { await p.click('[data-pmode="con"]'); await p.waitForTimeout(300); }
+    const pc = p.locator('#pChoices .dchoice');
+    const n = await pc.count();
+    for (let i = 0; i < n && !/=/.test(await p.textContent('#pPraise')); i++) { await pc.nth(i).click({ force: true }); await p.waitForTimeout(1300); }   // a wrong tap makes the choices rest briefly
+    wpOk = wpOk && n === 3 && /=/.test(await p.textContent('#pPraise'));
+  }
+  console.log((wpOk ? 'ok   ' : 'FAIL ') + 'word parts: endings and contractions'); if (!wpOk) errs.push('word parts');
   // Pacing: Next is locked until the round is FINISHED. A wrong answer does not unlock it, a locked tap does nothing,
   // and it re-locks after use. A stuck round reveals its answer (no praise) and then unlocks.
   await p.goto(url);

@@ -14,7 +14,7 @@
   const NEXT = {
     nextBtn: ['sound', 'praise'], rNext: ['read', 'rpraise'], lNext: ['letters', null],
     rhNext: ['rhyme', 'rhPraise'], dNext: ['detective', 'dPraise'], spNext: ['spell', 'spMsg'],
-    syNext: ['silly', 'syPraise'], tNext: ['trace', 'tPraise'], mNext: ['match', 'mPraise'], vNext: ['vocab', 'vPraise'], wNext: ['write', 'wMsg']
+    syNext: ['silly', 'syPraise'], tNext: ['trace', 'tPraise'], mNext: ['match', 'mPraise'], vNext: ['vocab', 'vPraise'], pNext: ['parts', 'pPraise'], wNext: ['write', 'wMsg']
   };
   const state = {};   // id -> { locked, stuck, idle }
   let msgTimer = null;
@@ -77,7 +77,7 @@
   });
 
   // A wrong tap makes the answer buttons rest for a moment, so tapping every choice at random takes real time.
-  ['dChoices', 'rchoices', 'syChoices', 'mChoices', 'vChoices'].forEach(cid => {
+  ['dChoices', 'rchoices', 'syChoices', 'mChoices', 'vChoices', 'pChoices'].forEach(cid => {
     const box = $(cid);
     new MutationObserver(list => {
       for (const m of list) {

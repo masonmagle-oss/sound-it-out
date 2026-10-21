@@ -138,7 +138,7 @@
   const activeKid = () => kids.find(k => k.id === activeId) || null;
 
   /* ---------------- navigation ---------------- */
-  const TITLES = { match: 'Which picture?', who: 'Who\u2019s playing?', home: 'Word play', sound: 'Sound it out', sight: 'Sight words', read: 'Read a sentence', say: 'Say the word', letters: 'Letters', rhyme: 'Rhyme time', detective: 'Sound detective', spell: 'Spell it', silly: 'Silly words', trace: 'Trace letters', stories: 'Little stories', vocab: 'Word meanings', write: 'Write it', place: 'Find his level', grown: 'For grown-ups' };
+  const TITLES = { match: 'Which picture?', who: 'Who\u2019s playing?', home: 'Word play', sound: 'Sound it out', sight: 'Sight words', read: 'Read a sentence', say: 'Say the word', letters: 'Letters', rhyme: 'Rhyme time', detective: 'Sound detective', spell: 'Spell it', silly: 'Silly words', trace: 'Trace letters', stories: 'Little stories', vocab: 'Word meanings', parts: 'Word parts', write: 'Write it', place: 'Find his level', grown: 'For grown-ups' };
   const hooks = { enter: {}, leave: {} };
   let current = 'home';
 

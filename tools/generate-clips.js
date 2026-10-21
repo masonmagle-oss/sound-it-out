@@ -10,7 +10,7 @@ const root = path.resolve(__dirname, '..');
 const arg = (n, d) => { const i = process.argv.indexOf('--' + n); return i < 0 ? d : (process.argv[i + 1] && !process.argv[i + 1].startsWith('--') ? process.argv[i + 1] : true); };
 const kind = arg('kind', 'all'), takes = Number(arg('takes', 2)), max = Number(arg('max', 12000)), dry = !!arg('dry', false), limit = Number(arg('limit', 9999));
 const VOICE = 'oClOrzqamOXmtcB8iqTj', MODEL = 'eleven_v4';
-global.window = {}; require('../js/content.js'); require('../js/stories-more.js');
+global.window = {}; require('../js/content.js'); require('../js/stories-more.js'); require('../js/parts-data.js');
 const C = window.WORDPLAY_CONTENT;
 const have = new Set(fs.readdirSync(path.join(root, 'sounds')).map(f => f.replace(/\.mp3$/, '')));
 const dash = t => t.toLowerCase().replace(/[^a-z ]/g, '').trim().replace(/ +/g, '-');
@@ -19,6 +19,11 @@ const add = (k, key, text) => { if (!have.has(key) && !jobs.some(j => j.key === 
 C.stories.forEach(s => s.lines.forEach(l => add('lines', 'sentence-' + dash(l), l)));
 C.stories.forEach(s => (s.q || []).forEach(x => add('questions', 'question-' + dash(x.ask), x.ask)));
 [['animal', 'Which one is an animal?'], ['food', 'Which one is food?'], ['clothes', 'Which one do we wear?'], ['vehicle', 'Which one takes us places?'], ['body', 'Which one is part of the body?'], ['home', 'Which one is in a home?'], ['nature', 'Which one is outside in nature?'], ['opposite', 'What is the opposite?']].forEach(([k, t]) => add('prompts', 'vocab-' + k, t));
+// Word parts game: the whole words, their base words, the contractions, and the four ending sounds
+const PD = window.WORDPLAY_PARTS;
+PD.endings.forEach(e => { add('parts', 'word-' + e.word, e.word + '.'); add('parts', 'word-' + e.base, e.base + '.'); });
+PD.contractions.forEach(c => add('parts', 'word-' + c.c.toLowerCase().replace(/[^a-z]/g, ''), c.c + '.'));
+Object.entries({ ful: '/fəl/', less: '/ləs/', ly: 'lee', ness: '/nəs/' }).forEach(([k, ipa]) => add('parts', k, ipa + '. ' + ipa + '.'));
 // isolated sounds: IPA between slashes, said twice (the second one is the clean one, as in WORKFLOWS); ful less ly ness are held until an endings activity exists
 Object.entries({ dle: '/dəl/', tle: '/təl/', le: '/əl/' }).forEach(([k, ipa]) => add('sounds', k, ipa + '. ' + ipa + '.'));
 require('./new-words-data.js').forEach(([, , emoji, word]) => { if (emoji && /^[a-z]+$/.test(word)) add('words', 'word-' + word, word + '.'); });   // endings and contractions need their own treatment

@@ -17,6 +17,8 @@ Full table with pictures and exact file names: [NEW-WORDS-TO-RECORD.md](NEW-WORD
 - [ ] Word clips for the parts of the ending words that do not exist yet: care, hope, sad, and the contraction clips (don't, can't, I'm, it's, isn't).
 - [ ] Optional later: rewrite the 4 sentences that use words he has not learned by sound (brother, school, friend, morning). Each rewritten sentence or story line needs its own new clip (clips are named after the exact words).
 
+- [ ] **Listen to the machine-chosen clips** (chosen by length, not by ear): the sounds `dle`, `tle`, `le`, `ful`, `less`, `ly`, `ness` (the sound clips are the riskiest: the transcript heard Dell, Tell, Fall, Los, Nurse), and `word-theyre` (heard as "there", which sounds the same). Tell Claude which to regenerate.
+
 ## 3. Pictures
 Pictures are emoji in `js/content.js`, so they need no files, only your OK.
 - [ ] **Existing words with no picture** (so they are skipped in the picture games): gum, lid, rug, much, thin, whip. Suggest 🍬 (gum), a lid, a rug, and so on; some have no good emoji, in which case leave them for Sound it out only.
@@ -34,7 +36,6 @@ Pictures are emoji in `js/content.js`, so they need no files, only your OK.
 ## 5. Code work Claude can do once the above exists
 - [ ] **After the new-word clips are in `sounds/`:** run `node tools/add-recorded-words.js` (adds every word whose clips exist to the word list), then `node tools/make-precache.js` and `node tools/test.js`. Words with no picture (endings, contractions) are skipped by that tool.
 - [ ] Display for two-syllable words and -le endings (needs the recordings above).
-- [ ] An ending-words activity for -ful/-less/-ly/-ness, and contractions in Read a sentence.
 - [ ] Split L5 into levels and migrate saved levels (decision in section 1).
 - [ ] Sound-manipulation game (say "cat" without /k/): needs new recordings.
 - [ ] More stories per level (each new story = 4 lines + 1 question to record; `node tools/check-stories.js` checks the words).
@@ -53,6 +54,8 @@ Pictures are emoji in `js/content.js`, so they need no files, only your OK.
 - 17 new decodable stories (levels 1 to 7) and a picture question after every story (29 stories); stories are listed by level and follow the grown-up's level; `node tools/check-stories.js` fails on any word above a story's level.
 - Word meanings (Which one is an animal? / Opposites), Write it (dictation from the word clips) and a Find his level reading check on the grown-ups page, all tested.
 - `tools/add-recorded-words.js`: finishing the phonics gaps is one command once the recordings are in.
+
+- Word parts game (endings -ful/-less/-ly/-ness and contractions), 20 new clips generated and installed with ElevenLabs; 21+6 new words, the -le words and 66+27+8 story, question and prompt clips installed from your picks.
 
 ## 7. Branches (all local, nothing pushed)
 - `main`: what is live now.

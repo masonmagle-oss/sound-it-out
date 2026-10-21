@@ -81,6 +81,10 @@
           <span class="big" aria-hidden="true">✍️</span>
           <span><strong>Write it</strong><span class="sub">Hear a word. Tap the letters to write it.</span></span>
         </button>
+        <button class="menu-card" type="button" data-go="parts" aria-label="Word parts. Word endings and contractions.">
+          <span class="big" aria-hidden="true">🧱</span>
+          <span><strong>Word parts</strong><span class="sub">Endings like -ful, and short words like don't.</span></span>
+        </button>
         <!-- Shown only when a grown-up turned speech on AND this browser supports it -->
         <button id="sayCard" class="menu-card" type="button" data-go="say" hidden aria-label="Say the word. Read words out loud and watch them light up.">
           <span class="big" aria-hidden="true">🎤</span>
@@ -300,6 +304,19 @@
       <div class="row"><button id="vNext" class="btn" type="button" aria-label="Next one">Next one &rarr;</button></div>
     </section>
 
+    <!-- WORD PARTS -->
+    <section id="screen-parts" aria-label="Word parts" hidden>
+      <div class="row" role="group" aria-label="Choose a game">
+        <button class="btn ghost" type="button" data-pmode="end" aria-pressed="true">Word endings</button>
+        <button class="btn ghost" type="button" data-pmode="con" aria-pressed="false">Contractions</button>
+      </div>
+      <p id="pPrompt" class="hint"></p>
+      <button id="pWord" class="btn ghost bigword" type="button"></button>
+      <div id="pChoices" class="dchoices" role="group" aria-label="Choices"></div>
+      <p id="pPraise" class="praise" role="status" aria-live="polite"></p>
+      <div class="row"><button id="pNext" class="btn" type="button" aria-label="Next one">Next one &rarr;</button></div>
+    </section>
+
     <!-- WRITE IT -->
     <section id="screen-write" aria-label="Write it" hidden>
       <p class="hint">Listen to the word. Tap the letters to write it.</p>
@@ -494,6 +511,8 @@
 <script src="js/mix.js"></script>
 <script src="js/session.js"></script>
 <script src="js/home.js"></script>
+<script src="js/parts-data.js"></script>
+<script src="js/parts.js"></script>
 <script src="js/vocab.js"></script>
 <script src="js/write.js"></script>
 <script src="js/place.js"></script>
