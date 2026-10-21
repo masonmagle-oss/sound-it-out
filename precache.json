@@ -1,11 +1,11 @@
 {
- "version": "1bfe72f854",
+ "version": "d2ac18b8a0",
  "files": {
   "index.html": "886f1a57d4",
   "manifest.webmanifest": "6fd7812c0c",
   "css/style.css": "87d5ee3a79",
   "js/app.js": "8a7dada17b",
-  "js/art.js": "a71994c065",
+  "js/art.js": "c77b9e9d44",
   "js/audio.js": "2e68cb19cb",
   "js/caps.js": "9f38d40703",
   "js/content.js": "673afc85cb",
