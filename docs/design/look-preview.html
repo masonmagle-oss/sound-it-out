@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Look preview: today and proposed</title>
+<!-- Preview only. The shipped app would bundle its font file; this page loads Andika from Google Fonts just to show the letter shapes. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&display=swap">
+<style>
+  :root{--ink:#1d2433; --felt:#2f6f83; --paper:#fbf6ea; --sun:#ffd23f; --tomato:#e63b2e; --cobalt:#2457d6; --leaf:#1f9d6b}
+  *{box-sizing:border-box}
+  body{margin:0; padding:28px 16px 48px; background:#e9e6df; font:16px/1.5 system-ui,sans-serif; color:#222}
+  h1{font:700 22px/1.2 system-ui,sans-serif; margin:0 0 4px; text-align:center}
+  .sub{max-width:44rem; margin:0 auto 22px; text-align:center; color:#555}
+  .row{display:flex; flex-wrap:wrap; gap:28px; justify-content:center; align-items:flex-start}
+  figure{margin:0; width:340px}
+  figcaption{margin-top:10px; font-size:14px; color:#444; max-width:340px}
+  figcaption b{display:block; font-size:16px; color:#111}
+  .phone{width:340px; height:640px; border-radius:34px; border:10px solid #111; overflow:hidden; position:relative; background:#fff}
+
+  /* ---- today ---- */
+  .today{background:#f3f7fb; font-family:system-ui,sans-serif; color:#1b2a41; padding:18px 14px}
+  .today .top{display:flex; align-items:center; gap:12px; margin-bottom:12px}
+  .today .back{border:3px solid #2a62c0; color:#2a62c0; background:#fff; border-radius:16px; padding:12px 16px; font-weight:700}
+  .today h2{margin:0; font-size:22px}
+  .today .tiles{display:flex; justify-content:center; margin:26px 0 18px}
+  .today .tile{min-width:88px; height:104px; border:4px solid #7a5a00; background:#ffd447; color:#1b2a41; font:700 52px/96px system-ui; text-align:center; border-radius:0}
+  .today .tile:first-child{border-radius:20px 0 0 20px}.today .tile:last-child{border-radius:0 20px 20px 0}
+  .today .stage{height:210px; border:3px solid #cfe0f3; border-radius:20px; background:#eaf3fd; display:flex; align-items:center; justify-content:center; font-size:84px}
+  .today .praise{text-align:center; font-weight:700; font-size:20px; margin:16px 0}
+  .today .next{display:block; margin:0 auto; width:100%; padding:16px; background:#2a62c0; color:#fff; border:0; border-radius:16px; font:700 18px system-ui}
+
+  /* ---- proposed ---- */
+  .new{background:var(--felt); font-family:'Andika','Comic Sans MS',system-ui,sans-serif; color:var(--paper); padding:16px 14px;
+       background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .07 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+  .new .top{display:flex; align-items:center; gap:12px; margin-bottom:8px}
+  .new .back{border:3px dashed var(--paper); color:var(--paper); background:transparent; border-radius:18px; padding:12px 16px; font:700 16px 'Andika',system-ui}
+  .new h2{margin:0; font-size:22px}
+  .folk{display:flex; justify-content:center; gap:0; margin:20px 0 6px}
+  .folk svg{width:92px; height:110px; overflow:visible}
+  .folk .lit{transform:translateY(-8px)}
+  .card{background:var(--paper); color:var(--ink); border-radius:22px; border:3px solid var(--ink); box-shadow:0 5px 0 var(--ink); height:204px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; margin-top:8px}
+  .card .big{font-size:84px; line-height:1}
+  .card .word{font:700 34px 'Andika',system-ui; letter-spacing:.06em}
+  .new .praise{text-align:center; font-weight:700; font-size:20px; margin:16px 0 14px}
+  .new .next{display:block; width:100%; padding:16px; background:var(--sun); color:var(--ink); border:3px solid var(--ink); border-radius:18px; box-shadow:0 5px 0 var(--ink); font:700 19px 'Andika',system-ui}
+  .new .stitch{position:absolute; inset:8px; border:2px dashed rgba(251,246,234,.55); border-radius:24px; pointer-events:none}
+</style>
+</head>
+<body>
+<h1>Today and proposed</h1>
+<p class="sub">The same screen (Sound it out, the word <b>sun</b>) in the app's current look and in the look I would recommend. The proposed one keeps the app's rules: no outside images or scripts, 56px or bigger targets, high contrast. It needs one small bundled font file, which is a change to the "system fonts only" rule.</p>
+<div class="row">
+
+<figure>
+  <div class="phone today">
+    <div class="top"><div class="back">&larr; Back</div><h2>Sound it out</h2></div>
+    <div class="tiles"><div class="tile">s</div><div class="tile">u</div><div class="tile">n</div></div>
+    <div class="stage" aria-hidden="true">☀️</div>
+    <div class="praise">You kept going!</div>
+    <button class="next">Next word &rarr;</button>
+  </div>
+  <figcaption><b>Today</b>Clean and readable, but anyone's phonics app could look like this. The letters are in the phone's system font, which draws <i>a</i> and <i>g</i> with a second storey that your son does not write.</figcaption>
+</figure>
+
+<figure>
+  <div class="phone new">
+    <div class="stitch"></div>
+    <div class="top"><div class="back">&larr; Back</div><h2>Sound it out</h2></div>
+    <div class="folk" role="img" aria-label="The letters s, u and n as three little folk standing together; u is saying its sound">
+      <!-- s: circle (consonant) -->
+      <svg viewBox="0 0 104 124"><circle cx="52" cy="62" r="46" fill="#e63b2e" stroke="#1d2433" stroke-width="4"/><circle cx="36" cy="46" r="9" fill="#fff"/><circle cx="68" cy="46" r="9" fill="#fff"/><circle cx="38" cy="48" r="4" fill="#1d2433"/><circle cx="70" cy="48" r="4" fill="#1d2433"/><path d="M38 66q14 9 28 0" fill="none" stroke="#1d2433" stroke-width="4" stroke-linecap="round"/><text x="52" y="97" text-anchor="middle" font-family="Andika,Comic Sans MS,sans-serif" font-weight="700" font-size="30" fill="#1d2433">s</text></svg>
+      <!-- u: square (vowel), lit and saying its sound -->
+      <svg viewBox="0 0 104 124" class="lit"><rect x="8" y="12" width="88" height="96" rx="6" fill="#2457d6" stroke="#1d2433" stroke-width="4"/><circle cx="34" cy="42" r="9" fill="#fff"/><circle cx="70" cy="42" r="9" fill="#fff"/><circle cx="36" cy="44" r="4" fill="#1d2433"/><circle cx="72" cy="44" r="4" fill="#1d2433"/><ellipse cx="52" cy="66" rx="11" ry="9" fill="#1d2433"/><text x="52" y="102" text-anchor="middle" font-family="Andika,Comic Sans MS,sans-serif" font-weight="700" font-size="34" fill="#fbf6ea">u</text><path d="M-4 26l-10-8M-4 50h-12M-4 74l-10 8" stroke="#ffd23f" stroke-width="4" stroke-linecap="round"/><path d="M108 26l10-8M108 50h12M108 74l10 8" stroke="#ffd23f" stroke-width="4" stroke-linecap="round"/></svg>
+      <!-- n: circle (consonant) -->
+      <svg viewBox="0 0 104 124"><circle cx="52" cy="62" r="46" fill="#e63b2e" stroke="#1d2433" stroke-width="4"/><circle cx="36" cy="46" r="9" fill="#fff"/><circle cx="68" cy="46" r="9" fill="#fff"/><circle cx="38" cy="48" r="4" fill="#1d2433"/><circle cx="70" cy="48" r="4" fill="#1d2433"/><path d="M38 66q14 9 28 0" fill="none" stroke="#1d2433" stroke-width="4" stroke-linecap="round"/><text x="52" y="97" text-anchor="middle" font-family="Andika,Comic Sans MS,sans-serif" font-weight="700" font-size="30" fill="#1d2433">n</text></svg>
+    </div>
+    <div class="card"><div class="big" aria-hidden="true">☀️</div><div class="word">sun</div></div>
+    <div class="praise">You kept going!</div>
+    <button class="next">Next word &rarr;</button>
+  </div>
+  <figcaption><b>Proposed: stitched felt, ink outline, letter folk</b>One signature idea: each sound is a little folk who opens its mouth when it speaks. Vowels are squares and consonants circles, so the vowel pops out of every word. Letters use a literacy typeface with the single-storey <i>a</i> he learns to write.</figcaption>
+</figure>
+
+</div>
+</body>
+</html>
