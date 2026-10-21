@@ -50,7 +50,17 @@ async function tts(text) {
 async function stt(file) {
   try { return (await client.speechToText.convert({ file: fs.createReadStream(file), modelId: 'scribe_v2' })).text || ''; } catch (e) { return null; }
 }
-const clean = (src, dst) => execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', src, '-af', 'silenceremove=start_periods=1:start_threshold=-50dB,adelay=40|40,apad=pad_dur=0.1,loudnorm=I=-18:TP=-1.5:LRA=11', '-ac', '1', '-ar', '44100', '-b:a', '128k', dst]);
+const clean = (src, dst) => execFileSync('ffmpeg', ['-v', 'error', '-y', '-i', src, '-af', 'silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse,adelay=40|40,apad=pad_dur=0.1,loudnorm=I=-18:TP=-1.5:LRA=11', '-ac', '1', '-ar', '44100', '-b:a', '128k', dst]);
+// Cut at the longest pause in the take (the gap between the two copies), not at every small gap: a stop like the t in "ment" has its own tiny gap.
+function secondCopy(rawf, cleanf) {
+  const r = require('child_process').spawnSync('ffmpeg', ['-nostats', '-i', rawf, '-af', 'silencedetect=noise=-40dB:d=0.15', '-f', 'null', '-'], { encoding: 'utf8' });
+  const total = Number(/Duration: \d+:\d+:([\d.]+)/.exec(r.stderr)[1]);
+  const gaps = [...r.stderr.matchAll(/silence_end: ([\d.]+) \| silence_duration: ([\d.]+)/g)].map(m => [Number(m[1]), Number(m[2])]).filter(([end]) => end < total - 0.15);
+  if (!gaps.length) return;
+  const [end] = gaps.sort((x, y) => y[1] - x[1])[0], tmp = cleanf + '.part.mp3';
+  execFileSync('ffmpeg', ['-v', 'error', '-y', '-ss', String(Math.max(0, end - 0.03)), '-i', rawf, '-c:a', 'libmp3lame', '-b:a', '128k', tmp]);
+  clean(tmp, cleanf); fs.unlinkSync(tmp);
+}
 const seconds = f => Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]).toString().trim());
 (async () => {
   const { ElevenLabsClient } = await import('@elevenlabs/elevenlabs-js');
@@ -60,10 +70,7 @@ const seconds = f => Number(execFileSync('ffprobe', ['-v', 'error', '-show_entri
     for (let n = m.takes.length + 1; n <= takes; n++) {
       const rawf = path.join(raw, `${j.key}-${n}.mp3`), cleanf = path.join(out, `${j.key}-${n}.mp3`);
       fs.writeFileSync(rawf, await tts(j.text)); clean(rawf, cleanf);
-      if (j.doubled) {   // keep only the second, clean copy (tools/cut-take.py splits at the silent gaps)
-        const pre = path.join(raw, j.key + '-' + n + '-cut');
-        try { execFileSync('python', [path.join(__dirname, 'cut-take.py'), cleanf, pre], { stdio: 'ignore' }); if (fs.existsSync(pre + '-2.mp3')) fs.copyFileSync(pre + '-2.mp3', cleanf); } catch (e) { console.log('could not cut', j.key); }
-      }
+      if (j.doubled) secondCopy(rawf, cleanf);   // an isolated sound said twice: keep the second, clean copy
       const heard = await stt(cleanf), want = norm(j.text);
       m.takes.push({ file: path.basename(cleanf), secs: Math.round(seconds(cleanf) * 100) / 100, heard, match: heard !== null && norm(heard) === want });
       fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, 1));
