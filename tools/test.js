@@ -95,6 +95,18 @@ const fs = require('fs');
     return toks.length >= 10 && toks.every(t => { WordPlay.pic(d, t); return !!d.querySelector('svg.pic'); });
   });
   console.log((svgOk ? 'ok   ' : 'FAIL ') + 'drawn pictures all render'); if (!svgOk) errs.push('drawn pictures');
+  // Big and little letters: a big letter has three little choices and the right one is praised
+  await p.goto(url);
+  await p.click('#moreGamesBtn'); await p.click('[data-go="caps"]'); await p.waitForTimeout(300);
+  let capsOk = true;
+  for (const m of ['lower', 'upper']) {
+    if (m === 'upper') { await p.click('[data-cmode="upper"]'); await p.waitForTimeout(300); }
+    const cc = p.locator('#cChoices .dchoice'); const n = await cc.count();
+    const shown = await p.textContent('#cBig');
+    for (let i = 0; i < n && !/same letter/.test(await p.textContent('#cPraise')); i++) { await cc.nth(i).click({ force: true }); await p.waitForTimeout(1300); }
+    capsOk = capsOk && n === 3 && /same letter/.test(await p.textContent('#cPraise')) && (m === 'lower' ? shown === shown.toUpperCase() : shown === shown.toLowerCase());
+  }
+  console.log((capsOk ? 'ok   ' : 'FAIL ') + 'big and little letters'); if (!capsOk) errs.push('caps');
   // Pacing: Next is locked until the round is FINISHED. A wrong answer does not unlock it, a locked tap does nothing,
   // and it re-locks after use. A stuck round reveals its answer (no praise) and then unlocks.
   await p.goto(url);

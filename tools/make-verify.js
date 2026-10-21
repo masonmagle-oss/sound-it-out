@@ -17,8 +17,9 @@ if (ri > 0) {
 }
 const sounds = 'ful less ly ness dle tle le est dis mis cher zhun'.split(' ');
 const words = 'theyre gnat deer daughter big fin mat pen pin pitch drew flew chew took hill stew knee chick'.split(' ').map(w => 'word-' + w);
-const keys = sounds.concat(words, ['sentence-the-cats-sat-on-the-chair']);
-const say = { ful: '"-ful" as in helpful', less: '"-less" as in hopeless', ly: '"-ly" as in sadly', ness: '"-ness" as in kindness', dle: '"-dle" as in candle', tle: '"-tle" as in turtle', le: '"-le" as in puzzle', est: '"-est" as in tallest', dis: '"dis-" as in dislike', mis: '"mis-" as in misspell', cher: '"-ture" as in picture', zhun: '"-sion" as in television' };
+const args = process.argv.slice(2).filter(x => !x.startsWith('--'));
+const keys = args.length ? args : sounds.concat(words, ['sentence-the-cats-sat-on-the-chair']);   // node tools/make-verify.js ment able  = just those clips
+const say = { ful: '"-ful" as in helpful', less: '"-less" as in hopeless', ly: '"-ly" as in sadly', ness: '"-ness" as in kindness', dle: '"-dle" as in candle', tle: '"-tle" as in turtle', le: '"-le" as in puzzle', est: '"-est" as in tallest', dis: '"dis-" as in dislike', mis: '"mis-" as in misspell', ment: '"-ment" as in payment', able: '"-able" as in washable', cher: '"-ture" as in picture', zhun: '"-sion" as in television' };
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const same = (a, b) => fs.existsSync(a) && fs.existsSync(b) && Buffer.compare(fs.readFileSync(a), fs.readFileSync(b)) === 0;
 const rows = keys.map(k => {

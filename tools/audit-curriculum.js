@@ -26,6 +26,8 @@ for (const [b, label, re] of R) {
 for (const b of Object.keys(by)) { console.log('\n== ' + b); by[b].forEach(l => console.log(l)); }
 console.log('\n== word-length / syllables (decodable words)');
 const sc = {}; dec.forEach(w => { const n = Math.min(syl(w), 4); sc[n] = (sc[n] || 0) + 1; }); console.log(sc);
+require('../js/parts-data.js'); const PD = window.WORDPLAY_PARTS;
+console.log('Word parts game: ' + PD.endings.length + ' ending words (' + PD.ends.map(e => e + ' ' + PD.endings.filter(x => x.end === e).length).join(', ') + '), ' + PD.prefixed.length + ' prefix words (' + PD.prefixes.map(e => e + ' ' + PD.prefixed.filter(x => x.pre === e).length).join(', ') + '), ' + PD.contractions.length + ' contractions');
 console.log('contractions in words/sentences:', C.words.filter(w => /'/.test(w.word)).length, '/', C.sentences.filter(s => /'/.test(s.text)).length);
 console.log('\n== reading material decodability (words not in the word list)');
 const uns = {};

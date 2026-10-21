@@ -18,12 +18,12 @@ const jobs = [];
 const add = (k, key, text) => { if (!have.has(key) && !jobs.some(j => j.key === key) && (kind === 'all' || kind === k)) jobs.push({ kind: k, key, text, doubled: /. .*.$/.test(text) && !/ [a-z]{2,} /i.test(text) }); };   // doubled = an isolated sound said twice: keep the second copy
 C.stories.forEach(s => s.lines.forEach(l => add('lines', 'sentence-' + dash(l), l)));
 C.stories.forEach(s => (s.q || []).forEach(x => add('questions', 'question-' + dash(x.ask), x.ask)));
-[['animal', 'Which one is an animal?'], ['food', 'Which one is food?'], ['clothes', 'Which one do we wear?'], ['vehicle', 'Which one takes us places?'], ['body', 'Which one is part of the body?'], ['home', 'Which one is in a home?'], ['nature', 'Which one is outside in nature?'], ['opposite', 'What is the opposite?']].forEach(([k, t]) => add('prompts', 'vocab-' + k, t));
+[['animal', 'Which one is an animal?'], ['food', 'Which one is food?'], ['clothes', 'Which one do we wear?'], ['vehicle', 'Which one takes us places?'], ['body', 'Which one is part of the body?'], ['home', 'Which one is in a home?'], ['nature', 'Which one is outside in nature?'], ['opposite', 'What is the opposite?'], ['caps-lower', 'Which little letter matches the big one?'], ['caps-upper', 'Which big letter matches the little one?']].forEach(([k, t]) => add('prompts', 'vocab-' + k, t));
 // Word parts game: the whole words, their base words, the contractions, and the four ending sounds
 const PD = window.WORDPLAY_PARTS;
 PD.endings.forEach(e => { add('parts', 'word-' + e.word, e.word + '.'); add('parts', 'word-' + e.base, e.base + '.'); });
 PD.contractions.forEach(c => add('parts', 'word-' + c.c.toLowerCase().replace(/[^a-z]/g, ''), c.c + '.'));
-Object.entries({ ful: '/fəl/', less: '/ləs/', ly: 'lee', ness: '/nəs/', est: '/ɪst/', dis: '/dɪs/', mis: '/mɪs/', cher: '/tʃɚ/', zhun: '/ʒən/' }).forEach(([k, ipa]) => add('parts', k, ipa + '. ' + ipa + '.'));
+Object.entries({ ful: '/fəl/', less: '/ləs/', ly: 'lee', ness: '/nəs/', est: '/ɪst/', dis: '/dɪs/', mis: '/mɪs/', cher: '/tʃɚ/', zhun: '/ʒən/', ment: '/mənt/', able: '/əbəl/' }).forEach(([k, ipa]) => add('parts', k, ipa + '. ' + ipa + '.'));
 // isolated sounds: IPA between slashes, said twice (the second one is the clean one, as in WORKFLOWS); ful less ly ness are held until an endings activity exists
 Object.entries({ dle: '/dəl/', tle: '/təl/', le: '/əl/' }).forEach(([k, ipa]) => add('sounds', k, ipa + '. ' + ipa + '.'));
 require('./new-words-data.js').forEach(([, , emoji, word, , how]) => { if ((emoji || how) && /^[a-z]+$/.test(word)) add('words', 'word-' + word, word + '.'); });   // endings and contractions need their own treatment

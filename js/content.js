@@ -473,6 +473,15 @@ window.WORDPLAY_CONTENT = {
     { word: 'pear', units: ['p', 'ear:air'], emoji: '🍐', sight: false, level: 5, anim: 'pop' },
     { word: 'deer', units: ['d', 'eer:ear'], emoji: '🦌', sight: false, level: 5, anim: 'pop' },
 
+    { word: 'berries', units: ['b', 'e', 'rr:r', 'ies:iz'], emoji: '🫐', sight: false, level: 7, anim: 'pop' },
+    { word: 'bunnies', units: ['b', 'u', 'nn:n', 'ies:iz'], emoji: '🐰', sight: false, level: 7, anim: 'pop' },
+    { word: 'ponies', units: ['p', 'o:o_long', 'n', 'ies:iz'], emoji: '🐴', sight: false, level: 7, anim: 'pop' },
+    { word: 'flies', units: ['f', 'l', 'i:i_long', 'es:z'], emoji: '🪰', sight: false, level: 7, anim: 'pop' },
+    { word: 'cities', units: ['c:s', 'i', 't', 'ies:iz'], emoji: '🏙️', sight: false, level: 7, anim: 'pop' },
+    { word: 'chopped', units: ['ch', 'o', 'pp:p', 'ed:t'], emoji: '🪓', sight: false, level: 7, anim: 'pop' },
+    { word: 'dropped', units: ['d', 'r', 'o', 'pp:p', 'ed:t'], emoji: '🫳', sight: false, level: 7, anim: 'pop' },
+    { word: 'alphabet', units: ['a', 'l', 'ph:f', 'a', 'b', 'e', 't'], emoji: '🔤', sight: false, level: 7, anim: 'pop' },
+
     // ---- sight words (Dolch lists; level = stage 1-5) ----
     { word: 'a', units: ['a'], emoji: null, sight: true, level: 1 },
     // ---- words used in stories and sentences that are not taught as sounds yet (added so the reading material only uses listed words) ----

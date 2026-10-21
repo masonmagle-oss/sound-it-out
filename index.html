@@ -85,6 +85,10 @@
           <span class="big" aria-hidden="true">🧱</span>
           <span><strong>Word parts</strong><span class="sub">Endings like -ful, and short words like don't.</span></span>
         </button>
+        <button class="menu-card" type="button" data-go="caps" aria-label="Big and little letters. Match a big letter to its little one.">
+          <span class="big" aria-hidden="true">🔠</span>
+          <span><strong>Big and little letters</strong><span class="sub">Match A to a, B to b.</span></span>
+        </button>
         <!-- Shown only when a grown-up turned speech on AND this browser supports it -->
         <button id="sayCard" class="menu-card" type="button" data-go="say" hidden aria-label="Say the word. Read words out loud and watch them light up.">
           <span class="big" aria-hidden="true">🎤</span>
@@ -304,6 +308,19 @@
       <div class="row"><button id="vNext" class="btn" type="button" aria-label="Next one">Next one &rarr;</button></div>
     </section>
 
+    <!-- BIG AND LITTLE LETTERS -->
+    <section id="screen-caps" aria-label="Big and little letters" hidden>
+      <div class="row" role="group" aria-label="Choose a game">
+        <button class="btn ghost" type="button" data-cmode="lower" aria-pressed="true">Find the little one</button>
+        <button class="btn ghost" type="button" data-cmode="upper" aria-pressed="false">Find the big one</button>
+      </div>
+      <p id="cPrompt" class="hint"></p>
+      <button id="cBig" class="btn ghost bigword" type="button" aria-label="Hear the letter"></button>
+      <div id="cChoices" class="dchoices" role="group" aria-label="Choices"></div>
+      <p id="cPraise" class="praise" role="status" aria-live="polite"></p>
+      <div class="row"><button id="cNext" class="btn" type="button" aria-label="Next one">Next one &rarr;</button></div>
+    </section>
+
     <!-- WORD PARTS -->
     <section id="screen-parts" aria-label="Word parts" hidden>
       <div class="row" role="group" aria-label="Choose a game">
@@ -513,6 +530,7 @@
 <script src="js/mix.js"></script>
 <script src="js/session.js"></script>
 <script src="js/home.js"></script>
+<script src="js/caps.js"></script>
 <script src="js/parts-data.js"></script>
 <script src="js/parts.js"></script>
 <script src="js/vocab.js"></script>

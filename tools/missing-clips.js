@@ -11,6 +11,6 @@ const lines = [], qs = [];
 C.stories.forEach(s => { s.lines.forEach(l => lines.push(['sentence-' + dash(l), l])); (s.q || []).forEach(x => qs.push(['question-' + dash(x.ask), x.ask])); });
 const seen = new Set(), uniq = a => a.filter(([k]) => !seen.has(k) && seen.add(k));
 let n = rows('Story lines', uniq(lines)) + rows('Story questions', uniq(qs));
-n += rows('Word meanings prompts', [['vocab-animal', 'Which one is an animal?'], ['vocab-food', 'Which one is food?'], ['vocab-clothes', 'Which one do we wear?'], ['vocab-vehicle', 'Which one takes us places?'], ['vocab-body', 'Which one is part of the body?'], ['vocab-home', 'Which one is in a home?'], ['vocab-nature', 'Which one is outside in nature?'], ['vocab-opposite', 'What is the opposite?']]);
+n += rows('Word meanings prompts', [['vocab-animal', 'Which one is an animal?'], ['vocab-food', 'Which one is food?'], ['vocab-clothes', 'Which one do we wear?'], ['vocab-vehicle', 'Which one takes us places?'], ['vocab-body', 'Which one is part of the body?'], ['vocab-home', 'Which one is in a home?'], ['vocab-nature', 'Which one is outside in nature?'], ['vocab-opposite', 'What is the opposite?'], ['vocab-caps-lower', 'Which little letter matches the big one?'], ['vocab-caps-upper', 'Which big letter matches the little one?']]);
 out.push('Total here: ' + n + ' clips, plus the new words in NEW-WORDS-TO-RECORD.md.');
 console.log(out.join('\n'));

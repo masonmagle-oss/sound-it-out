@@ -11,10 +11,10 @@
   if (!W) return;
   const FOCUS_ROUNDS = 8, REVIEW_EVERY = 4, MAXL = 7, SECURE_SHARE = 0.7;
   const SEQ = {
-    start: ['sound', 'detective', 'spell', 'trace', 'silly', 'rhyme', 'match', 'read'],
-    reader: ['read', 'spell', 'match', 'read', 'silly', 'rhyme', 'detective', 'sound']
+    start: ['sound', 'detective', 'spell', 'trace', 'silly', 'rhyme', 'match', 'read', 'write', 'caps', 'vocab'],
+    reader: ['read', 'spell', 'match', 'read', 'silly', 'rhyme', 'detective', 'sound', 'write', 'parts', 'vocab']
   };
-  const GAMES = ['sound', 'detective', 'spell', 'trace', 'silly', 'rhyme', 'match', 'read'];
+  const GAMES = ['sound', 'detective', 'spell', 'trace', 'silly', 'rhyme', 'match', 'read', 'write', 'caps', 'vocab', 'parts'];
   const keysOf = w => W.wordKeys(w).filter(k => k !== '_' && k.indexOf('word-') !== 0);
   const lvl = w => w.level || 1;
   const words = W.CONTENT.words.filter(w => !w.sight);
