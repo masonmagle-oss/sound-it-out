@@ -90,7 +90,7 @@
     Array.prototype.forEach.call(grid.children, (b, j) => b.classList.toggle('lit', j === i));
     card.hidden = false;
     $('lbig').textContent = x.l.toUpperCase() + x.l;
-    $('lemo').textContent = x.emoji;
+    W.pic($('lemo'), x.emoji);
     $('lword').textContent = x.word;
     $('lhand').innerHTML = ASL[x.l] || ''; const mo = MOUTH[x.l]; $('lmouth').innerHTML = mo ? mouthSVG(mo) : ''; $('lcue').textContent = mo ? mo.c : '';
     $('lsr').textContent = x.name + '. ' + x.l + ' is for ' + x.word + '.' + (MOUTH[x.l] ? ' ' + MOUTH[x.l].c : '');

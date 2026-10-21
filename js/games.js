@@ -335,7 +335,7 @@
       b.type = 'button'; b.className = 'menu-card';
       b.setAttribute('aria-label', 'Story: ' + x.s.title + ', level ' + x.l);
       b.innerHTML = '<span class="big" aria-hidden="true"></span><span><strong></strong><span class="sub"></span></span>';
-      b.querySelector('.big').textContent = x.s.emoji;
+      W.pic(b.querySelector('.big'), x.s.emoji);
       b.querySelector('strong').textContent = x.s.title;
       b.querySelector('.sub').textContent = 'Level ' + x.l;
       b.addEventListener('click', () => openStory(x.i));
@@ -345,7 +345,7 @@
   function openStory(i) {
     stoken++; stopSeq(); cur = stories[i];
     $('sList').hidden = true; $('sRead').hidden = false; $('sQuiz').hidden = true; $('sQ').hidden = !(cur.q && cur.q.length);
-    $('sTitle').textContent = cur.emoji + ' ' + cur.title;
+    { const t = $('sTitle'), sp = document.createElement('span'); t.textContent = ''; sp.className = 'stpic'; sp.setAttribute('aria-hidden', 'true'); W.pic(sp, cur.emoji); t.appendChild(sp); t.appendChild(document.createTextNode(' ' + cur.title)); }
     const box = $('sLines'); box.innerHTML = '';
     cur.lines.forEach((t, n) => {
       const row = document.createElement('div'); row.className = 'sline';
@@ -390,7 +390,7 @@
       b.type = 'button'; b.className = 'dchoice';
       b.setAttribute('aria-label', o.p[1]);
       b.innerHTML = '<span class="rtemo" aria-hidden="true"></span><span class="sub"></span>';
-      b.querySelector('.rtemo').textContent = o.p[0]; b.querySelector('.sub').textContent = o.p[1];
+      W.pic(b.querySelector('.rtemo'), o.p[0]); b.querySelector('.sub').textContent = o.p[1];
       b.addEventListener('click', () => {
         if (solved) return;
         if (o.i === x.ok) { solved = true; b.classList.add('right'); $('sQPraise').textContent = W.pick(CONTENT.praise); }

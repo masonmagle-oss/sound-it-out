@@ -241,14 +241,14 @@ const fs = require('fs');
   // More games is a grid of pictures with short names; Play shows the game it opens first.
   await p.goto(url);
   await p.waitForTimeout(200);
-  const playPic = await p.evaluate(() => document.getElementById('playNext').textContent.trim());
+  const playPic = await p.evaluate(() => document.getElementById('playNext').dataset.pic);
   await p.click('#moreGamesBtn');
   const grid = await p.evaluate(() => {
     const cs = [...document.querySelectorAll('.menu-card')].filter(c => c.offsetParent !== null);
     return { n: cs.length, cols: new Set(cs.map(c => Math.round(c.getBoundingClientRect().left))).size, minH: Math.min.apply(null, cs.map(c => c.getBoundingClientRect().height)),
       subHidden: [...document.querySelectorAll('.menu-card .sub')].every(x => getComputedStyle(x).display === 'none'), overflow: document.documentElement.scrollWidth > innerWidth };
   });
-  const okGrid = playPic === '\u{1F446}' && grid.cols === 3 && grid.minH >= 56 && grid.subHidden && grid.n >= 10 && !grid.overflow;
+  const okGrid = playPic === 'svg:ui-sound' && grid.cols === 3 && grid.minH >= 56 && grid.subHidden && grid.n >= 10 && !grid.overflow;
   console.log((okGrid ? 'ok   ' : 'FAIL ') + 'more games is a picture grid and Play shows its first game'); if (!okGrid) errs.push('grid: ' + playPic + ' ' + JSON.stringify(grid));
   // Trace letters: strokes must be followed in order and direction; being a little off the line is fine.
   await p.goto(url);
@@ -300,7 +300,7 @@ const fs = require('fs');
   await p.evaluate(() => { window.__PACE_STUCK_MS = 600; });
   await p.waitForTimeout(1700);
   await p.click('#playBtn');
-  const promised = await p.evaluate(() => { const g = WordPlay.mix.upNext(), c = document.querySelector('.menu-card[data-go="' + g + '"] .big'); return [g, c ? c.textContent : '', document.querySelector('#nextBtn .next-pic').textContent.trim()]; });
+  const promised = await p.evaluate(() => { const g = WordPlay.mix.upNext(), c = document.querySelector('.menu-card[data-go="' + g + '"] .big'); return [g, c ? c.dataset.pic : '', document.querySelector('#nextBtn .next-pic').dataset.pic]; });
   await p.waitForFunction(() => !WordPlay.pace.isLocked('nextBtn'), null, { timeout: 12000 }).catch(() => {});
   await p.click('#nextBtn');
   const afterNext = await p.evaluate(() => [WordPlay.current(), WordPlay.mix.active()]);

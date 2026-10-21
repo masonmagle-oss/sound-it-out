@@ -1,0 +1,51 @@
+// Batch 7.
+const { K, L, c, e, r, p, line, dot, eyes, hi, g, txt, wave, ground } = require('./kit');
+const { B, R, Y, W, WD, G, GL, S, C, P, O, Gy, GyD, Br, Pu, T, Sk, Ln } = K;
+const swatch = col => r(12, 22, 76, 56, col, 8) + hi('M22 34h28') + line('M22 90h56', 4, col);
+const note = (x, y, col = L) => e(x, y, 10, 7, col, -20) + line(`M${x + 8} ${y - 3}V${y - 38}`, 4) + p(`M${x + 8} ${y - 38}q12 4 12 16`, 'none', 'stroke-width="4"');
+module.exports = {
+  quit: c(50, 18, 12, Sk) + p('M34 32H66L72 66H28Z', B) + line('M30 40L74 74M70 40L26 74', 9, Sk) + line('M38 88V66M62 88V66', 7, Br),
+  ring: e(50, 62, 30, 26, Y) + e(50, 62, 18, 16, 'none') + p('M50 62', 'none') + p('M36 38L44 22H56L64 38L50 50Z', S) + p('M44 22L50 50L56 22M36 38H64', 'none', 'stroke-width="2.5"') + e(50, 62, 18, 16, C).replace('fill="#fffdf7"', 'fill="#fffdf7"') + hi('M24 64q0-12 8-16'),
+  king: p('M20 20L16 4L34 14L50 0L66 14L84 4L80 20Z', Y) + c(50, 46, 24, Sk) + p('M24 52Q26 94 50 94Q74 94 76 52Q66 70 50 70Q34 70 24 52Z', '#d8dde8') + eyes(42, 58, 44, 2.8) + p('M42 56Q50 52 58 56Q50 62 42 56Z', '#d8dde8', 'stroke="none"') + dots2([[24, 12], [50, 6], [76, 12]]),
+  sing: p('M40 8Q22 8 22 28Q22 44 38 48L44 78H56L62 48Q78 44 78 28Q78 8 60 8Z', GyD) + line('M28 28H72M28 38H72M34 18H66', 2.5, Gy) + r(40, 76, 20, 10, L, 3) + line('M50 86V92', 5),
+  song: note(30, 74) + note(62, 66, B) + line('M38 36L70 28', 8),
+  long: r(8, 34, 84, 32, Y, 4) + [18, 30, 42, 54, 66, 78].map(x => line(`M${x} 34v12`, 3)).join('') + line('M24 34v7M36 34v7M48 34v7M60 34v7M72 34v7', 2.5) + txt(50, 62, '12', 12, L).replace('', ''),
+  wing: p('M8 78Q8 30 56 12Q70 8 94 12Q90 36 76 52Q66 72 40 84Q20 92 8 78Z', C) + line('M20 70Q44 52 72 20M30 76Q56 60 82 30M42 82Q62 70 88 36', 3, Gy),
+  bank: p('M4 38L50 10L96 38Z', Gy) + r(8, 38, 84, 10, C, 2) + [18, 36, 54, 72].map(x => r(x, 48, 10, 32, C, 2)).join('') + r(4, 80, 92, 12, Gy, 2) + c(50, 26, 7, Y),
+  pink: swatch(P),
+  sink: p('M10 50H90V70Q90 86 74 86H26Q10 86 10 70Z', C) + r(4, 44, 92, 8, Gy, 3) + p('M32 44V24Q32 14 46 14H56', 'none', 'stroke-width="7" stroke="#aab4c4"') + c(60, 14, 5, Gy) + p('M54 18v14', 'none', 'stroke-width="4"') + p('M52 36q-4 8 0 10q4-2 0-10Z', S) + line('M40 62h20', 3, Gy),
+  drink: p('M22 20H78L72 90H28Z', '#ff9f43') + p('M24 36H76', 'none') + line('M58 6L48 40', 5, R) + hi('M32 30l4 50') + p('M26 36q24-8 48 0', 'none', 'stroke-width="3"'),
+  think: p('M22 52Q4 50 6 34Q8 20 26 22Q32 6 52 8Q72 8 78 24Q96 22 94 38Q92 52 74 52Z', C) + c(30, 66, 6, C) + c(18, 80, 4, C) + txt(50, 40, '...', 30, L),
+  whale: p('M4 62Q4 30 40 28Q70 28 80 44Q96 38 96 24Q84 28 82 20Q96 16 98 8Q76 6 72 28L70 30Q40 30 30 52Q22 68 4 62Z', '#6aa6e6') + p('M8 62Q30 90 62 80Q84 72 86 48Q60 56 8 62Z', C) + dot(30, 46, 2.8) + line('M44 14q0 6-6 10M44 14q0 6 6 10M44 14V4', 3.5, S),
+  white: swatch(C),
+  station: r(8, 36, 84, 50, R, 3) + p('M4 38L50 10L96 38Z', Br) + c(50, 28, 10, C) + line('M50 28V22M50 28l5 3', 2.5) + r(20, 52, 16, 22, S, 2) + r(42, 52, 16, 34, W, 2) + r(64, 52, 16, 22, S, 2) + line('M4 92H96', 4, GyD),
+  action: r(12, 42, 76, 46, L, 4) + p('M12 42L88 24L92 38L16 56Z', C) + p('M26 38l8-2l-6 12ZM48 33l8-2l-6 12ZM70 28l8-2l-6 12Z', L, 'stroke="none"') + line('M24 62h52M24 74h36', 3, C),
+  lotion: r(34, 36, 32, 54, C, 8) + r(40, 18, 20, 18, B, 3) + p('M44 18V8H62V12', 'none', 'stroke-width="5"') + r(40, 52, 20, 20, S, 3) + hi('M40 60v24'),
+  motion: p('M50 14A36 36 0 0 1 86 50', 'none', 'stroke-width="9" stroke="#2457d6"') + p('M86 30V54H62Z', B) + p('M50 86A36 36 0 0 1 14 50', 'none', 'stroke-width="9" stroke="#e63b2e"') + p('M14 70V46H38Z', R),
+  unlock: r(20, 46, 60, 44, Y, 6) + p('M32 46V30Q32 12 52 12Q70 12 70 28', 'none', 'stroke-width="9" stroke="#aab4c4"') + c(50, 66, 7, L) + line('M50 68v10', 4),
+  unpack: p('M24 30Q24 10 50 10Q76 10 76 30V86Q76 92 70 92H30Q24 92 24 86Z', B) + r(32, 54, 36, 28, '#183f9e', 6) + line('M32 60H68', 3.5) + c(50, 70, 3.4, Y) + p('M32 30Q50 24 68 30', 'none', 'stroke-width="3"') + line('M24 44H12V70H24M76 44H88V70H76', 5, '#183f9e'),
+  undo: r(8, 16, 84, 68, Pu, 10) + p('M32 40L18 54L32 68V58H56Q68 58 68 48Q68 40 56 40H44V32H58Q80 32 80 50Q80 66 56 66H32Z', C),
+  redo: r(8, 16, 84, 68, T, 10) + p('M68 40L82 54L68 68V58H44Q32 58 32 48Q32 40 44 40H56V32H42Q20 32 20 50Q20 66 44 66H68Z', C),
+  replay: r(8, 16, 84, 68, G, 10) + p('M38 30L72 50L38 70Z', C),
+  rerun: p('M50 12A38 38 0 1 1 18 36', 'none', 'stroke-width="10" stroke="#2bb8a5"') + p('M10 14L40 24L18 48Z', T),
+  playing: p('M24 36H46Q46 20 58 20Q70 20 70 36H86V58Q74 58 74 66Q74 76 86 76V92H24Z', '#5fc16a').replace('', '') + p('M14 36H40Q40 18 54 18Q68 18 68 36H88V62Q74 62 74 72Q74 84 88 84V92H14Z', G) + hi('M22 46v38'),
+  fishing: line('M14 94L62 8Q86 8 88 40', 5, Br) + line('M88 40V58', 2.5, GyD) + p('M80 62q8 6 16 0q-4 12-16 8Z', Gy) + e(84, 72, 12, 8, O) + p('M96 72l4-6v12Z', O, 'stroke="none"').replace('', '') + wave(90, B),
+  helping: p('M2 38L22 34L48 44L40 62L16 56Z', B) + p('M98 38L78 34L52 44L60 62L84 56Z', R) + p('M30 50Q50 36 70 50L60 70Q50 76 40 70Z', Sk) + line('M42 52l8 12M52 50l8 12', 3, '#e8b98a'),
+  singing: c(50, 54, 34, Y) + eyes(38, 62, 46, 3) + e(50, 70, 10, 12, L) + e(50, 76, 5, 4, R) + note(78, 28, B).replace('', '') + hi('M30 40q4-8 12-10'),
+  looking: c(40, 40, 28, '#cfe6ff') + c(40, 40, 28, 'none') + line('M60 60L90 90', 11, Br) + hi('M26 32q4-10 14-12') + c(40, 40, 28, 'none').replace('stroke-width', 'stroke-width').replace('fill="none"', 'fill="none" stroke="#2457d6" stroke-width="6"'),
+  resting: r(6, 54, 88, 26, C, 6) + r(6, 44, 14, 46, WD, 3) + c(32, 48, 13, Sk) + p('M20 46Q20 32 32 32Q46 32 44 46Q36 40 20 46Z', Br) + line('M26 48q3 3 6 0M34 48q3 3 6 0', 2.5) + p('M44 58H92V80H44Z', B) + txt(70, 34, 'Z', 24, B) + txt(82, 20, 'z', 16, B),
+  helper: p('M30 40L10 90L50 84L90 90L70 40Z', R) + c(50, 22, 13, Sk) + p('M34 22Q34 6 50 6Q66 6 66 22Q58 14 34 22Z', Br) + p('M36 40H64L68 70H32Z', B) + p('M50 46l4 8h8l-6 5l2 8l-8-5l-8 5l2-8l-6-5h8Z', Y) + eyes(45, 55, 24, 2.4),
+  farmer: c(50, 34, 14, Sk) + p('M18 26Q50 16 82 26Q82 18 50 8Q18 18 18 26Z', Y).replace('', '') + e(50, 26, 36, 8, Y) + p('M36 28Q38 8 50 8Q62 8 64 28Z', Y) + p('M30 90V54Q30 48 40 48H60Q70 48 70 54V90Z', B) + r(38, 64, 24, 14, '#183f9e', 2) + line('M40 48V34M60 48V34', 3, B) + eyes(44, 56, 34, 2.4),
+  painter: c(50, 38, 15, Sk) + p('M30 30Q30 10 50 10Q72 10 74 28Q60 20 30 30Z', Pu) + c(30, 18, 5, Pu) + p('M26 92V62Q26 52 40 52H60Q74 52 74 62V92Z', C) + dots2([[44, 68], [56, 74], [46, 82]], [R, B, Y]) + line('M76 56L90 24', 5, Br) + p('M86 24L94 16L98 22L90 30Z', R) + eyes(44, 56, 38, 2.4),
+  teacher: r(6, 8, 56, 40, G, 3) + line('M12 20h30M12 32h40', 3, C) + c(74, 36, 12, Sk) + p('M60 92V58Q60 48 74 48Q90 48 90 58V92Z', R) + line('M62 56L40 44', 4, Br) + eyes(70, 78, 34, 2.2),
+  hunter: line('M14 16Q44 50 14 84', 5, Br) + line('M14 16L14 84', 2.5, GyD) + line('M14 50H84', 4, WD) + p('M84 50L72 42V58Z', Gy) + p('M20 44l-10-4M20 56l-10 4', 'none', 'stroke-width="3" stroke="#e63b2e"'),
+  cupcake: p('M24 52H76L68 90H32Z', R) + line('M36 52L40 90M50 52V90M64 52L60 90', 3, '#a81f16') + p('M18 52Q14 34 32 32Q34 16 50 16Q66 16 68 32Q86 34 82 52Z', P) + c(50, 12, 6, R),
+  hotdog: e(50, 62, 42, 20, '#e8b86a') + e(50, 56, 38, 12, R) + line('M20 54q8-6 16 0t16 0 16 0 12-2', 4.5, Y) + p('M10 66Q50 80 90 66', 'none', 'stroke-width="3"').replace('', ''),
+  sunset: r(6, 10, 88, 80, '#ff9f68', 10) + p('M22 62A28 28 0 0 1 78 62Z', Y) + line('M6 62H94', 3) + p('M6 62H94V90H6Z', B, 'stroke-width="3.5"') + line('M30 72h40M38 80h24', 4, '#7fb3e6'),
+  rainbow: p('M6 76A44 44 0 0 1 94 76', 'none', 'stroke-width="9" stroke="#e63b2e"') + p('M16 76A34 34 0 0 1 84 76', 'none', 'stroke-width="9" stroke="#ffd23f"') + p('M26 76A24 24 0 0 1 74 76', 'none', 'stroke-width="9" stroke="#3fa34d"') + p('M36 76A14 14 0 0 1 64 76', 'none', 'stroke-width="9" stroke="#2457d6"') + p('M2 84Q2 70 16 72Q18 62 30 64Q40 70 36 84Z M98 84Q98 70 84 72Q82 62 70 64Q60 70 64 84Z', C),
+  snowman: c(50, 76, 20, C) + c(50, 50, 16, C) + c(50, 28, 12, C) + r(38, 6, 24, 10, L, 2) + r(32, 14, 36, 6, L, 2) + p('M52 28h14l-14 4Z', O) + dot(46, 26, 2.2) + dot(55, 26, 2.2) + line('M40 38h20', 5, R) + dot(50, 48, 2.4) + dot(50, 58, 2.4) + line('M34 52L18 40M66 52L82 40', 3.5, Br),
+  snowball: c(50, 52, 36, C) + hi('M28 44q4-14 18-18') + line('M64 70q8-4 14-14', 3, '#cfe6ff') + c(14, 20, 3, S) + c(88, 26, 3, S) + c(86, 80, 3, S) + c(12, 74, 3, S),
+  football: e(50, 50, 42, 26, Br, -30) + line('M30 66L70 34M44 60l4-6M52 54l4-6M60 48l4-6', 3.5, C) + line('M18 62q-6 8 0 14M82 38q6-8 0-14', 3.5, C),
+  goldfish: p('M16 40Q16 22 50 22Q84 22 84 40V74Q84 90 50 90Q16 90 16 74Z', '#e8f4ff') + e(50, 56, 22, 14, O) + p('M70 56l14-12V68Z', O) + dot(40, 52, 2.8) + line('M16 36H84', 3.5) + c(34, 40, 3, S).replace('', '') + wave(70, '#7fb3e6')
+};
+function dots2(pts, cols) { return pts.map(([x, y], i) => c(x, y, 4, cols ? cols[i % cols.length] : R)).join(''); }

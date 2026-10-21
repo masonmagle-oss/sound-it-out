@@ -49,7 +49,7 @@
       await W.sleep(900);
       if (my !== token) return;
       sr.textContent = 'The sentence is: ' + sn.text + '.';
-      emo.textContent = sn.emoji || '';
+      W.pic(emo, sn.emoji || '');
       emo.className = 'emo anim-pop'; void emo.offsetWidth;
       stage.classList.add('show');
       praise.textContent = W.pick(CONTENT.praise);

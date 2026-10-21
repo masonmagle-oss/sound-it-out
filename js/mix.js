@@ -49,14 +49,14 @@
 
   // pictures: the same emoji as the game's tile in "More games"
   const card = g => document.querySelector('.menu-card[data-go="' + g + '"]');
-  const pic = g => { const el = card(g) && card(g).querySelector('.big'); return el ? el.textContent : ''; };
+  const pic = g => { const el = card(g) && card(g).querySelector('.big'); return el ? (el.dataset.pic || el.textContent) : ''; };
   const gname = g => { const el = card(g) && card(g).querySelector('strong'); return el ? el.textContent : g; };
   const seqOf = () => SEQ[(W.activeKid() || {}).order] || SEQ.start;
   // Play opens the same first game for each child; Next shows which game comes after this one
   function showPlay() {
     const g = seqOf()[0], p = $('playNext');
     if (!p) return;
-    p.textContent = ' ' + pic(g);
+    W.pic(p, pic(g));
     $('playBtn').setAttribute('aria-label', 'Play. It starts with ' + gname(g) + '.');
   }
   const NEXT_IDS = ['nextBtn', 'rNext', 'rhNext', 'dNext', 'spNext', 'syNext', 'mNext', 'tNext'];
@@ -66,7 +66,7 @@
       if (!b) return;
       let s = b.querySelector('.next-pic');
       if (!s) { s = document.createElement('span'); s.className = 'next-pic'; s.setAttribute('aria-hidden', 'true'); b.appendChild(s); }
-      s.textContent = active() && st.nextGame ? ' ' + pic(st.nextGame) : '';
+      W.pic(s, active() && st.nextGame ? pic(st.nextGame) : '');
     });
   }
 
