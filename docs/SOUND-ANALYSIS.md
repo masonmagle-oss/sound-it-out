@@ -33,9 +33,8 @@ Nothing flagged.
 
 Nothing flagged.
 
-## word (677 clips, median 0.88s, median -20.2 dB RMS, 6 flagged)
+## word (677 clips, median 0.88s, median -20.2 dB RMS, 5 flagged)
 
-- `word-gem.mp3`: loud -16.1 dB RMS vs group -20.2
 - `word-jumping.mp3`: peak -0.9 dB (clipping risk)
 - `word-peach.mp3`: quiet -24.8 dB RMS vs group -20.2
 - `word-seat.mp3`: quiet -25.4 dB RMS vs group -20.2
@@ -44,4 +43,4 @@ Nothing flagged.
 
 ## Summary
 
-sound: 8, help: 0, letter: 0, question: 0, sentence: 0, vocab: 0, word: 6
+sound: 8, help: 0, letter: 0, question: 0, sentence: 0, vocab: 0, word: 5
