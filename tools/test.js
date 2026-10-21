@@ -66,7 +66,7 @@ const fs = require('fs');
   for (let g = 0; g < 40 && !(await p.locator('#plDone').isVisible()); g++) {
     const wd = await p.textContent('#plWord');
     const em = await p.evaluate(x => WordPlay.CONTENT.words.find(w => w.word === x && !w.sight).emoji, wd);
-    await p.locator('#plChoices .dchoice', { hasText: em }).first().click();
+    await p.locator('#plChoices .dchoice:has([data-pic="' + em + '"])').first().click();   // data-pic works for drawn pictures too
   }
   const top = await p.textContent('#plResult');
   await p.click('#plApply');
