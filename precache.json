@@ -1,9 +1,9 @@
 {
- "version": "d2ac18b8a0",
+ "version": "39e74f19f4",
  "files": {
   "index.html": "886f1a57d4",
   "manifest.webmanifest": "6fd7812c0c",
-  "css/style.css": "87d5ee3a79",
+  "css/style.css": "06268bdbde",
   "js/app.js": "8a7dada17b",
   "js/art.js": "c77b9e9d44",
   "js/audio.js": "2e68cb19cb",
@@ -1142,7 +1142,7 @@
   "icons/icon-180.png": "39dcdaa4d6",
   "icons/icon-192.png": "3e912aab56",
   "icons/icon-512.png": "3d0d7adf4e",
-  "fonts/OFL.txt": "7fae3f01d9",
+  "fonts/OFL.txt": "786aea9fcb",
   "fonts/andika-400.woff2": "33b47c2f78",
   "fonts/andika-700.woff2": "4b0d7b967b"
  }

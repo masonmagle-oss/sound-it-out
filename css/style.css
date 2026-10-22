@@ -140,7 +140,7 @@
   .dchoice{min-width:5.5rem; min-height:5.5rem; padding:0 1.1rem; background:var(--card); color:var(--ink); border:4px solid var(--ink); border-radius:1.25rem;
            font:inherit; font-size:clamp(2.4rem,13vw,3.4rem); font-weight:800; cursor:pointer; touch-action:manipulation}
   .dchoice.right{background:#d8f1e2; border-color:var(--good)}
-  .dchoice.heard-it{background:var(--card)3c4}
+  .dchoice.heard-it{background:#fff3c4}
   .dchoice:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
   .twrap{position:relative; margin:.5rem auto; width:100%; max-width:360px; aspect-ratio:1/1; background:var(--card); border:4px solid var(--ink); border-radius:1.25rem; overflow:hidden}
   .twrap canvas{position:absolute; inset:0; width:100%; height:100%}
@@ -159,11 +159,11 @@
 
   /* ---------- Spell it / Silly words ---------- */
   .spslots{display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin:.75rem 0; min-height:5.4rem}
-  .spslot{min-width:4.2rem; min-height:5.2rem; padding:0 .6rem; border:4px dashed var(--ink-soft); border-radius:1.1rem; background:var(--card); color:var(--ink);
+  .spslot{min-width:3.4rem; min-height:5.2rem; padding:0 .35rem;   /* five slots must fit on one row at 390px */ border:4px dashed var(--ink-soft); border-radius:1.1rem; background:var(--card); color:var(--ink);
           font:inherit; font-size:clamp(2.2rem,11vw,3rem); font-weight:800; cursor:pointer; touch-action:manipulation}
   .spslot.full{border-style:solid; border-color:var(--ink)}
   .spslot.match{background:#d8f1e2; border-color:var(--good)}
-  .spslot.near{background:var(--card)3c4; border-color:var(--lit-edge)}
+  .spslot.near{background:#fff3c4; border-color:var(--lit-edge)}
   .spslot:focus-visible{outline:4px solid var(--ink); outline-offset:3px}
   .dchoice.used{opacity:.35}
   .chip.blank{border-style:dashed; color:var(--ink-soft)}

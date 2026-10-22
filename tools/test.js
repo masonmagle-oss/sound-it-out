@@ -121,6 +121,15 @@ const fs = require('fs');
     }
     const reachOk = Object.keys(reach).length === 0;
     console.log((reachOk ? 'ok   ' : 'FAIL ') + 'every game fits a short phone with no scrolling and Next stays reachable'); if (!reachOk) errs.push('below the fold: ' + JSON.stringify(reach));
+    // the longest words (five sounds) are the tightest fit, so test one on purpose instead of by luck
+    await q2.goto(url); await q2.tap('#moreGamesBtn'); await q2.tap('[data-go="spell"]'); await q2.waitForTimeout(400);
+    const five = await q2.evaluate(async () => {
+      for (let i = 0; i < 80 && document.querySelectorAll('#spSlots .spslot').length !== 5; i++) { WordPlay.hooks.enter.spell(); await new Promise(r => setTimeout(r, 20)); }
+      const slots = [...document.querySelectorAll('#spSlots .spslot')];
+      return { n: slots.length, rows: new Set(slots.map(e => Math.round(e.getBoundingClientRect().top))).size, over: Math.max(0, document.documentElement.scrollHeight - innerHeight) };
+    });
+    const fiveOk = five.n === 5 && five.rows === 1 && five.over <= 2;
+    console.log((fiveOk ? 'ok   ' : 'FAIL ') + 'Spell it fits a short phone with a five-sound word'); if (!fiveOk) errs.push('spell five: ' + JSON.stringify(five));
     await q2.goto(url); await q2.tap('#moreGamesBtn'); await q2.tap('[data-go="spell"]'); await q2.waitForTimeout(500);
     const nslots = await q2.locator('#spSlots .spslot').count();
     for (let i = 0; i < 6 && (await q2.locator('#spSlots .spslot.full').count()) < nslots; i++) { await q2.locator('#spTray .dchoice').nth(i).tap(); await q2.waitForTimeout(100); }
