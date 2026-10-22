@@ -778,7 +778,7 @@ window.WORDPLAY_CONTENT = {
   // Tile clips are named by the tile text: s.m4a, sh.m4a, ck.m4a ...
   // Whole-word clips (played after the blend) are named word-sun.m4a, word-ship.m4a ...
   // Missing files are simply silent. The grown-ups page lists exactly which files are needed.
-  sounds: { folder: 'sounds/', extensions: ['m4a', 'mp3', 'wav'] },
+  sounds: { folder: 'sounds/', extensions: ['mp3', 'm4a', 'wav'] },
   // Sentences for "Read a sentence". Use only words that exist above (sound words or sight words).
   // Clips: sentence-<words-joined-by-dashes>.mp3, e.g. sentence-i-see-a-red-bug.mp3
   sentences: [

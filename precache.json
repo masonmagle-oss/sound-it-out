@@ -1,5 +1,5 @@
 {
- "version": "39e74f19f4",
+ "version": "03f6330cf2",
  "files": {
   "index.html": "886f1a57d4",
   "manifest.webmanifest": "6fd7812c0c",
@@ -8,10 +8,10 @@
   "js/art.js": "c77b9e9d44",
   "js/audio.js": "2e68cb19cb",
   "js/caps.js": "9f38d40703",
-  "js/content.js": "673afc85cb",
+  "js/content.js": "52bf772d83",
   "js/games.js": "23c17167be",
   "js/help.js": "03bd765806",
-  "js/home.js": "79ba88d633",
+  "js/home.js": "059e4f81b2",
   "js/icons.js": "2d3ead9544",
   "js/letters-rhyme.js": "097f223a29",
   "js/match.js": "f481a5b9e6",
@@ -27,7 +27,7 @@
   "js/speech.js": "206d54c3ea",
   "js/stories-more.js": "0137a0cab1",
   "js/strokes.js": "cfeedbe4b5",
-  "js/trace.js": "4fb82ca259",
+  "js/trace.js": "f91ae5785c",
   "js/vocab.js": "b34b1a517d",
   "js/write.js": "61c6f1d508",
   "sounds/a.mp3": "0032f59e02",

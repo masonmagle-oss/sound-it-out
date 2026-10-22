@@ -42,7 +42,7 @@
   }
 
   let ti = 0, lower = false, strokes = [], si = 0, idx = 0, drag = false, misses = 0;
-  let S = 300, k = 3, demo = null, raf = 0, shownLetter = false, finished = false;
+  let S = 300, k = 3, demo = null, raf = 0, shownLetter = false, finished = false, lastAct = 0;
   const unit = v => v * k;
   const reducedMotion = () => !!(W.reduced && W.reduced.matches);
 
@@ -124,9 +124,9 @@
       if (demo.p >= 1 && t - demo.t0 > dur + 250) { demo.i++; demo.t0 = t; demo.p = 0; if (demo.i >= strokes.length) { demo = null; } }
     }
     render(t);
-    if (!reducedMotion() || demo) raf = requestAnimationFrame(frame);
+    if (demo || (!reducedMotion() && t - lastAct < 6000)) raf = requestAnimationFrame(frame);     // pulses for a few seconds, then rests
   }
-  const kick = () => { if (!raf) raf = requestAnimationFrame(frame); };
+  const kick = () => { lastAct = performance.now(); if (!raf) raf = requestAnimationFrame(frame); };
 
   function setCase(low) {
     lower = low;
@@ -169,7 +169,7 @@
   const pt = e => { const r = ink.getBoundingClientRect(); return [(e.clientX - r.left) * (100 / r.width), (e.clientY - r.top) * (100 / r.height)]; };
   const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
   ink.addEventListener('pointerdown', e => {
-    e.preventDefault();
+    e.preventDefault(); kick();
     if (demo || finished || !strokes[si]) return;
     const st = strokes[si], p = pt(e);
     if (st.last === 0) {                       // a dot: just tap it
